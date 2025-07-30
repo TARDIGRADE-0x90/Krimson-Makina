@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://clrni1gwcddot"]
+
+[ext_resource type="Script" path="res://Projectile/Projectile.gd" id="1_oed1u"]
+
+[node name="Projectile" type="Area2D" node_paths=PackedStringArray("Sprite", "Collider", "ShotLifetime")]
+collision_layer = 0
+script = ExtResource("1_oed1u")
+Sprite = NodePath("Sprite")
+Collider = NodePath("Collider")
+ShotLifetime = NodePath("ShotLifetime")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+
+[node name="ShotLifetime" type="Timer" parent="."]

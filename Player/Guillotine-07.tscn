@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://bpard0pnbjd2v"]
+
+[ext_resource type="Script" path="res://Player/Guillotine-07.gd" id="1_2uy8n"]
+[ext_resource type="Texture2D" uid="uid://dfdrywdfoturh" path="res://Assets/guillotine-wings-draft.png" id="4_5julm"]
+[ext_resource type="Texture2D" uid="uid://b4t8skqxmo2rg" path="res://Assets/guillotine-body-draft.png" id="5_aulbw"]
+[ext_resource type="Texture2D" uid="uid://dwry8ylxb6cxu" path="res://Assets/guillotine-head-draft.png" id="6_8bemu"]
+[ext_resource type="Texture2D" uid="uid://t6oqb4tbi8w5" path="res://Assets/guillotine-blade-draft.png" id="7_p2rxt"]
+[ext_resource type="Texture2D" uid="uid://b4jiulrlpn05t" path="res://Assets/guillotine_minigun_draft.png" id="8_7dn3a"]
+[ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="9_w0jcr"]
+[ext_resource type="Resource" uid="uid://bhigx4fbwrcpi" path="res://Player/MinigunShot.tres" id="10_5h044"]
+
+[node name="Guillotine-07" type="CharacterBody2D" node_paths=PackedStringArray("PlayerCamera")]
+script = ExtResource("1_2uy8n")
+PlayerCamera = NodePath("")
+
+[node name="RushTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="SlashTimer" type="Timer" parent="."]
+
+[node name="ThrustTimer" type="Timer" parent="."]
+
+[node name="JoustCharge" type="Timer" parent="."]
+
+[node name="AuxillaryCooldown" type="Timer" parent="."]
+process_callback = 0
+
+[node name="FullBody" type="Node2D" parent="."]
+
+[node name="Wings" type="Sprite2D" parent="FullBody"]
+texture = ExtResource("4_5julm")
+
+[node name="Body" type="Sprite2D" parent="FullBody"]
+z_index = 2
+texture = ExtResource("5_aulbw")
+
+[node name="Head" type="Sprite2D" parent="FullBody"]
+z_index = 3
+texture = ExtResource("6_8bemu")
+
+[node name="Blade" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(0, 256)
+
+[node name="BladeVisual" type="Sprite2D" parent="Blade"]
+rotation = 0.785398
+texture = ExtResource("7_p2rxt")
+
+[node name="Auxillary" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(64, -64)
+
+[node name="GunVisual" type="Sprite2D" parent="Auxillary"]
+texture = ExtResource("8_7dn3a")
+
+[node name="CannonPoint" type="Marker2D" parent="Auxillary"]
+position = Vector2(96, -8)
+
+[node name="PlayerGun" parent="Auxillary" instance=ExtResource("9_w0jcr")]
+position = Vector2(-64, 64)
+ShotData = ExtResource("10_5h044")
+MaxPool = 1200

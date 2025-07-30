@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://inojsm1xrm4h"]
+
+[ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="1_m13wb"]
+[ext_resource type="Script" path="res://GUI/OptionsMenu.gd" id="1_ylii0"]
+
+[node name="OptionsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ylii0")
+
+[node name="OptionsContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
+theme_override_fonts/font = ExtResource("1_m13wb")
+theme_override_font_sizes/font_size = 24
+text = "SFX"
+
+[node name="Button3" type="Button" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
+theme_override_fonts/font = ExtResource("1_m13wb")
+theme_override_font_sizes/font_size = 24
+text = "MUSIC"
+
+[node name="Button2" type="Button" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
+theme_override_fonts/font = ExtResource("1_m13wb")
+theme_override_font_sizes/font_size = 24
+text = "VFX LEVEL"

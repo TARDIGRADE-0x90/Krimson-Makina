@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwegmqh8oa5ys"]
+
+[ext_resource type="Texture2D" uid="uid://2358ag0d62ev" path="res://Assets/test_background.png" id="1_omfcp"]
+
+[node name="LevelBackground" type="Sprite2D"]
+scale = Vector2(5, 5)
+texture = ExtResource("1_omfcp")
