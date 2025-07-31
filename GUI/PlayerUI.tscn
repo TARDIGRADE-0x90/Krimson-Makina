@@ -1,6 +1,235 @@
-[gd_scene load_steps=2 format=3 uid="uid://btojetc84kpdp"]
+[gd_scene load_steps=12 format=3 uid="uid://btojetc84kpdp"]
 
 [ext_resource type="Script" path="res://GUI/PlayerUI.gd" id="1_mbxyd"]
+[ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_gei3a"]
+[ext_resource type="PackedScene" uid="uid://t32j02e4nyx2" path="res://GUI/FPSLabel.tscn" id="3_jpwls"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yebyq"]
+font = ExtResource("2_gei3a")
+font_size = 12
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_d2aph"]
+font = ExtResource("2_gei3a")
+font_size = 18
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_lr8o4"]
+font = ExtResource("2_gei3a")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0govm"]
+font = ExtResource("2_gei3a")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_v5r0y"]
+font = ExtResource("2_gei3a")
+font_size = 24
+font_color = Color(1, 0.431373, 0, 1)
+outline_size = 4
+outline_color = Color(0.705882, 0.0784314, 0.164706, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_r3nsp"]
+font = ExtResource("2_gei3a")
+font_size = 12
+outline_size = 2
+outline_color = Color(1, 0.890196, 0.768627, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_haf7r"]
+font = ExtResource("2_gei3a")
+
+[sub_resource type="LabelSettings" id="LabelSettings_xlmte"]
+font = ExtResource("2_gei3a")
 
 [node name="PlayerUI" type="CanvasLayer"]
 script = ExtResource("1_mbxyd")
+
+[node name="OpticalIndicator" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="OpticalIndicator"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OpticalIndicator/MarginContainer"]
+layout_mode = 2
+
+[node name="OpticalLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "OPTICAL FEED :: ACTIVE"
+label_settings = SubResource("LabelSettings_yebyq")
+vertical_alignment = 2
+
+[node name="EnemyLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "ENEMY TITLE :: ENEMY_HEALTH"
+label_settings = SubResource("LabelSettings_d2aph")
+vertical_alignment = 2
+
+[node name="CoreHeatPanel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1240.0
+offset_top = 680.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CoreHeatPanel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -387.0
+offset_top = -96.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CoreHeatPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="CoreHeatHeader" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "GUILLOTINE-07 TEMPERATURE:
+"
+label_settings = SubResource("LabelSettings_lr8o4")
+
+[node name="CoreHeat" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "200° C FROM PEAK"
+label_settings = SubResource("LabelSettings_0govm")
+horizontal_alignment = 2
+
+[node name="CoreHeatBar" type="ColorRect" parent="CoreHeatPanel"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -10.0
+offset_right = 384.0
+offset_bottom = 2.0
+grow_horizontal = 0
+grow_vertical = 0
+rotation = 3.14159
+color = Color(1, 0.717647, 0.611765, 0.580392)
+
+[node name="WeaponHeatPanel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WeaponHeatBar" type="ColorRect" parent="WeaponHeatPanel"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+offset_left = 170.0
+offset_top = 620.0
+offset_right = 194.0
+offset_bottom = 760.0
+grow_vertical = 2
+rotation = 3.14159
+size_flags_horizontal = 4
+color = Color(1, 1, 1, 0.419608)
+
+[node name="WeaponHeatLimit" type="ColorRect" parent="WeaponHeatPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 138.0
+offset_top = 120.0
+offset_right = 178.0
+offset_bottom = 124.0
+grow_vertical = 2
+color = Color(1, 1, 1, 0.392157)
+
+[node name="OverheatWarning" type="Label" parent="WeaponHeatPanel/WeaponHeatLimit"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -132.0
+offset_top = 64.0
+offset_right = 132.0
+offset_bottom = 108.0
+grow_horizontal = 2
+text = "[! OVERHEATED !]"
+label_settings = SubResource("LabelSettings_v5r0y")
+
+[node name="WeaponMaxHeat" type="Label" parent="WeaponHeatPanel/WeaponHeatLimit"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -71.5
+offset_top = -34.0
+offset_right = 71.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "MAX: 144° C"
+label_settings = SubResource("LabelSettings_r3nsp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="WeaponHeatPanel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -552.0
+offset_right = 292.0
+grow_vertical = 0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 480
+theme_override_constants/margin_right = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WeaponHeatPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="WeaponHeatHeader" type="Label" parent="WeaponHeatPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "AUXILLARY HEAT"
+label_settings = SubResource("LabelSettings_haf7r")
+horizontal_alignment = 1
+
+[node name="WeaponHeat" type="Label" parent="WeaponHeatPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "00.00° C"
+label_settings = SubResource("LabelSettings_xlmte")
+horizontal_alignment = 1
+
+[node name="FPSLabel" parent="." instance=ExtResource("3_jpwls")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_bottom = 0.0
+offset_left = -31.0
+offset_bottom = 28.0
+grow_horizontal = 0
+grow_vertical = 1

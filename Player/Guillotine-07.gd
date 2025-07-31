@@ -1,6 +1,11 @@
 extends CharacterBody2D
 class_name Player
 
+"""
+Note on Executions:
+	- let them fully cool weapons
+	- let them restore a bit of core cooling
+"""
 enum TILT_STATES {NONE, LEFT, RIGHT}
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
 
@@ -11,18 +16,27 @@ const SPEED_DICT: Dictionary = {
 }
 
 const ZERO_VECTOR = Vector2(0, 0)
+
 const FOCUS_CAMERA_PUSH: int = 640
 const DEFAULT_PUSH: int = 480
 
 const RUSH_TIME: float = 0.5
-const RUSH_TIME_FACTOR: int = 100
-const BLADE_SHIFT_FACTOR: float = 2.4
-const HEAD_SHIFT_FACTOR: float = 0.8
-const BODY_SHIFT_FACTOR: float = 0.4
-
 const SLASH_TIME: float = 0.3
 const THRUST_TIME: float = 0.4
+
 const MINIGUN_FIRERATE: float = 0.075
+const MINIGUN_HEAT_RANGE = Vector2(1.5, 2.8)
+
+const RUSH_TIME_FACTOR: int = 100
+const HEAD_SHIFT_FACTOR: float = 1.8
+const BODY_SHIFT_FACTOR: float = 1.2
+
+const CORE_HEAT_INITIAL_MAX: float = 200.0
+
+const RUSH_HEAT_DEFAULT: float = 25.0
+const WEAPON_HEAT_MAX: float = 140.0
+const WEAPON_COOL_RATE: float = 36 #multiplied against delta
+const OVERHEAT_DAMAGE: float = 4 #multiplied against delta
 
 const DEFAULT_CHOKE: float = 1.0
 const FOCUS_CHOKE: float = 0.4
@@ -78,13 +92,23 @@ var blade_direction: int = 1
 var blade_position: Vector2 = BLADE_START
 
 var auxillary_firerate: float
+var aim_choke: float = 1.0
 
 var primary_held: bool = false
 var auxillary_held: bool = false
 var focus_held: bool = false
 var dash_held: bool = false
 
-var aim_choke: float = 1.0
+var core_heat_max: float = CORE_HEAT_INITIAL_MAX
+var core_heat: float = CORE_HEAT_INITIAL_MAX
+
+var weapon_heat_range: Vector2 = MINIGUN_HEAT_RANGE
+var weapon_heat_max: float = WEAPON_HEAT_MAX
+var weapon_heat: float = 0
+
+var rush_heat: float = RUSH_HEAT_DEFAULT
+
+var overheated: bool = false
 
 func _ready() -> void:
 	Global.player = self
@@ -103,6 +127,8 @@ func _ready() -> void:
 	initialize_slash_timer()
 	initialize_thrust_timer()
 	initialize_auxillary_cooldown()
+	
+	Events.weapon_heat_updated.connect(check_heat)
 
 func _physics_process(delta: float) -> void:
 	Global.player_position = global_position
@@ -131,6 +157,12 @@ func _physics_process(delta: float) -> void:
 	
 	if auxillary_held and AuxillaryCooldown.is_stopped():
 		fire_auxillary()
+	
+	if not auxillary_held:
+		cool_weapon()
+	
+	if overheated:
+		tick_overheat_damage()
 
 func _unhandled_input(event : InputEvent) -> void:
 	parse_input_movement(event)
@@ -211,6 +243,10 @@ func parse_input_movement(event: InputEvent) -> void:
 	if event.is_action_pressed(Inputs.RUSH) and RushTimer.is_stopped():
 		move_state = MOVEMENT_STATES.RUSH
 		current_speed = SPEED_DICT[move_state]
+		
+		weapon_heat += rush_heat
+		Events.weapon_heat_updated.emit(weapon_heat)
+		
 		RushTimer.start()
 	
 	if event.is_action_pressed(Inputs.FOCUS):
@@ -245,7 +281,7 @@ func parse_input_attack(event: InputEvent) -> void:
 
 func animate_rush() -> void:
 	Wings.position.x = -(RushTimer.time_left * RUSH_TIME_FACTOR)
-	Head.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR)
+	Head.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR * HEAD_SHIFT_FACTOR)
 	Body.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR * BODY_SHIFT_FACTOR)
 	Auxillary.position.x = AUXILLARY_START.x + (RushTimer.time_left * RUSH_TIME_FACTOR)
 
@@ -308,14 +344,39 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 			Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * DEFAULT_PUSH)
 			Global.active_camera.tilt_to_angle(0)
 
+
+"""
+do later -
+figure out some equation for heat generation with relation to number of shots,
+preferrably reduced by some factor
+"""
 func fire_auxillary() -> void:
+	AuxillaryCooldown.start()
+	
 	var shots: int = 8
-	var spread: float = 0.8 * aim_choke
+	var spread: float = 0.4 * aim_choke
 	var shot_angle: float = Auxillary.global_rotation
 	var shot_speed: float = 100
 	var shot_start = CannonPoint.global_position
+	var heat: float = randf_range(weapon_heat_range.x, weapon_heat_range.y) 
 	
-	AuxillaryCooldown.start()
-	#PlayerGun.fire(shot_speed, shot_angle, shot_start)
-	PlayerGun.multifire(shots, spread, shot_speed, shot_angle, shot_start)
+	#heat *= (shots * 0.4) 
+	#PlayerGun.multifire_radial(shots, spread, shot_speed, shot_angle, shot_start) 
+	
+	PlayerGun.fire(shot_speed, shot_angle, shot_start)
+	weapon_heat += heat
+	Events.weapon_heat_updated.emit(weapon_heat)
 
+func cool_weapon() -> void:
+	weapon_heat = max(0, weapon_heat - WEAPON_COOL_RATE * get_physics_process_delta_time())
+	Events.weapon_heat_updated.emit(weapon_heat)
+
+func check_heat(value: float) -> void:
+	if value >= weapon_heat_max:
+		overheated = true
+		Events.core_overheated.emit()
+	else:
+		overheated = false
+
+func tick_overheat_damage() -> void:
+	core_heat -= OVERHEAT_DAMAGE * get_physics_process_delta_time()

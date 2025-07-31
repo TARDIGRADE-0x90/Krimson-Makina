@@ -59,4 +59,4 @@ position = Vector2(96, -8)
 [node name="PlayerGun" parent="Auxillary" instance=ExtResource("9_w0jcr")]
 position = Vector2(-64, 64)
 ShotData = ExtResource("10_5h044")
-MaxPool = 1200
+MaxPool = 2000

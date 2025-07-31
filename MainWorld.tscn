@@ -1,12 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://bljl55j6cvpyg"]
+[gd_scene load_steps=6 format=3 uid="uid://bljl55j6cvpyg"]
 
 [ext_resource type="PackedScene" uid="uid://bpard0pnbjd2v" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
 [ext_resource type="Script" path="res://MainWorld.gd" id="1_g5bsb"]
 [ext_resource type="PackedScene" uid="uid://bwegmqh8oa5ys" path="res://LevelBackground.tscn" id="1_iq8db"]
+[ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="2_eupmn"]
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_n2egp"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_g5bsb")
+
+[node name="PlayerUI" parent="." instance=ExtResource("2_eupmn")]
 
 [node name="LevelBackground" parent="." instance=ExtResource("1_iq8db")]
 
