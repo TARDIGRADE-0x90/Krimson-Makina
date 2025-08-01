@@ -4,5 +4,6 @@
 
 [node name="Floor" type="Polygon2D"]
 texture_repeat = 3
+position = Vector2(-24, 0)
 texture = ExtResource("1_ohhdx")
-polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2096, 5072, 1160, 5112, -24)
+polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2408, 11160, 2440, 11288, -2840, 9256, -2880, 9248, -744, 8464, 0)

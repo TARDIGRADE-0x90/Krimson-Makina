@@ -15,6 +15,9 @@ func _ready() -> void:
 	if ShotData:
 		set_data()
 	
+	CollisionBits.set_mask(self, CollisionBits.DEFAULT_BIT, false)
+	#CollisionBits.set_mask(self, CollisionBits.PROJECTILE_BIT, true)
+	
 	body_entered.connect(collide)
 	area_entered.connect(collide)
 	
@@ -28,6 +31,7 @@ func set_data(data: ProjectileData = ShotData) -> void:
 	initialize_sprite(data)
 	initialize_collider(data)
 	initialize_lifetime(data)
+	CollisionBits.set_mask(self, ShotData.CollisionType, true)
 
 func initialize_sprite(data: ProjectileData = ShotData) -> void:
 	Sprite.set_texture(data.ShotVisual)

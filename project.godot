@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Events="*res://Events.gd"
 Global="*res://Global.gd"
+CollisionBits="*res://CollisionBits.gd"
 
 [display]
 

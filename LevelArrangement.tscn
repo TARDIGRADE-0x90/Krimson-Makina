@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8e835qjr5wxb"]
+
+[ext_resource type="Script" path="res://Walls.gd" id="1_0eknv"]
+[ext_resource type="Texture2D" uid="uid://bw7kbvr7f64y4" path="res://Assets/undergrating.png" id="1_2wlli"]
+[ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="1_qg5gr"]
+[ext_resource type="Texture2D" uid="uid://dmh1vtukdkb4w" path="res://Assets/steel_wall.png" id="3_uupkf"]
+
+[node name="LevelArrangement" type="Node2D"]
+
+[node name="Underfloor" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("1_2wlli")
+texture_rotation = 1.5708
+polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 2
+texture = ExtResource("1_qg5gr")
+polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+script = ExtResource("1_0eknv")
+
+[node name="WallVisual" type="Polygon2D" parent="Walls"]
+texture_repeat = 3
+texture = ExtResource("3_uupkf")
+invert_enabled = true
+invert_border = 4000.0
+polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
+
+[node name="Collider" type="CollisionPolygon2D" parent="Walls"]
+visible = false
+position = Vector2(-16, 8)
+polygon = PackedVector2Array(9248, -2872, 9240, -744, 8464, 0, 16, -8, 16, 4928, 2264, 4952, 2240, 2464, 3352, 1600, 8456, 1600, 9072, 2472, 9080, 4384, 16536, 4376, 16752, 5056, -88, 5056, -80, -2984, 16752, -2976, 16752, 5056, 16536, 4376, 16648, 272, 13752, 2400, 11264, 2400, 11248, -2848)

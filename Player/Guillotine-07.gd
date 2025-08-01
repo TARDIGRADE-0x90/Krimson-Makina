@@ -22,7 +22,7 @@ const SPEED_DICT: Dictionary = {
 
 const ZERO_VECTOR = Vector2(0, 0)
 
-const VIEW_MARGIN_FOCUS: int = 640
+const VIEW_MARGIN_FOCUS: int = 720
 const VIEW_MARGIN_DEFAULT: int = 480
 const VIEW_MARGIN_EXECUTION: int = 240
 
@@ -31,6 +31,7 @@ const SLASH_TIME: float = 0.3
 const THRUST_TIME: float = 0.4
 const EXECUTION_TIME: float = 0.8
 
+const MINIGUN_POOL_SIZE: int = 80
 const MINIGUN_FIRERATE: float = 0.075
 const MINIGUN_HEAT_RANGE = Vector2(1.5, 2.8)
 
@@ -92,10 +93,10 @@ const Z_HEAD: int = 3
 @onready var Body: Sprite2D  = $FullBody/Body
 @onready var Head: Sprite2D  = $FullBody/Head
 @onready var Blade: Node2D = $Blade
-@onready var Auxillary: Node2D = $Auxillary
-@onready var CannonPoint: Marker2D = $Auxillary/CannonPoint
+@onready var AuxillaryAnchor: Node2D = $AuxillaryAnchor
+@onready var CannonPoint: Marker2D = $AuxillaryAnchor/CannonPoint
 
-@onready var PlayerGun: ProjectileManager = $Auxillary/PlayerGun
+@onready var PlayerGun: ProjectileManager = $AuxillaryAnchor/PlayerGun
 
 var current_speed: int = 0
 var current_direction = Vector2(0,0)
@@ -127,6 +128,7 @@ var weapon_heat_range: Vector2 = MINIGUN_HEAT_RANGE
 var weapon_heat_max: float = WEAPON_HEAT_MAX
 var weapon_heat: float = 0
 
+var auxillary_pool_size: int = MINIGUN_POOL_SIZE
 var auxillary_firerate: float
 var aim_choke: float = 1.0
 
@@ -137,15 +139,17 @@ var overheated: bool = false
 func _ready() -> void:
 	Global.player = self
 	
-	initialize_z_ordering()
+	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, true)
 	
-	Blade.position = BLADE_START
-	Auxillary.position = AUXILLARY_START
+	initialize_z_ordering()
 	
 	move_state_stack.append(MOVEMENT_STATES.HOVER) #default speed in the movement queue VERY IMPORTANT
 	current_speed = SPEED_DICT[MOVEMENT_STATES.HOVER]
 	
+	Blade.position = BLADE_START
+	AuxillaryAnchor.position = AUXILLARY_START
 	auxillary_firerate = MINIGUN_FIRERATE
+	PlayerGun.MaxPool = auxillary_pool_size
 	
 	initialize_rush_timer()
 	initialize_slash_timer()
@@ -167,7 +171,6 @@ func _physics_process(delta: float) -> void:
 	
 	update_direction()
 	update_velocity()
-	
 	
 	if slashing:
 		animate_slash()
@@ -229,7 +232,7 @@ func initialize_z_ordering() -> void:
 	Body.z_index = Z_BODY
 	Wings.z_index = Z_WINGS
 	Blade.z_index = Z_BLADE
-	Auxillary.z_index = Z_AUXILLARY
+	AuxillaryAnchor.z_index = Z_AUXILLARY
 
 func look_at_with_bound(obj: Node2D, target: Vector2, bound: Vector2) -> void:
 	var localized_target = to_local(target)
@@ -249,6 +252,7 @@ func update_direction() -> void:
 		input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
 		
 		current_direction = Vector2(input_x, input_y).normalized()
+	
 	else:
 		current_direction = ZERO_VECTOR 
 	
@@ -272,9 +276,6 @@ func update_direction() -> void:
 	"""
 
 func parse_input_movement(event: InputEvent) -> void:
-	if executing: #poor fix but leave it for now
-		return
-	
 	if event.is_action_pressed(Inputs.RUSH) and move_state != MOVEMENT_STATES.RUSH:
 		move_state = MOVEMENT_STATES.RUSH
 		current_speed = SPEED_DICT[move_state]
@@ -317,25 +318,26 @@ func parse_input_execution(event: InputEvent) -> void:
 func handle_looking() -> void: #remember that this method, as it is now, is literally running every frame
 	if move_state == MOVEMENT_STATES.FOCUS and !executing:
 		aim_choke = FOCUS_CHOKE 
-		look_at_with_bound(Auxillary, cursor, AUXILLARY_AIM_BOUND)
+		look_at_with_bound(AuxillaryAnchor, cursor, AUXILLARY_AIM_BOUND)
 		look_at_with_bound(Head, cursor, AUXILLARY_AIM_BOUND)
 		
 		if Global.active_camera:
 			Global.active_camera.set_focused(true)
 			Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_FOCUS)
+			Global.active_camera.tilt_to_angle(Head.rotation)
 	
 	elif executing:
 		set_rotation(global_position.angle_to_point(execution_point))
-		Auxillary.set_rotation(0)
+		AuxillaryAnchor.set_rotation(0)
 		Head.set_rotation(0)
 		
 		Global.active_camera.set_focused(false)
 		Global.active_camera.snap_to_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_EXECUTION)
-		Global.active_camera.tilt_to_angle(0)
+		#Global.active_camera.tilt_to_angle(0)
 
 	else:
 		aim_choke = DEFAULT_CHOKE
-		Auxillary.set_rotation(0)
+		AuxillaryAnchor.set_rotation(0)
 		Head.set_rotation(0)
 		
 		if Global.active_camera:
@@ -385,7 +387,10 @@ func reset_blade() -> void:
 
 func trigger_execution() -> void:
 	executing = true
-	move_state = MOVEMENT_STATES.HOVER
+	
+	if move_state == MOVEMENT_STATES.RUSH:
+		RushTimer.stop()
+		clear_rush()
 	
 	reset_blade() #safeguard
 	
@@ -404,7 +409,7 @@ func animate_execution_movement() -> void: #animate the launch toward an enemy
 	Wings.position.x = -( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
 	Head.position.x = ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR * HEAD_SHIFT_FACTOR)
 	Body.position.x = ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR * BODY_SHIFT_FACTOR)
-	Auxillary.position.x = AUXILLARY_START.x + ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
+	AuxillaryAnchor.position.x = AUXILLARY_START.x + ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
 
 func handle_execution() -> void:
 	global_position.x = Global.interpolate_value(global_position.x, execution_point.x, 0.3, 0.5)
@@ -431,7 +436,7 @@ func animate_rush() -> void:
 	Wings.position.x = -(RushTimer.time_left * RUSH_TIME_FACTOR)
 	Head.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR * HEAD_SHIFT_FACTOR)
 	Body.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR * BODY_SHIFT_FACTOR)
-	Auxillary.position.x = AUXILLARY_START.x + (RushTimer.time_left * RUSH_TIME_FACTOR)
+	AuxillaryAnchor.position.x = AUXILLARY_START.x + (RushTimer.time_left * RUSH_TIME_FACTOR)
 
 func handle_rush() -> void:
 	velocity = Vector2(cos(rotation), sin(rotation)).normalized() * current_speed
@@ -444,7 +449,7 @@ func clear_rush() -> void: #reset movement and chassis part positioning
 	Wings.position.x = 0
 	Body.position.x = 0
 	Head.position.x = 0
-	Auxillary.position.x = AUXILLARY_START.x 
+	AuxillaryAnchor.position.x = AUXILLARY_START.x 
 
 """
 do later -
@@ -456,15 +461,15 @@ func fire_auxillary() -> void:
 	
 	var shots: int = 8
 	var spread: float = 0.4 * aim_choke
-	var shot_angle: float = Auxillary.global_rotation
+	var shot_angle: float = AuxillaryAnchor.global_rotation
 	var shot_speed: float = 100
 	var shot_start = CannonPoint.global_position
 	var heat: float = randf_range(weapon_heat_range.x, weapon_heat_range.y) 
 	
 	#heat *= (shots * 0.4) 
-	#PlayerGun.multifire_radial(shots, spread, shot_speed, shot_angle, shot_start) 
-	
+	#PlayerGun.multifire_radial(shots, spread, shot_speed, shot_angle, shot_start)
 	PlayerGun.fire(shot_speed, shot_angle, shot_start)
+	
 	weapon_heat += heat
 	Events.weapon_heat_updated.emit(weapon_heat)
 

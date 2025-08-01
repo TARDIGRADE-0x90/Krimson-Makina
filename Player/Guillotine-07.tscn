@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bpard0pnbjd2v"]
+[gd_scene load_steps=10 format=3 uid="uid://bpard0pnbjd2v"]
 
 [ext_resource type="Script" path="res://Player/Guillotine-07.gd" id="1_2uy8n"]
 [ext_resource type="Texture2D" uid="uid://dfdrywdfoturh" path="res://Assets/guillotine-wings-draft.png" id="4_5julm"]
@@ -9,9 +9,15 @@
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="9_w0jcr"]
 [ext_resource type="Resource" uid="uid://bhigx4fbwrcpi" path="res://Player/MinigunShot.tres" id="10_5h044"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1jr70"]
+size = Vector2(256, 256)
+
 [node name="Guillotine-07" type="CharacterBody2D" node_paths=PackedStringArray("PlayerCamera")]
 script = ExtResource("1_2uy8n")
 PlayerCamera = NodePath("")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1jr70")
 
 [node name="RushTimer" type="Timer" parent="."]
 one_shot = true
@@ -46,17 +52,17 @@ position = Vector2(0, 256)
 rotation = 0.785398
 texture = ExtResource("7_p2rxt")
 
-[node name="Auxillary" type="Node2D" parent="."]
+[node name="AuxillaryAnchor" type="Node2D" parent="."]
 z_index = 1
 position = Vector2(64, -64)
 
-[node name="GunVisual" type="Sprite2D" parent="Auxillary"]
+[node name="GunVisual" type="Sprite2D" parent="AuxillaryAnchor"]
 texture = ExtResource("8_7dn3a")
 
-[node name="CannonPoint" type="Marker2D" parent="Auxillary"]
+[node name="CannonPoint" type="Marker2D" parent="AuxillaryAnchor"]
 position = Vector2(96, -8)
 
-[node name="PlayerGun" parent="Auxillary" instance=ExtResource("9_w0jcr")]
+[node name="PlayerGun" parent="AuxillaryAnchor" instance=ExtResource("9_w0jcr")]
 position = Vector2(-64, 64)
 ShotData = ExtResource("10_5h044")
-MaxPool = 2000
+MaxPool = 128
