@@ -1,22 +1,27 @@
 extends CanvasLayer
 class_name PlayerUI
 
+"""
+do later -
+let WeaponHeat panel blink a bit upon reaching 0 before clearing
+"""
+
 const MSG_IDLE: String = "OPTICAL FEED :: ACTIVE"
 const MSG_COMBAT: String = "ENGAGING"
 const CORE_HEAT_PREFIX: String = "GUILLOTINE-07 TEMPERATURE:"
 const CORE_HEAT_SUFFIX: String = "° C FROM PEAK"
-const CORE_HEAT_SUFFX_MAX: String = "° C - FULLY COOLED"
+const CORE_HEAT_SUFFX_MAX: String = "° C FROM PEAK [FULLY COOLED]"
 
 const WEAPON_MAX_HEAT_PREFIX: String = "MAX: "
 const WEAPON_MAX_HEAT_SUFFIX: String = "° C"
-const WEAPON_MAX_HEAT_SUFFIX_WARN: String = "° C [!!]"
-const WEAPON_MAX_HEAT_SUFFIX_OVERHEAT: String = "° C [OVERHEATING]"
+const WEAPON_MAX_HEAT_SUFFIX_WARN: String = "° C [!!!]"
+const OVERHEAT_WARNING: String = "[! OVERHEATING !]"
 
 const WEAPON_HEAT_SUFFIX: String = "° C"
 
 const WEAPON_HEAT_HEADER: String = "AUXILLARY HEAT"
 
-const HEAT_WARN_FACTOR: float = 0.7
+const HEAT_WARN_FACTOR: float = 0.65
 
 const CORE_HEAT_BAR_X_FACTOR: int = 2
 
@@ -44,6 +49,7 @@ func _ready() -> void:
 	
 	WeaponMaxHeat.set_text("%s %s" % [WEAPON_MAX_HEAT_PREFIX, WEAPON_MAX_HEAT_SUFFIX])
 	WeaponHeatHeader.set_text(WEAPON_HEAT_HEADER)
+	OverheatWarning.set_text(OVERHEAT_WARNING)
 	OverheatWarning.set_visible(false)
 	
 	Events.weapon_heat_updated.connect(adjust_weapon_heat)

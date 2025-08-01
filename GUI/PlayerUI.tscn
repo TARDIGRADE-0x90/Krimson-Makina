@@ -178,7 +178,7 @@ offset_top = 64.0
 offset_right = 132.0
 offset_bottom = 108.0
 grow_horizontal = 2
-text = "[! OVERHEATED !]"
+text = "[! OVERHEATING !]"
 label_settings = SubResource("LabelSettings_v5r0y")
 
 [node name="WeaponMaxHeat" type="Label" parent="WeaponHeatPanel/WeaponHeatLimit"]

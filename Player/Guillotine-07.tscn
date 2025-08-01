@@ -20,7 +20,7 @@ one_shot = true
 
 [node name="ThrustTimer" type="Timer" parent="."]
 
-[node name="JoustCharge" type="Timer" parent="."]
+[node name="ExecutionTimer" type="Timer" parent="."]
 
 [node name="AuxillaryCooldown" type="Timer" parent="."]
 process_callback = 0

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0yy8451w18eb"]
+
+[ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="1_ohhdx"]
+
+[node name="Floor" type="Polygon2D"]
+texture_repeat = 3
+texture = ExtResource("1_ohhdx")
+polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2096, 5072, 1160, 5112, -24)

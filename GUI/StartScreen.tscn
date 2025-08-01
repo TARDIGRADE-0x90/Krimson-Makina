@@ -46,6 +46,7 @@ theme_override_font_sizes/font_size = 24
 text = "START"
 
 [node name="OptionsButton" type="Button" parent="MenuButtonMargin/MenuButtons"]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
