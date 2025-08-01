@@ -12,12 +12,6 @@ TO DO:
 		is a worst case fix but there ought to be a better way to break it into pieces)
 """
 
-"""
-Note on Executions:
-	- let them fully cool weapons
-	- let them restore a bit of core cooling
-"""
-
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
 
 const SPEED_DICT: Dictionary = {
@@ -40,6 +34,7 @@ const EXECUTION_TIME: float = 0.8
 const MINIGUN_FIRERATE: float = 0.075
 const MINIGUN_HEAT_RANGE = Vector2(1.5, 2.8)
 
+const EXECUTION_RUSH_TIME_FACTOR: int = 120
 const RUSH_TIME_FACTOR: int = 100
 const HEAD_SHIFT_FACTOR: float = 1.8
 const BODY_SHIFT_FACTOR: float = 1.2
@@ -52,17 +47,27 @@ const WEAPON_COOL_RATE: float = 44 #multiplied against delta
 const WEAPON_COOL_RATE_FOCUSED: float = 26 #multiplied against delta
 const OVERHEAT_DAMAGE: float = 4 #multiplied against delta
 
+const EXECUTION_COOLING: float = 20.0
+
 const DEFAULT_CHOKE: float = 1.0
 const FOCUS_CHOKE: float = 0.4
 
 const BLADE_START = Vector2(0, 256)
 const BLADE_SLASH_REST = Vector2(0, -256)
 const BLADE_T_X_DEFAULT = Vector2(1, 0)
-const BLADE_ROTATE_ANGLE: float = (PI * 0.06)
-const BLADE_ROTATE_DEGREE: float = 0.2
+
+const SLASH_ANGLE: float = (PI * 0.06)
+const SLASH_DEGREE: float = 0.2
+
 const THRUST_X_OFFSET: int = 256
 const THRUST_TIME_FACTOR: int = 22
 const THRUST_PUSH: int = 200
+
+const EXECUTION_ANGLE: float = (PI * 0.12)
+const EXECUTION_DEGREE: float = 0.8
+const EXECUTION_X_OFFSET: int = 128
+const EXECUTION_TIME_FACTOR: int = 24
+const EXECUTION_PUSH: int = 340
 
 const AUXILLARY_START = Vector2(64, -64)
 const AUXILLARY_AIM_BOUND = Vector2(100, 0)
@@ -163,8 +168,6 @@ func _physics_process(delta: float) -> void:
 	update_direction()
 	update_velocity()
 	
-	if move_state == MOVEMENT_STATES.RUSH:
-		animate_rush()
 	
 	if slashing:
 		animate_slash()
@@ -175,7 +178,7 @@ func _physics_process(delta: float) -> void:
 	if move_state == MOVEMENT_STATES.RUSH:
 		handle_rush()
 	
-	if auxillary_held and AuxillaryCooldown.is_stopped():
+	if auxillary_held and AuxillaryCooldown.is_stopped() and !executing:
 		fire_auxillary()
 	
 	if !auxillary_held:
@@ -269,6 +272,9 @@ func update_direction() -> void:
 	"""
 
 func parse_input_movement(event: InputEvent) -> void:
+	if executing: #poor fix but leave it for now
+		return
+	
 	if event.is_action_pressed(Inputs.RUSH) and move_state != MOVEMENT_STATES.RUSH:
 		move_state = MOVEMENT_STATES.RUSH
 		current_speed = SPEED_DICT[move_state]
@@ -290,7 +296,7 @@ func parse_input_movement(event: InputEvent) -> void:
 			current_speed = SPEED_DICT[move_state]
 
 func parse_input_attack(event: InputEvent) -> void:
-	if event.is_action_pressed(Inputs.PRIMARY) and !slashing and !thrusting:
+	if event.is_action_pressed(Inputs.PRIMARY) and !slashing and !thrusting and !executing:
 		if Input.is_action_pressed(Inputs.FOCUS):
 			trigger_thrust()
 			return
@@ -343,19 +349,25 @@ func trigger_slash() -> void:
 	slashing = true
 
 func animate_slash() -> void:
-	Blade.transform.origin = Blade.transform.origin.rotated(BLADE_ROTATE_ANGLE * blade_direction)
-	Blade.rotation += BLADE_ROTATE_DEGREE * blade_direction
+	Blade.transform.origin = Blade.transform.origin.rotated(SLASH_ANGLE * blade_direction)
+	Blade.rotation += SLASH_DEGREE * blade_direction
 
 func trigger_thrust() -> void:
 	center_blade()
 	ThrustTimer.start()
 	thrusting = true
 
+func animate_thrust() -> void:
+	Blade.transform.origin.x = THRUST_X_OFFSET - sin(ThrustTimer.time_left * THRUST_TIME_FACTOR) * THRUST_PUSH
+
 func center_blade() -> void:
 	Blade.transform.origin.y = Head.rotation #center the blade
 	Blade.set_rotation(PI * 0.5 * -blade_direction)
 
 func reset_blade() -> void:
+	slashing = false
+	thrusting = false
+	
 	match blade_direction:
 		1: 
 			blade_position = BLADE_START
@@ -371,26 +383,44 @@ func reset_blade() -> void:
 	Blade.transform.y.y = blade_direction
 	Blade.position = blade_position
 
-func animate_thrust() -> void:
-	Blade.transform.origin.x = THRUST_X_OFFSET - sin(ThrustTimer.time_left * THRUST_TIME_FACTOR) * THRUST_PUSH
-
 func trigger_execution() -> void:
-	#reset move state upon entering execution
-	move_state_stack.erase(MOVEMENT_STATES.FOCUS)
-	move_state_stack.erase(MOVEMENT_STATES.RUSH)
-	
 	executing = true
+	move_state = MOVEMENT_STATES.HOVER
+	
+	reset_blade() #safeguard
+	
 	execution_point = cursor
 	ExecutionTimer.start()
+
+func animate_execution_strike() -> void: #spin into a thrust
+	if ExecutionTimer.time_left >= EXECUTION_TIME * 0.5:
+		Blade.transform.origin = Blade.transform.origin.rotated(EXECUTION_ANGLE * blade_direction)
+		Blade.rotation += EXECUTION_DEGREE * blade_direction
+	else:
+		center_blade()
+		Blade.transform.origin.x = EXECUTION_X_OFFSET - sin(ExecutionTimer.time_left * EXECUTION_TIME_FACTOR) * EXECUTION_PUSH
+
+func animate_execution_movement() -> void: #animate the launch toward an enemy
+	Wings.position.x = -( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
+	Head.position.x = ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR * HEAD_SHIFT_FACTOR)
+	Body.position.x = ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR * BODY_SHIFT_FACTOR)
+	Auxillary.position.x = AUXILLARY_START.x + ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
 
 func handle_execution() -> void:
 	global_position.x = Global.interpolate_value(global_position.x, execution_point.x, 0.3, 0.5)
 	global_position.y = Global.interpolate_value(global_position.y, execution_point.y, 0.3, 0.5)
+	
+	animate_execution_strike()
+	animate_execution_movement()
 
 func clear_execution() -> void:
+	executing = false
+	
+	reset_blade()
+	
+	core_heat = min(core_heat_max, core_heat + EXECUTION_COOLING)
 	weapon_heat = 0
 	Events.weapon_heat_updated.emit(weapon_heat)
-	executing = false
 
 func trigger_rush() -> void:
 	weapon_heat += rush_heat
@@ -405,12 +435,14 @@ func animate_rush() -> void:
 
 func handle_rush() -> void:
 	velocity = Vector2(cos(rotation), sin(rotation)).normalized() * current_speed
+	animate_rush()
 
 func clear_rush() -> void: #reset movement and chassis part positioning
 	move_state = move_state_stack.back()
 	current_speed = SPEED_DICT[move_state]
 	
 	Wings.position.x = 0
+	Body.position.x = 0
 	Head.position.x = 0
 	Auxillary.position.x = AUXILLARY_START.x 
 

@@ -111,6 +111,7 @@ layout_mode = 2
 text = "GUILLOTINE-07 TEMPERATURE:
 "
 label_settings = SubResource("LabelSettings_lr8o4")
+horizontal_alignment = 2
 
 [node name="CoreHeat" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2

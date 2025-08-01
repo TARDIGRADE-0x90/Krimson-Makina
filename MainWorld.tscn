@@ -9,11 +9,11 @@
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_g5bsb")
 
-[node name="PlayerUI" parent="." instance=ExtResource("2_eupmn")]
+[node name="Floor" parent="." instance=ExtResource("5_wrhwl")]
+position = Vector2(-2236, -1194)
 
 [node name="Guillotine-07" parent="." instance=ExtResource("1_fk2mu")]
 
 [node name="PlayerCamera" parent="." instance=ExtResource("4_n2egp")]
 
-[node name="Floor" parent="." instance=ExtResource("5_wrhwl")]
-position = Vector2(-2236, -1194)
+[node name="PlayerUI" parent="." instance=ExtResource("2_eupmn")]
