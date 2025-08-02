@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://den6r6d30mayi"]
+
+[ext_resource type="Texture2D" uid="uid://dq1utibhjvpsr" path="res://Assets/turret_base.png" id="1_menga"]
+[ext_resource type="Script" path="res://PlasmaTrigunTurret.gd" id="1_nymim"]
+[ext_resource type="Texture2D" uid="uid://menr1trsc80q" path="res://Assets/plasma_shotgun_gun.png" id="2_r8u6w"]
+[ext_resource type="PackedScene" uid="uid://cg0ec8jkbxaxc" path="res://Meleeable.tscn" id="4_cyh0y"]
+[ext_resource type="PackedScene" uid="uid://5q1chrrp83rm" path="res://Shootable.tscn" id="5_q75c7"]
+[ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="6_xdcgi"]
+[ext_resource type="Resource" uid="uid://bnen0x4qmsndc" path="res://Projectile/EnemyProjectiles/PlasmaShot.tres" id="7_70tw4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nn2xq"]
+size = Vector2(256, 256)
+
+[node name="PlasmaTrigunTurret" type="StaticBody2D"]
+script = ExtResource("1_nymim")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nn2xq")
+
+[node name="GunCooldown" type="Timer" parent="."]
+
+[node name="FullBody" type="Node2D" parent="."]
+
+[node name="Base" type="Sprite2D" parent="FullBody"]
+texture = ExtResource("1_menga")
+
+[node name="Guns" type="Sprite2D" parent="FullBody"]
+texture = ExtResource("2_r8u6w")
+
+[node name="Cannon1" type="Marker2D" parent="FullBody/Guns"]
+position = Vector2(96, -96)
+rotation = -0.261799
+
+[node name="Cannon2" type="Marker2D" parent="FullBody/Guns"]
+position = Vector2(112, 0)
+
+[node name="Cannon3" type="Marker2D" parent="FullBody/Guns"]
+position = Vector2(96, 96)
+rotation = 0.261799
+
+[node name="PlasmaGun" parent="." instance=ExtResource("6_xdcgi")]
+position = Vector2(96, -96)
+rotation = -0.261799
+ShotData = ExtResource("7_70tw4")
+MaxPool = 32
+
+[node name="Shootable" parent="." instance=ExtResource("5_q75c7")]
+
+[node name="Meleeable" parent="." instance=ExtResource("4_cyh0y")]

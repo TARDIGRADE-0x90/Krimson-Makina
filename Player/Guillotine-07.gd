@@ -31,7 +31,7 @@ const SLASH_TIME: float = 0.3
 const THRUST_TIME: float = 0.4
 const EXECUTION_TIME: float = 0.8
 
-const MINIGUN_POOL_SIZE: int = 80
+const MINIGUN_POOL_SIZE: int = 2000
 const MINIGUN_FIRERATE: float = 0.075
 const MINIGUN_HEAT_RANGE = Vector2(1.5, 2.8)
 
@@ -53,24 +53,24 @@ const EXECUTION_COOLING: float = 20.0
 const DEFAULT_CHOKE: float = 1.0
 const FOCUS_CHOKE: float = 0.4
 
-const BLADE_START = Vector2(0, 256)
-const BLADE_SLASH_REST = Vector2(0, -256)
+const BLADE_START = Vector2(0, 320)
+const BLADE_SLASH_REST = Vector2(0, -320)
 const BLADE_T_X_DEFAULT = Vector2(1, 0)
 
 const SLASH_ANGLE: float = (PI * 0.06)
 const SLASH_DEGREE: float = 0.2
 
-const THRUST_X_OFFSET: int = 256
+const THRUST_X_OFFSET: int = 320
 const THRUST_TIME_FACTOR: int = 22
-const THRUST_PUSH: int = 200
+const THRUST_PUSH: int = 340
 
 const EXECUTION_ANGLE: float = (PI * 0.12)
 const EXECUTION_DEGREE: float = 0.8
 const EXECUTION_X_OFFSET: int = 128
 const EXECUTION_TIME_FACTOR: int = 24
-const EXECUTION_PUSH: int = 340
+const EXECUTION_PUSH: int = 260
 
-const AUXILLARY_START = Vector2(64, -64)
+const AUXILLARY_START = Vector2(0, -64)
 const AUXILLARY_AIM_BOUND = Vector2(100, 0)
 
 const Z_BLADE: int = 1
@@ -88,14 +88,14 @@ const Z_HEAD: int = 3
 @onready var ExecutionTimer: Timer = $ExecutionTimer
 @onready var AuxillaryCooldown: Timer = $AuxillaryCooldown
 
+@onready var Hurtbox = $Hurtbox
 @onready var FullBody: Node2D = $FullBody
 @onready var Wings: Sprite2D = $FullBody/Wings
 @onready var Body: Sprite2D  = $FullBody/Body
 @onready var Head: Sprite2D  = $FullBody/Head
-@onready var Blade: Node2D = $Blade
+@onready var Blade: Area2D = $Blade
 @onready var AuxillaryAnchor: Node2D = $AuxillaryAnchor
 @onready var CannonPoint: Marker2D = $AuxillaryAnchor/CannonPoint
-
 @onready var PlayerGun: ProjectileManager = $AuxillaryAnchor/PlayerGun
 
 var current_speed: int = 0
@@ -139,7 +139,8 @@ var overheated: bool = false
 func _ready() -> void:
 	Global.player = self
 	
-	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, true)
+	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, true)
+	CollisionBits.set_mask(Blade, CollisionBits.PLAYER_SWORD_BIT, true)
 	
 	initialize_z_ordering()
 	
@@ -171,6 +172,9 @@ func _physics_process(delta: float) -> void:
 	
 	update_direction()
 	update_velocity()
+	
+	if slashing || thrusting || executing:
+		check_blade_collision()
 	
 	if slashing:
 		animate_slash()
@@ -247,14 +251,26 @@ func update_velocity() -> void:
 	move_and_slide()
 
 func update_direction() -> void:
-	if move_state != MOVEMENT_STATES.RUSH and !executing:
-		input_x = int(Input.is_action_pressed(Inputs.MOVE_RIGHT)) - int(Input.is_action_pressed(Inputs.MOVE_LEFT));
-		input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
-		
-		current_direction = Vector2(input_x, input_y).normalized()
+	if executing:
+		current_direction = ZERO_VECTOR
+		return
 	
-	else:
-		current_direction = ZERO_VECTOR 
+	match move_state:
+		MOVEMENT_STATES.HOVER:
+			input_x = int(Input.is_action_pressed(Inputs.MOVE_RIGHT)) - int(Input.is_action_pressed(Inputs.MOVE_LEFT));
+			input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
+			
+			current_direction = Vector2(input_x, input_y).normalized()
+		
+		MOVEMENT_STATES.FOCUS:
+			input_x = int(Input.is_action_pressed(Inputs.MOVE_RIGHT)) - int(Input.is_action_pressed(Inputs.MOVE_LEFT));
+			input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
+			
+			current_direction = Vector2(input_x, input_y).normalized()
+			#current_direction = Vector2(input_x * (rotation + (PI * 0.5)), (input_y * -rotation * 2)).normalized()
+		
+		MOVEMENT_STATES.RUSH:
+			current_direction = ZERO_VECTOR
 	
 	"""
 	match move_state: #tank controls do not fit at all for this kind of gameplay but i'm leaving it for posterity
@@ -362,9 +378,27 @@ func trigger_thrust() -> void:
 func animate_thrust() -> void:
 	Blade.transform.origin.x = THRUST_X_OFFSET - sin(ThrustTimer.time_left * THRUST_TIME_FACTOR) * THRUST_PUSH
 
+var melee_hits: Array[CollisionObject2D] #very very dumb but I'm doing this anyway
+
+func check_blade_collision() -> void:
+	if Blade.has_overlapping_bodies():
+		for i in range(Blade.get_overlapping_bodies().size()):
+			var melee_body: CollisionObject2D = Blade.get_overlapping_bodies()[i]
+			
+			if melee_body.has_node(Global.MELEE_DETECTOR): #Note that this only checks the first layer of nodes
+				if !melee_body.get_node(Global.MELEE_DETECTOR).struck:
+					melee_body.get_node(Global.MELEE_DETECTOR).melee_detected.emit()
+					melee_hits.append(Blade.get_overlapping_bodies()[i])
+
 func center_blade() -> void:
 	Blade.transform.origin.y = Head.rotation #center the blade
 	Blade.set_rotation(PI * 0.5 * -blade_direction)
+
+func clear_melee_hits() -> void:
+	for i in range(melee_hits.size()):
+		var hit_body: CollisionObject2D = melee_hits[i]
+		hit_body.get_node(Global.MELEE_DETECTOR).melee_cleared.emit()
+		melee_hits.erase(hit_body)
 
 func reset_blade() -> void:
 	slashing = false
@@ -384,6 +418,8 @@ func reset_blade() -> void:
 	Blade.transform.y.x = 0
 	Blade.transform.y.y = blade_direction
 	Blade.position = blade_position
+	
+	clear_melee_hits()
 
 func trigger_execution() -> void:
 	executing = true
@@ -391,6 +427,12 @@ func trigger_execution() -> void:
 	if move_state == MOVEMENT_STATES.RUSH:
 		RushTimer.stop()
 		clear_rush()
+	
+	if slashing:
+		SlashTimer.stop()
+	
+	if thrusting:
+		ThrustTimer.stop()
 	
 	reset_blade() #safeguard
 	
@@ -462,13 +504,12 @@ func fire_auxillary() -> void:
 	var shots: int = 8
 	var spread: float = 0.4 * aim_choke
 	var shot_angle: float = AuxillaryAnchor.global_rotation
-	var shot_speed: float = 100
 	var shot_start = CannonPoint.global_position
 	var heat: float = randf_range(weapon_heat_range.x, weapon_heat_range.y) 
 	
 	#heat *= (shots * 0.4) 
-	#PlayerGun.multifire_radial(shots, spread, shot_speed, shot_angle, shot_start)
-	PlayerGun.fire(shot_speed, shot_angle, shot_start)
+	#PlayerGun.multifire_radial(shots, spread, shot_angle, shot_start)
+	PlayerGun.fire(shot_angle, shot_start)
 	
 	weapon_heat += heat
 	Events.weapon_heat_updated.emit(weapon_heat)

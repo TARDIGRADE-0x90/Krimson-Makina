@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://bnen0x4qmsndc"]
+
+[ext_resource type="Shape2D" uid="uid://dh65u6vbxcdt3" path="res://Projectile/ShotColliders/LargeSquareCollider.tres" id="1_1cw7e"]
+[ext_resource type="Script" path="res://Projectile/ProjectileData.gd" id="1_hvhom"]
+[ext_resource type="Texture2D" uid="uid://cx07bjue83iq8" path="res://Assets/purple_shot.png" id="2_ddcud"]
+
+[resource]
+script = ExtResource("1_hvhom")
+ShotVisual = ExtResource("2_ddcud")
+CollisionData = ExtResource("1_1cw7e")
+CollisionType = 3
+Lifetime = 2.8
+Speed = 20.0

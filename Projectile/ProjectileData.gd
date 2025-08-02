@@ -5,5 +5,6 @@ enum CollisionTypes {PLAYER = CollisionBits.PLAYER_PROJECTILE_BIT, ENEMY = Colli
 
 @export var ShotVisual: Texture
 @export var CollisionData: RectangleShape2D
-@export var Lifetime: float
 @export var CollisionType: CollisionTypes
+@export var Lifetime: float
+@export var Speed: float

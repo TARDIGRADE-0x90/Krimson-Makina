@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://bhigx4fbwrcpi"]
+
+[ext_resource type="Shape2D" uid="uid://cphqu5naqwqvq" path="res://Projectile/ShotColliders/ColliderMed.tres" id="1_dl5rk"]
+[ext_resource type="Texture2D" uid="uid://q7uayg0l3oc3" path="res://Assets/mingun_shot_draft.png" id="2_7u7wt"]
+[ext_resource type="Script" path="res://Projectile/ProjectileData.gd" id="3_voyh6"]
+
+[resource]
+script = ExtResource("3_voyh6")
+ShotVisual = ExtResource("2_7u7wt")
+CollisionData = ExtResource("1_dl5rk")
+CollisionType = 2
+Lifetime = 1.2
+Speed = 100.0

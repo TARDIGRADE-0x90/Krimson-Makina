@@ -15,8 +15,7 @@ func _ready() -> void:
 	if ShotData:
 		set_data()
 	
-	CollisionBits.set_mask(self, CollisionBits.DEFAULT_BIT, false)
-	#CollisionBits.set_mask(self, CollisionBits.PROJECTILE_BIT, true)
+	CollisionBits.set_mask(self, CollisionBits.DEFAULT_BIT, false) #additional collision assigned in Setdata
 	
 	body_entered.connect(collide)
 	area_entered.connect(collide)
@@ -57,12 +56,20 @@ func set_presence(value: bool) -> void:
 
 func collide(body: CollisionObject2D) -> void:
 	if active:
-		expire()
+		
+		if ShotData.CollisionType == ShotData.CollisionTypes.PLAYER:
+			if body.has_node(Global.SHOOT_DETECTOR):
+				body.get_node(Global.SHOOT_DETECTOR).owner_shot.emit()
+		
+		explode()
+
+func explode() -> void:
+	"""
+	do visual VFX
+	"""
+	expire()
 
 func expire() -> void:
-	"""
-	show some explosion VFX on impact later
-	"""
 	active = false
 	Velocity = NO_TARGET
 	set_presence(false)

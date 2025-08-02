@@ -23,20 +23,16 @@ func _physics_process(delta) -> void:
 	else:
 		zoom = Vector2(DEFAULT_ZOOM, DEFAULT_ZOOM)
 	
-	anchor_to_target(current_target)
+	smooth_to_target(current_target)
 
 func _process(delta) -> void:
-	pass
-
-func ease_to_cursor() -> void:
 	pass
 
 func snap_to_target(target: Vector2) -> void:
 	global_position = target
 
-func anchor_to_target(target: Vector2 = Global.player_position) -> void:
-	global_position.x = Global.interpolate_value(global_position.x, target.x, PUSH_TIME, PUSH_DAMP)
-	global_position.y = Global.interpolate_value(global_position.y, target.y, PUSH_TIME, PUSH_DAMP)
+func smooth_to_target(target: Vector2 = Global.player_position) -> void:
+	global_position = Global.interpolate_vector(global_position, target, PUSH_TIME, PUSH_DAMP)
 
 func tilt_to_angle(target_angle: float) -> void:
 	rotation = Global.interpolate_value(rotation, target_angle, TILT_TIME, TILT_DAMP)

@@ -7,6 +7,7 @@ let WeaponHeat panel blink a bit upon reaching 0 before clearing
 """
 
 const MSG_IDLE: String = "OPTICAL FEED :: ACTIVE"
+const MSG_FOCUSED: String = "OPTICAL FEED :: SCANNING"
 const MSG_COMBAT: String = "ENGAGING"
 const CORE_HEAT_PREFIX: String = "GUILLOTINE-07 TEMPERATURE:"
 const CORE_HEAT_SUFFIX: String = "° C FROM PEAK"
@@ -27,14 +28,15 @@ const CORE_HEAT_BAR_X_FACTOR: int = 2
 
 @onready var OpticalLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/OpticalLabel
 @onready var EnemyLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/EnemyLabel
+
 @onready var CoreHeatPanel: Control = $CoreHeatPanel
 @onready var CoreHeatHeader: Label = $CoreHeatPanel/MarginContainer/VBoxContainer/CoreHeatHeader
 @onready var CoreHeatBar = $CoreHeatPanel/CoreHeatBar
 @onready var CoreHeat: Label = $CoreHeatPanel/MarginContainer/VBoxContainer/CoreHeat
+
 @onready var WeaponHeatPanel: Control = $WeaponHeatPanel
 @onready var WeaponMaxHeat: Label = $WeaponHeatPanel/WeaponHeatLimit/WeaponMaxHeat
 @onready var OverheatWarning = $WeaponHeatPanel/WeaponHeatLimit/OverheatWarning
-
 @onready var WeaponHeatBar: ColorRect = $WeaponHeatPanel/WeaponHeatBar
 @onready var WeaponHeatHeader: Label = $WeaponHeatPanel/MarginContainer/VBoxContainer/WeaponHeatHeader
 @onready var WeaponHeat: Label = $WeaponHeatPanel/MarginContainer/VBoxContainer/WeaponHeat
@@ -43,6 +45,9 @@ var fully_cooled: bool = false
 
 func _ready() -> void:
 	adjust_weapon_heat(0)
+	
+	OpticalLabel.set_text(MSG_IDLE)
+	
 	CoreHeatHeader.set_text(CORE_HEAT_PREFIX)
 	CoreHeat.set_text("%2.1f %s" % [Player.CORE_HEAT_INITIAL_MAX, CORE_HEAT_SUFFIX])
 	CoreHeatBar.size.x = Player.CORE_HEAT_INITIAL_MAX * CORE_HEAT_BAR_X_FACTOR
@@ -57,6 +62,7 @@ func _ready() -> void:
 func _process(delta) -> void:
 	display_weapon_heat()
 	display_core_heat()
+	display_optical_text()
 
 func display_weapon_heat() -> void:
 	WeaponHeatPanel.visible = !fully_cooled
@@ -81,6 +87,14 @@ func display_core_heat() -> void:
 			CoreHeat.set_text("%2.1f %s" % [Global.player.core_heat, CORE_HEAT_SUFFIX])
 		
 		CoreHeatBar.size.x = Global.player.core_heat * CORE_HEAT_BAR_X_FACTOR
+
+func display_optical_text() -> void:
+	if Global.player:
+		
+		if Global.player.move_state == Global.player.MOVEMENT_STATES.FOCUS:
+			OpticalLabel.set_text(MSG_FOCUSED)
+		else:
+			OpticalLabel.set_text(MSG_IDLE)
 
 func adjust_weapon_heat(value: float) -> void:
 	WeaponHeatBar.size.y = value

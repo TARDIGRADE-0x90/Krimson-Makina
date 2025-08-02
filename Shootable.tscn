@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5q1chrrp83rm"]
+
+[ext_resource type="Script" path="res://Shootable.gd" id="1_gf7t0"]
+
+[node name="Shootable" type="Node"]
+script = ExtResource("1_gf7t0")

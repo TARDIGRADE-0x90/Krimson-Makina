@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8e835qjr5wxb"]
+[gd_scene load_steps=6 format=3 uid="uid://dimcpy1wi0m6v"]
 
 [ext_resource type="Script" path="res://Walls.gd" id="1_0eknv"]
 [ext_resource type="Texture2D" uid="uid://bw7kbvr7f64y4" path="res://Assets/undergrating.png" id="1_2wlli"]
 [ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="1_qg5gr"]
 [ext_resource type="Texture2D" uid="uid://dmh1vtukdkb4w" path="res://Assets/steel_wall.png" id="3_uupkf"]
+[ext_resource type="Texture2D" uid="uid://cylc5upb5yaja" path="res://Assets/steel_beam.png" id="5_pyoca"]
 
 [node name="LevelArrangement" type="Node2D"]
 
@@ -19,16 +20,22 @@ texture = ExtResource("1_qg5gr")
 polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
 
 [node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 15
+collision_mask = 15
 script = ExtResource("1_0eknv")
 
 [node name="WallVisual" type="Polygon2D" parent="Walls"]
 texture_repeat = 3
 texture = ExtResource("3_uupkf")
-invert_enabled = true
 invert_border = 4000.0
-polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
+polygon = PackedVector2Array(0, 0, 8464, 0, 9248, -744, 9256, -2880, 11264, -2840, 11260, 2400, 13745, 2400, 16640, 272, 24101, 230, 24179, -6338, -5903, -6212, -5597, 8773, 24028, 9014, 24101, 230, 16640, 272, 16520, 4392, 9072, 4376, 9072, 2440, 8456, 1600, 3344, 1600, 2240, 2472, 2248, 4960, 0, 4937)
 
-[node name="Collider" type="CollisionPolygon2D" parent="Walls"]
-visible = false
-position = Vector2(-16, 8)
-polygon = PackedVector2Array(9248, -2872, 9240, -744, 8464, 0, 16, -8, 16, 4928, 2264, 4952, 2240, 2464, 3352, 1600, 8456, 1600, 9072, 2472, 9080, 4384, 16536, 4376, 16752, 5056, -88, 5056, -80, -2984, 16752, -2976, 16752, 5056, 16536, 4376, 16648, 272, 13752, 2400, 11264, 2400, 11248, -2848)
+[node name="Outline" type="Line2D" parent="Walls"]
+position = Vector2(12.6587, 0)
+points = PackedVector2Array(0, 0, 8464, 0, 9248, -744, 9256, -2880, 11264, -2840, 11260, 2400, 13745, 2400, 16640, 272, 24101, 230, 24179, -6338, -5903, -6212, -5597, 8773, 24028, 9014, 24101, 230, 16640, 272, 16520, 4392, 9072, 4376, 9072, 2440, 8456, 1600, 3344, 1600, 2240, 2472, 2248, 4960, 0, 4937, 0, 0)
+width = 64.0
+default_color = Color(0.533333, 0.478431, 0.792157, 1)
+texture = ExtResource("5_pyoca")
+texture_mode = 1
+begin_cap_mode = 1
+end_cap_mode = 1

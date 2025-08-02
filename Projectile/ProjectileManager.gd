@@ -1,6 +1,9 @@
 extends Node2D
 class_name ProjectileManager
 
+"""
+note that 
+"""
 enum MULTIFIRE_TYPE {NONE, RADIAL}
 
 const PROJECTILE_PATH: String = "res://Projectile/Projectile.tscn"
@@ -30,16 +33,16 @@ func initialize_projectiles() -> void:
 		
 		shot_pool.append(projectile)
 
-func fire(speed: float, angle: float = 0, start: Vector2 = global_position) -> void:
+func fire(angle: float = 0, start: Vector2 = global_position) -> void:
 	current_shot = shot_pool[shot_index]
 	
 	if not current_shot.active:
 		current_shot.global_position = start
 		current_shot.set_rotation(angle)
-		current_shot.trigger(Vector2.from_angle(angle) * speed)
+		current_shot.trigger(Vector2.from_angle(angle) * ShotData.Speed)
 		shot_index = (shot_index + 1) % shot_pool.size()
 
-func multifire_radial(shots: int, spread: float, speed: float, angle: float = 0, start: Vector2 = global_position) -> void:
+func multifire_radial(shots: int, spread: float, angle: float = 0, start: Vector2 = global_position) -> void:
 	var deviation: float = 0.0
 	var organized_shots: Array[int] = Global.mirrored_half(shots)
 	spread = clamp(spread, SPREAD_MIN, SPREAD_MAX)
@@ -54,5 +57,5 @@ func multifire_radial(shots: int, spread: float, speed: float, angle: float = 0,
 		if not current_shot.active:
 			current_shot.global_position = start
 			current_shot.set_rotation(angle + deviation)
-			current_shot.trigger( Vector2.from_angle(angle + deviation) * speed)
+			current_shot.trigger( Vector2.from_angle(angle + deviation) * ShotData.Speed)
 			shot_index = (shot_index + 1) % shot_pool.size()
