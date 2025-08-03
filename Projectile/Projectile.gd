@@ -9,6 +9,7 @@ const NO_TARGET = Vector2(0, 0)
 @export var ShotLifetime: Timer
 @export var Velocity: Vector2
 
+var damage: float = 0.0
 var active: bool = false
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func set_data(data: ProjectileData = ShotData) -> void:
 	initialize_collider(data)
 	initialize_lifetime(data)
 	CollisionBits.set_mask(self, ShotData.CollisionType, true)
+	damage = ShotData.BaseDamage
 
 func initialize_sprite(data: ProjectileData = ShotData) -> void:
 	Sprite.set_texture(data.ShotVisual)
@@ -43,8 +45,9 @@ func initialize_lifetime(data: ProjectileData = ShotData) -> void:
 	ShotLifetime.set_one_shot(true)
 	ShotLifetime.timeout.connect(expire)
 
-func trigger(target: Vector2) -> void:
+func trigger(target: Vector2, damage_modifier: float = 1.0) -> void:
 	active = true
+	damage *= damage_modifier
 	set_presence(true)
 	ShotLifetime.start()
 	Velocity = target
@@ -54,12 +57,11 @@ func set_presence(value: bool) -> void:
 	set_physics_process(value)
 	set_visible(value)
 
-func collide(body: CollisionObject2D) -> void:
+func collide(obj: CollisionObject2D) -> void:
 	if active:
 		
-		if ShotData.CollisionType == ShotData.CollisionTypes.PLAYER:
-			if body.has_node(Global.SHOOT_DETECTOR):
-				body.get_node(Global.SHOOT_DETECTOR).owner_shot.emit()
+		if obj.has_meta(Global.META_SHOOTABLE_REF):
+			obj.get_meta(Global.META_SHOOTABLE_REF).shot_detected.emit(damage)
 		
 		explode()
 

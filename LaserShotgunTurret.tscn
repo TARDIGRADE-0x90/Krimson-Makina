@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://cka0gycinnaq1"]
+[gd_scene load_steps=14 format=3 uid="uid://cka0gycinnaq1"]
 
 [ext_resource type="Script" path="res://LaserShotgunTurret.gd" id="1_2mqeq"]
 [ext_resource type="PackedScene" uid="uid://5q1chrrp83rm" path="res://Shootable.tscn" id="1_2n05d"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="1_l70uu"]
 [ext_resource type="PackedScene" uid="uid://cg0ec8jkbxaxc" path="res://Meleeable.tscn" id="2_3r31s"]
+[ext_resource type="PackedScene" uid="uid://dwi25fesc1esk" path="res://DeathDelay.tscn" id="2_vj6h5"]
 [ext_resource type="Texture2D" uid="uid://cs6rgi45oqjmo" path="res://Assets/laser_shotgun_gun.png" id="2_yrhid"]
 [ext_resource type="Script" path="res://Projectile/ProjectileManager.gd" id="3_0qyeo"]
 [ext_resource type="Texture2D" uid="uid://dipyv4tbujgmr" path="res://Assets/shotgun_turret_base.png" id="3_nra3s"]
@@ -26,9 +27,15 @@ shader_parameter/flash_modifier = 0.0
 
 [node name="LaserShotgunTurret" type="StaticBody2D"]
 script = ExtResource("1_2mqeq")
+MachineTitle = "M5-PHONEIX"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_mp070")
+
+[node name="Destruction" parent="." instance=ExtResource("2_vj6h5")]
+Delay = 3.0
+
+[node name="GunCooldown" type="Timer" parent="."]
 
 [node name="FullBody" type="Node2D" parent="."]
 
@@ -43,14 +50,14 @@ texture = ExtResource("2_yrhid")
 [node name="Muzzle" type="Marker2D" parent="FullBody/Cannon"]
 position = Vector2(120, 0)
 
-[node name="GunCooldown" type="Timer" parent="."]
-
 [node name="LaserShotgun" type="Node2D" parent="."]
 script = ExtResource("3_0qyeo")
 ShotData = ExtResource("5_3ni45")
 MaxPool = 100
 
-[node name="Shootable" parent="." instance=ExtResource("1_2n05d")]
+[node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("1_2n05d")]
+CollisionType = 2
+Collider = NodePath("..")
 
 [node name="Meleeable" parent="." instance=ExtResource("2_3r31s")]
 

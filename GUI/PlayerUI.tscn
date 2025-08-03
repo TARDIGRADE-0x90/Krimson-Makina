@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://btojetc84kpdp"]
+[gd_scene load_steps=13 format=3 uid="uid://btojetc84kpdp"]
 
 [ext_resource type="Script" path="res://GUI/PlayerUI.gd" id="1_mbxyd"]
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_gei3a"]
@@ -9,12 +9,20 @@ font = ExtResource("2_gei3a")
 font_size = 12
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_d2aph"]
 font = ExtResource("2_gei3a")
 font_size = 18
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
+outline_size = 6
+outline_color = Color(0.423529, 0, 0, 1)
+shadow_size = 12
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_l4nmq"]
+font = ExtResource("2_gei3a")
+font_size = 24
 
 [sub_resource type="LabelSettings" id="LabelSettings_lr8o4"]
 font = ExtResource("2_gei3a")
@@ -32,18 +40,26 @@ font_size = 24
 font_color = Color(1, 0.431373, 0, 1)
 outline_size = 4
 outline_color = Color(0.705882, 0.0784314, 0.164706, 1)
+shadow_size = 20
+shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_r3nsp"]
 font = ExtResource("2_gei3a")
 font_size = 12
 outline_size = 2
 outline_color = Color(1, 0.890196, 0.768627, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_haf7r"]
 font = ExtResource("2_gei3a")
+outline_size = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_xlmte"]
 font = ExtResource("2_gei3a")
+font_color = Color(1, 0.835294, 0.596078, 1)
+shadow_size = 12
+shadow_color = Color(0, 0, 0, 1)
 
 [node name="PlayerUI" type="CanvasLayer"]
 script = ExtResource("1_mbxyd")
@@ -72,11 +88,15 @@ label_settings = SubResource("LabelSettings_yebyq")
 vertical_alignment = 2
 
 [node name="EnemyLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 text = "ENEMY TITLE :: ENEMY_HEALTH"
 label_settings = SubResource("LabelSettings_d2aph")
 vertical_alignment = 2
+
+[node name="DestructionLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "TARGET DESTROYED"
+label_settings = SubResource("LabelSettings_l4nmq")
 
 [node name="CoreHeatPanel" type="Control" parent="."]
 layout_mode = 3
@@ -155,7 +175,7 @@ offset_bottom = 760.0
 grow_vertical = 2
 rotation = 3.14159
 size_flags_horizontal = 4
-color = Color(1, 1, 1, 0.419608)
+color = Color(1, 0.603922, 0.486275, 0.419608)
 
 [node name="WeaponHeatLimit" type="ColorRect" parent="WeaponHeatPanel"]
 layout_mode = 1
@@ -225,6 +245,10 @@ layout_mode = 2
 text = "00.00° C"
 label_settings = SubResource("LabelSettings_xlmte")
 horizontal_alignment = 1
+
+[node name="BattleDelay" type="Timer" parent="."]
+
+[node name="DestroyFlicker" type="Timer" parent="."]
 
 [node name="FPSLabel" parent="." instance=ExtResource("3_jpwls")]
 anchors_preset = 1

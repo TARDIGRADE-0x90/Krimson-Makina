@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwi25fesc1esk"]
+
+[ext_resource type="Script" path="res://DeathDelay.gd" id="1_65scd"]
+
+[node name="DeathDelay" type="Timer"]
+script = ExtResource("1_65scd")

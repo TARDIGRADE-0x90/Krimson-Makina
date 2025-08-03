@@ -11,3 +11,4 @@ CollisionData = ExtResource("1_d4o3k")
 CollisionType = 3
 Lifetime = 0.8
 Speed = 45.0
+BaseDamage = 12.0

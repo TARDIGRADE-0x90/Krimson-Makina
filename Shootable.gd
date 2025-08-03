@@ -1,14 +1,15 @@
 extends Node
 class_name Shootable
 
-signal owner_shot
+signal shot_detected(shot_damage: float)
 
-const ERR_NON_COLLIDABLE_PARENT: String = "ERROR [Shootable.gd] :: Parent not collidable"
- 
+@export var CollisionType: ProjectileData.CollisionTypes
+@export var Collider: CollisionObject2D
+
 func _ready() -> void:
-	assert(is_instance_of(owner, CollisionObject2D), ERR_NON_COLLIDABLE_PARENT)
-	CollisionBits.set_layer(owner, CollisionBits.PLAYER_PROJECTILE_BIT, true)
-	owner_shot.connect(read_shot)
+	CollisionBits.set_layer(Collider, CollisionType, true)
+	Collider.set_meta(Global.META_SHOOTABLE_REF, self)
+	shot_detected.connect(read_shot)
 
-func read_shot() -> void:
+func read_shot(amount: float) -> void:
 	pass

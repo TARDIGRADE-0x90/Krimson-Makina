@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://bfxhyvx6mv1av"]
 
 [ext_resource type="Shape2D" uid="uid://cphqu5naqwqvq" path="res://Projectile/ProjectileColliders/ColliderMed.tres" id="1_dl5rk"]
 [ext_resource type="Texture2D" uid="uid://c65cekhfck3uk" path="res://Assets/mingun_shot.png" id="2_ln5qq"]
@@ -11,3 +11,4 @@ CollisionData = ExtResource("1_dl5rk")
 CollisionType = 2
 Lifetime = 1.2
 Speed = 100.0
+BaseDamage = 4.0

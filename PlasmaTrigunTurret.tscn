@@ -1,13 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://den6r6d30mayi"]
+[gd_scene load_steps=14 format=3 uid="uid://den6r6d30mayi"]
 
 [ext_resource type="Texture2D" uid="uid://dq1utibhjvpsr" path="res://Assets/turret_base.png" id="1_menga"]
 [ext_resource type="Script" path="res://PlasmaTrigunTurret.gd" id="1_nymim"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_3ured"]
+[ext_resource type="PackedScene" uid="uid://dwi25fesc1esk" path="res://DeathDelay.tscn" id="2_7vo83"]
 [ext_resource type="Texture2D" uid="uid://menr1trsc80q" path="res://Assets/plasma_shotgun_gun.png" id="2_r8u6w"]
 [ext_resource type="PackedScene" uid="uid://cg0ec8jkbxaxc" path="res://Meleeable.tscn" id="4_cyh0y"]
 [ext_resource type="PackedScene" uid="uid://5q1chrrp83rm" path="res://Shootable.tscn" id="5_q75c7"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="6_xdcgi"]
-[ext_resource type="Resource" path="res://Projectile/EnemyProjectiles/PlasmaShot.tres" id="7_70tw4"]
+[ext_resource type="Resource" uid="uid://r33v0q0km25v" path="res://Projectile/EnemyProjectiles/PlasmaShot.tres" id="7_70tw4"]
 [ext_resource type="PackedScene" uid="uid://dlwc6u5k8g6eq" path="res://HitFlashHandler.tscn" id="8_ttave"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nn2xq"]
@@ -27,11 +28,15 @@ shader_parameter/flash_modifier = 0.0
 
 [node name="PlasmaTrigunTurret" type="StaticBody2D"]
 script = ExtResource("1_nymim")
+MachineTitle = "F3-HYDRA"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_nn2xq")
 
 [node name="GunCooldown" type="Timer" parent="."]
+
+[node name="Destruction" parent="." instance=ExtResource("2_7vo83")]
+Delay = 3.0
 
 [node name="FullBody" type="Node2D" parent="."]
 
@@ -60,7 +65,9 @@ rotation = -0.261799
 ShotData = ExtResource("7_70tw4")
 MaxPool = 32
 
-[node name="Shootable" parent="." instance=ExtResource("5_q75c7")]
+[node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("5_q75c7")]
+CollisionType = 2
+Collider = NodePath("..")
 
 [node name="Meleeable" parent="." instance=ExtResource("4_cyh0y")]
 

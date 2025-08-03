@@ -10,6 +10,8 @@ TO DO:
 	- Before worrying about background texture, first draft up the level layout itself,
 		then go over it with whatever visuals needed (how to do this? idk - One Giant Image
 		is a worst case fix but there ought to be a better way to break it into pieces)
+	
+	- Hit penalties such as auxillary weapon heat getting pulsed up, and reduced cooling rate for a moment
 """
 
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
@@ -28,8 +30,11 @@ const VIEW_MARGIN_EXECUTION: int = 240
 
 const RUSH_TIME: float = 0.5
 const SLASH_TIME: float = 0.3
-const THRUST_TIME: float = 0.4
+const THRUST_TIME: float = 0.2
 const EXECUTION_TIME: float = 0.8
+
+const BLADE_BASE_DAMAGE: float = 20.0
+const THRUST_DAMAGE_MODIFIER: float = 0.75
 
 const MINIGUN_POOL_SIZE: int = 2000
 const MINIGUN_FIRERATE: float = 0.075
@@ -62,7 +67,7 @@ const SLASH_DEGREE: float = 0.2
 
 const THRUST_X_OFFSET: int = 320
 const THRUST_TIME_FACTOR: int = 22
-const THRUST_PUSH: int = 145
+const THRUST_PUSH: int = 200
 
 const EXECUTION_ANGLE: float = (PI * 0.12)
 const EXECUTION_DEGREE: float = 0.8
@@ -80,7 +85,6 @@ const Z_BODY: int = 2
 const Z_HEAD: int = 3
 
 @export var ACCELERATION: float = 0.2;
-@export var PlayerCamera: MainCamera
 
 @onready var RushTimer: Timer = $RushTimer
 @onready var SlashTimer: Timer = $SlashTimer
@@ -88,7 +92,7 @@ const Z_HEAD: int = 3
 @onready var ExecutionTimer: Timer = $ExecutionTimer
 @onready var AuxillaryCooldown: Timer = $AuxillaryCooldown
 
-@onready var Hurtbox = $Hurtbox
+@onready var Hurtbox: Area2D = $Hurtbox
 @onready var FullBody: Node2D = $FullBody
 @onready var Wings: Sprite2D = $FullBody/Wings
 @onready var Body: Sprite2D  = $FullBody/Body
@@ -97,6 +101,9 @@ const Z_HEAD: int = 3
 @onready var AuxillaryAnchor: Node2D = $AuxillaryAnchor
 @onready var CannonPoint: Marker2D = $AuxillaryAnchor/CannonPoint
 @onready var PlayerGun: ProjectileManager = $AuxillaryAnchor/PlayerGun
+
+@onready var FlashHandler: HitFlashHandler = $FlashHandler
+@onready var ShotDetector: Shootable = $ShotDetector
 
 var current_speed: int = 0
 var current_direction = Vector2(0,0)
@@ -111,6 +118,7 @@ var move_state: int = MOVEMENT_STATES.HOVER
 
 var blade_direction: int = 1
 var blade_position: Vector2 = BLADE_START
+var blade_damage: float = BLADE_BASE_DAMAGE
 
 var auxillary_held: bool = false
 var focus_held: bool = false
@@ -139,10 +147,12 @@ var overheated: bool = false
 func _ready() -> void:
 	Global.player = self
 	
+	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, false) # override what ShotDetector does (spaghetti btw)
 	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, true)
 	CollisionBits.set_mask(Blade, CollisionBits.PLAYER_SWORD_BIT, true)
 	
 	initialize_z_ordering()
+	FlashHandler.assign_sprites([Head, Body, Wings])
 	
 	move_state_stack.append(MOVEMENT_STATES.HOVER) #default speed in the movement queue VERY IMPORTANT
 	current_speed = SPEED_DICT[MOVEMENT_STATES.HOVER]
@@ -159,6 +169,7 @@ func _ready() -> void:
 	initialize_auxillary_cooldown()
 	
 	Events.weapon_heat_updated.connect(check_heat)
+	ShotDetector.shot_detected.connect(read_damage)
 
 func _physics_process(delta: float) -> void:
 	Global.player_position = global_position
@@ -350,6 +361,8 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 			Global.active_camera.tilt_to_angle(0)
 
 func trigger_slash() -> void:
+	blade_damage = BLADE_BASE_DAMAGE
+	
 	blade_direction *= -1
 	SlashTimer.start()
 	slashing = true
@@ -360,6 +373,8 @@ func animate_slash() -> void:
 
 var aim_vector: Vector2
 func trigger_thrust() -> void:
+	blade_damage = BLADE_BASE_DAMAGE * THRUST_DAMAGE_MODIFIER
+	
 	Blade.transform.y.y = 1
 	Blade.transform.origin.y = Head.rotation #center the blade
 	Blade.set_rotation(Head.rotation + (-PI * 0.5))
@@ -378,7 +393,7 @@ func check_blade_collision() -> void:
 			
 			if melee_body.has_node(Global.MELEE_DETECTOR): #Note that this only checks the first layer of nodes
 				if !melee_body.get_node(Global.MELEE_DETECTOR).struck:
-					melee_body.get_node(Global.MELEE_DETECTOR).melee_detected.emit()
+					melee_body.get_node(Global.MELEE_DETECTOR).melee_detected.emit(blade_damage)
 					melee_hits.append(Blade.get_overlapping_bodies()[i])
 
 func center_blade() -> void:
@@ -409,10 +424,12 @@ func reset_blade() -> void:
 	Blade.transform.y.x = 0
 	Blade.transform.y.y = blade_direction
 	Blade.position = blade_position
-	
+	blade_damage = BLADE_BASE_DAMAGE #then multiply by any ongoing modifiers after
 	clear_melee_hits()
 
 func trigger_execution() -> void:
+	blade_damage = BLADE_BASE_DAMAGE
+	
 	executing = true
 	
 	if move_state == MOVEMENT_STATES.RUSH:
@@ -519,6 +536,11 @@ func check_heat(value: float) -> void:
 		Events.core_overheated.emit()
 	else:
 		overheated = false
+
+func read_damage(amount: float) -> void:
+	if not executing: #invincible during execution
+		core_heat -= amount
+		FlashHandler.trigger_flash()
 
 func tick_overheat_damage() -> void:
 	core_heat -= OVERHEAT_DAMAGE * get_physics_process_delta_time()

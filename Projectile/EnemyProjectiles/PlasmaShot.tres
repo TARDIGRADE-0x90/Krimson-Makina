@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://r33v0q0km25v"]
 
 [ext_resource type="Shape2D" uid="uid://dh65u6vbxcdt3" path="res://Projectile/ProjectileColliders/LargeSquareCollider.tres" id="1_1cw7e"]
 [ext_resource type="Script" path="res://Projectile/ProjectileData.gd" id="1_hvhom"]
@@ -11,3 +11,4 @@ CollisionData = ExtResource("1_1cw7e")
 CollisionType = 3
 Lifetime = 2.8
 Speed = 15.0
+BaseDamage = 20.0

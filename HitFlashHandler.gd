@@ -4,9 +4,13 @@ class_name HitFlashHandler
 const ERR_INVALID_TYPE: String = "ERROR :: HitFlashHandler.gd - attempting to append non-texturable node"
 const ERR_SHADER_NIL: String = "ERROR :: HitFlashHandler.gd - attempting to access unset material"
 const FLASH_PARAMETER: String = "flash_modifier"
+const FLASH_COLOR: String = "flash_color"
+
+const INITIAL_FLASH: float = 0.85
 
 @export var Duration: float
 @export var FlashTimer: Timer
+@export var FlashColor: Color = Color(1, 1, 1, 1)
 
 var sprites: Array[Sprite2D]
 var shaders_present: bool = false
@@ -26,10 +30,12 @@ func assign_sprites(args: Array[Sprite2D]) -> void:
 		
 		if !has_shader_material(args[i]):
 			shaders_present = has_shader_material(args[i])
+			args[i].material.set_shader_parameter(FLASH_COLOR, FlashColor)
 			continue #don't continue next line if even one sprite lacks material
 		else:
 			shaders_present = has_shader_material(args[i])
 	
+	clear_flash() #clear any flash on start
 
 func initialize_flash_timer() -> void:
 	FlashTimer.set_wait_time(Duration)
@@ -37,12 +43,12 @@ func initialize_flash_timer() -> void:
 	FlashTimer.timeout.connect(clear_flash)
 
 func trigger_flash() -> void:
-	flash_tweak = 1.0
+	flash_tweak = INITIAL_FLASH
 	FlashTimer.start()
 
 func flash_sprites() -> void:
 	update_flash_tweak()
-	flash_tweak = sin(FlashTimer.time_left * PI * -0.25) * 5
+	flash_tweak = sin(FlashTimer.time_left * PI) * 1
 
 func clear_flash() -> void:
 	flash_tweak = 0
@@ -53,6 +59,7 @@ func update_flash_tweak() -> void:
 		for i in range(sprites.size()):
 			if shaders_present:
 				sprites[i].material.set_shader_parameter(FLASH_PARAMETER, flash_tweak)
+				sprites[i].material.set_shader_parameter(FLASH_COLOR, FlashColor)
 
 func has_shader_material(sprite: Sprite2D) -> bool:
 	if sprite.material: #confirm a material has been set
@@ -60,5 +67,5 @@ func has_shader_material(sprite: Sprite2D) -> bool:
 			shaders_present = true
 			return true
 	
-	print(ERR_SHADER_NIL)
+	assert(shaders_present, ERR_SHADER_NIL)
 	return false

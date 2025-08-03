@@ -1,6 +1,8 @@
 extends StaticBody2D
 class_name PlasmaTrigunTurret
 
+const BASE_HEALTH: float = 100.0
+
 const AIM_TIME: float = 1.0
 const AIM_DAMP: float = 0.5
 
@@ -8,8 +10,13 @@ const ROTATION_RATE: int = 100
 
 const GUN_COOLDOWN: float = 0.25
 
+const DEATH_DELAY: float = 5.0
+
+@export var MachineTitle: String
+
 @onready var Base: Sprite2D = $FullBody/Base
 @onready var Guns: Sprite2D = $FullBody/Guns
+@onready var Destruction: DeathDelay = $Destruction
 @onready var GunCooldown: Timer = $GunCooldown
 @onready var PlasmaGun: ProjectileManager = $PlasmaGun
 @onready var ShootDetect: Shootable = $Shootable
@@ -17,6 +24,7 @@ const GUN_COOLDOWN: float = 0.25
 @onready var FlashHandler: HitFlashHandler = $FlashHandler
 
 var target: Vector2
+var health: float = BASE_HEALTH
 var cannon_index: int = 0
 
 func _ready() -> void:
@@ -24,7 +32,7 @@ func _ready() -> void:
 	
 	FlashHandler.assign_sprites([Base, Guns])
 	MeleeDetect.melee_detected.connect(read_damage)
-	ShootDetect.owner_shot.connect(read_damage)
+	ShootDetect.shot_detected.connect(read_damage)
 
 func _physics_process(delta) -> void:
 	if Global.player:
@@ -54,5 +62,24 @@ func fire_cannons() -> void:
 	
 	GunCooldown.start()
 
-func read_damage() -> void:
+func read_damage(amount: float) -> void:
+	health -= amount
+	
+	if health <= 0:
+		destroy()
+		return
+	
 	FlashHandler.trigger_flash()
+	Events.new_target_hit.emit(MachineTitle, health)
+
+func destroy() -> void:
+	Events.target_destroyed.emit()
+	
+	CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
+	CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
+	CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
+	
+	Destruction.start()
+	
+	set_physics_process(false)
+	set_visible(false)
