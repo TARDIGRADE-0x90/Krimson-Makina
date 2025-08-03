@@ -16,7 +16,6 @@ func _ready() -> void:
 
 func read_melee() -> void:
 	struck = true
-	print("%s was struck " % owner)
 
 func reset_melee_detection() -> void:
 	struck = false

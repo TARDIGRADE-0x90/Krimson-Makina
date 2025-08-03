@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://jxk1a63v6s5o"]
+[gd_scene load_steps=8 format=3 uid="uid://jxk1a63v6s5o"]
 
 [ext_resource type="PackedScene" uid="uid://c04vi3vcgfk46" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
 [ext_resource type="Script" path="res://MainWorld.gd" id="1_g5bsb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dimcpy1wi0m6v" path="res://LevelArrangement.tscn" id="2_nvf3a"]
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_n2egp"]
 [ext_resource type="PackedScene" uid="uid://den6r6d30mayi" path="res://PlasmaTrigunTurret.tscn" id="6_rq1np"]
+[ext_resource type="PackedScene" uid="uid://cka0gycinnaq1" path="res://LaserShotgunTurret.tscn" id="7_3q3p8"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_g5bsb")
@@ -13,11 +14,30 @@ script = ExtResource("1_g5bsb")
 [node name="LevelArrangement" parent="." instance=ExtResource("2_nvf3a")]
 
 [node name="Guillotine-07" parent="." instance=ExtResource("1_fk2mu")]
-position = Vector2(498, 404)
+position = Vector2(1151, 4218)
 
 [node name="PlayerCamera" parent="." instance=ExtResource("4_n2egp")]
+position = Vector2(967, -1573)
 
 [node name="PlayerUI" parent="." instance=ExtResource("2_eupmn")]
 
-[node name="PlasmaShotgunTurret" parent="." instance=ExtResource("6_rq1np")]
-position = Vector2(2402, 1002)
+[node name="LaserShotgunTurret" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(211, 220)
+
+[node name="PlasmaTrigunTurret" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(3812, 240)
+
+[node name="PlasmaTrigunTurret2" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(5911, 1350)
+
+[node name="PlasmaTrigunTurret3" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(8131, 223)
+
+[node name="LaserShotgunTurret2" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(10279, -1157)
+
+[node name="LaserShotgunTurret3" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(9464, 4045)
+
+[node name="PlasmaTrigunTurret4" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(11597, 3434)

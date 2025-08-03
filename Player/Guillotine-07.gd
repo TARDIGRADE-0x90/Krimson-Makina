@@ -33,7 +33,7 @@ const EXECUTION_TIME: float = 0.8
 
 const MINIGUN_POOL_SIZE: int = 2000
 const MINIGUN_FIRERATE: float = 0.075
-const MINIGUN_HEAT_RANGE = Vector2(1.5, 2.8)
+const MINIGUN_HEAT_RANGE = Vector2(2.1, 3.6)
 
 const EXECUTION_RUSH_TIME_FACTOR: int = 120
 const RUSH_TIME_FACTOR: int = 100
@@ -42,10 +42,10 @@ const BODY_SHIFT_FACTOR: float = 1.2
 
 const CORE_HEAT_INITIAL_MAX: float = 200.0
 
-const RUSH_HEAT_DEFAULT: float = 25.0
+const RUSH_HEAT_DEFAULT: float = 35.0
 const WEAPON_HEAT_MAX: float = 140.0
 const WEAPON_COOL_RATE: float = 44 #multiplied against delta
-const WEAPON_COOL_RATE_FOCUSED: float = 26 #multiplied against delta
+const WEAPON_COOL_RATE_FOCUSED: float = 20 #multiplied against delta
 const OVERHEAT_DAMAGE: float = 4 #multiplied against delta
 
 const EXECUTION_COOLING: float = 20.0
@@ -62,7 +62,7 @@ const SLASH_DEGREE: float = 0.2
 
 const THRUST_X_OFFSET: int = 320
 const THRUST_TIME_FACTOR: int = 22
-const THRUST_PUSH: int = 340
+const THRUST_PUSH: int = 145
 
 const EXECUTION_ANGLE: float = (PI * 0.12)
 const EXECUTION_DEGREE: float = 0.8
@@ -71,7 +71,7 @@ const EXECUTION_TIME_FACTOR: int = 24
 const EXECUTION_PUSH: int = 260
 
 const AUXILLARY_START = Vector2(0, -64)
-const AUXILLARY_AIM_BOUND = Vector2(100, 0)
+const FOCUS_AIM_BOUND = Vector2(100, 0)
 
 const Z_BLADE: int = 1
 const Z_AUXILLARY: int = 1
@@ -251,26 +251,14 @@ func update_velocity() -> void:
 	move_and_slide()
 
 func update_direction() -> void:
-	if executing:
+	if executing || move_state == MOVEMENT_STATES.RUSH:
 		current_direction = ZERO_VECTOR
 		return
 	
-	match move_state:
-		MOVEMENT_STATES.HOVER:
-			input_x = int(Input.is_action_pressed(Inputs.MOVE_RIGHT)) - int(Input.is_action_pressed(Inputs.MOVE_LEFT));
-			input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
-			
-			current_direction = Vector2(input_x, input_y).normalized()
-		
-		MOVEMENT_STATES.FOCUS:
-			input_x = int(Input.is_action_pressed(Inputs.MOVE_RIGHT)) - int(Input.is_action_pressed(Inputs.MOVE_LEFT));
-			input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
-			
-			current_direction = Vector2(input_x, input_y).normalized()
-			#current_direction = Vector2(input_x * (rotation + (PI * 0.5)), (input_y * -rotation * 2)).normalized()
-		
-		MOVEMENT_STATES.RUSH:
-			current_direction = ZERO_VECTOR
+	input_x = int(Input.is_action_pressed(Inputs.MOVE_RIGHT)) - int(Input.is_action_pressed(Inputs.MOVE_LEFT));
+	input_y = int(Input.is_action_pressed(Inputs.MOVE_DOWN)) - int(Input.is_action_pressed(Inputs.MOVE_UP));
+	
+	current_direction = Vector2(input_x, input_y).normalized()
 	
 	"""
 	match move_state: #tank controls do not fit at all for this kind of gameplay but i'm leaving it for posterity
@@ -334,8 +322,8 @@ func parse_input_execution(event: InputEvent) -> void:
 func handle_looking() -> void: #remember that this method, as it is now, is literally running every frame
 	if move_state == MOVEMENT_STATES.FOCUS and !executing:
 		aim_choke = FOCUS_CHOKE 
-		look_at_with_bound(AuxillaryAnchor, cursor, AUXILLARY_AIM_BOUND)
-		look_at_with_bound(Head, cursor, AUXILLARY_AIM_BOUND)
+		look_at_with_bound(AuxillaryAnchor, cursor, FOCUS_AIM_BOUND)
+		look_at_with_bound(Head, cursor, FOCUS_AIM_BOUND)
 		
 		if Global.active_camera:
 			Global.active_camera.set_focused(true)
@@ -370,16 +358,19 @@ func animate_slash() -> void:
 	Blade.transform.origin = Blade.transform.origin.rotated(SLASH_ANGLE * blade_direction)
 	Blade.rotation += SLASH_DEGREE * blade_direction
 
+var aim_vector: Vector2
 func trigger_thrust() -> void:
-	center_blade()
+	Blade.transform.y.y = 1
+	Blade.transform.origin.y = Head.rotation #center the blade
+	Blade.set_rotation(Head.rotation + (-PI * 0.5))
+	
 	ThrustTimer.start()
 	thrusting = true
 
 func animate_thrust() -> void:
-	Blade.transform.origin.x = THRUST_X_OFFSET - sin(ThrustTimer.time_left * THRUST_TIME_FACTOR) * THRUST_PUSH
+	Blade.translate(Vector2.from_angle(Blade.rotation + (PI * 0.5) ) * THRUST_PUSH * sin(ThrustTimer.time_left * THRUST_TIME_FACTOR))
 
 var melee_hits: Array[CollisionObject2D] #very very dumb but I'm doing this anyway
-
 func check_blade_collision() -> void:
 	if Blade.has_overlapping_bodies():
 		for i in range(Blade.get_overlapping_bodies().size()):

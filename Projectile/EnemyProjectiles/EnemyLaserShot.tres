@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://c6j3hoksfcsh5"]
+
+[ext_resource type="Script" path="res://Projectile/ProjectileData.gd" id="1_4l6mo"]
+[ext_resource type="Shape2D" uid="uid://digaijsmdlkpe" path="res://Projectile/ProjectileColliders/ColliderNarrow.tres" id="1_d4o3k"]
+[ext_resource type="Texture2D" uid="uid://b7xcas104ux0k" path="res://Assets/laser_shot.png" id="2_75w28"]
+
+[resource]
+script = ExtResource("1_4l6mo")
+ShotVisual = ExtResource("2_75w28")
+CollisionData = ExtResource("1_d4o3k")
+CollisionType = 3
+Lifetime = 0.8
+Speed = 45.0

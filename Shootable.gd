@@ -11,4 +11,4 @@ func _ready() -> void:
 	owner_shot.connect(read_shot)
 
 func read_shot() -> void:
-	print("%s was shot " % owner)
+	pass

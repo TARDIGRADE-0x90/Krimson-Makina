@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlwc6u5k8g6eq"]
+
+[ext_resource type="Script" path="res://HitFlashHandler.gd" id="1_j4061"]
+
+[node name="HitFlashHandler" type="Node" node_paths=PackedStringArray("FlashTimer")]
+script = ExtResource("1_j4061")
+FlashTimer = NodePath("FlashTimer")
+
+[node name="FlashTimer" type="Timer" parent="."]

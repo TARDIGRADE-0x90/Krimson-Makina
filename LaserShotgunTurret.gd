@@ -1,28 +1,30 @@
 extends StaticBody2D
-class_name PlasmaTrigunTurret
+class_name LaserShotgunTurret
 
 const AIM_TIME: float = 1.0
 const AIM_DAMP: float = 0.5
 
-const ROTATION_RATE: int = 100
+const ROTATION_RATE: int = 65
 
-const GUN_COOLDOWN: float = 0.25
+const SHOTS: int = 7
+const SPREAD: float = 0.8
+const GUN_COOLDOWN: float = 1.4
 
 @onready var Base: Sprite2D = $FullBody/Base
-@onready var Guns: Sprite2D = $FullBody/Guns
+@onready var Cannon: Sprite2D = $FullBody/Cannon
+@onready var Muzzle: Marker2D = $FullBody/Cannon/Muzzle
 @onready var GunCooldown: Timer = $GunCooldown
-@onready var PlasmaGun: ProjectileManager = $PlasmaGun
+@onready var LaserShotgun: ProjectileManager = $LaserShotgun
 @onready var ShootDetect: Shootable = $Shootable
 @onready var MeleeDetect: Meleeable = $Meleeable
-@onready var FlashHandler: HitFlashHandler = $FlashHandler
+@onready var FlashHandler: HitFlashHandler = $HitFlashHandler
 
 var target: Vector2
-var cannon_index: int = 0
 
 func _ready() -> void:
-	initialize_firing_cooldown()
+	initialize_gun_cooldown()
+	FlashHandler.assign_sprites([Base, Cannon])
 	
-	FlashHandler.assign_sprites([Base, Guns])
 	MeleeDetect.melee_detected.connect(read_damage)
 	ShootDetect.owner_shot.connect(read_damage)
 
@@ -33,9 +35,9 @@ func _physics_process(delta) -> void:
 	smooth_to_target(delta)
 	
 	if GunCooldown.is_stopped():
-		fire_cannons()
+		fire_cannon()
 
-func initialize_firing_cooldown() -> void:
+func initialize_gun_cooldown() -> void:
 	GunCooldown.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
 	GunCooldown.set_wait_time(GUN_COOLDOWN)
 	GunCooldown.set_one_shot(true)
@@ -44,15 +46,13 @@ func update_target(newTarget: Vector2) -> void:
 	target = newTarget
 
 func smooth_to_target(delta: float) -> void:
-	Guns.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Guns.get_angle_to(target)))
+	Cannon.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Cannon.get_angle_to(target)))
 
-func fire_cannons() -> void:
-	var current_cannon_point: Marker2D = Guns.get_children()[cannon_index]
-	PlasmaGun.fire(current_cannon_point.global_rotation, current_cannon_point.global_position)
-	
-	cannon_index = (cannon_index + 1) % Guns.get_child_count()
-	
+func fire_cannon() -> void:
+	LaserShotgun.multifire_radial(SHOTS, SPREAD, Muzzle.global_rotation, Muzzle.global_position)
 	GunCooldown.start()
 
 func read_damage() -> void:
 	FlashHandler.trigger_flash()
+	#set_physics_process(false)
+	#set_visible(false)
