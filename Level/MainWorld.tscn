@@ -1,12 +1,12 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=8 format=3 uid="uid://df44147ji6wgv"]
 
-[ext_resource type="PackedScene" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
-[ext_resource type="Script" path="res://MainWorld.gd" id="1_g5bsb"]
+[ext_resource type="PackedScene" uid="uid://bn834txfdx660" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
+[ext_resource type="Script" path="res://Level/MainWorld.gd" id="1_g5bsb"]
 [ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="2_eupmn"]
-[ext_resource type="PackedScene" uid="uid://dimcpy1wi0m6v" path="res://LevelArrangement.tscn" id="2_nvf3a"]
+[ext_resource type="PackedScene" uid="uid://cjbci3qdvoae2" path="res://Level/LevelArrangement.tscn" id="2_nvf3a"]
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_n2egp"]
-[ext_resource type="PackedScene" path="res://Enemies/PlasmaTrigunTurret.tscn" id="6_rq1np"]
-[ext_resource type="PackedScene" path="res://Enemies/LaserShotgunTurret.tscn" id="7_3q3p8"]
+[ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="6_rq1np"]
+[ext_resource type="PackedScene" uid="uid://gb10noi2smvd" path="res://Enemies/LaserShotgunTurret.tscn" id="7_3q3p8"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_g5bsb")

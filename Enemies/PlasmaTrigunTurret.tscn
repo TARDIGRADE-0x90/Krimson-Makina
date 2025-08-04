@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://tqxs1pma1w02"]
+[gd_scene load_steps=14 format=3 uid="uid://cpbfnumyppfm7"]
 
 [ext_resource type="Script" path="res://Enemies/PlasmaTrigunTurret.gd" id="1_f3274"]
-[ext_resource type="PackedScene" uid="uid://dwi25fesc1esk" path="res://DeathDelay.tscn" id="2_0fmaj"]
+[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="2_b2r0b"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="3_0a7qk"]
 [ext_resource type="Texture2D" uid="uid://dq1utibhjvpsr" path="res://Assets/turret_base.png" id="4_g2bmg"]
 [ext_resource type="Texture2D" uid="uid://menr1trsc80q" path="res://Assets/plasma_shotgun_gun.png" id="5_0om4f"]
@@ -33,10 +33,10 @@ MachineTitle = "F3-HYDRA"
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_nn2xq")
 
-[node name="GunCooldown" type="Timer" parent="."]
-
-[node name="Destruction" parent="." instance=ExtResource("2_0fmaj")]
+[node name="Destruction" parent="." instance=ExtResource("2_b2r0b")]
 Delay = 3.0
+
+[node name="GunCooldown" type="Timer" parent="."]
 
 [node name="FullBody" type="Node2D" parent="."]
 

@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckwo7ltccm4lj"]
+[gd_scene load_steps=14 format=3 uid="uid://gb10noi2smvd"]
 
 [ext_resource type="Script" path="res://Enemies/LaserShotgunTurret.gd" id="1_ghsm1"]
-[ext_resource type="PackedScene" uid="uid://dwi25fesc1esk" path="res://DeathDelay.tscn" id="2_tolj2"]
+[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="2_pb1a6"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="3_mjrua"]
 [ext_resource type="Texture2D" uid="uid://dipyv4tbujgmr" path="res://Assets/shotgun_turret_base.png" id="4_a5d04"]
 [ext_resource type="Texture2D" uid="uid://cs6rgi45oqjmo" path="res://Assets/laser_shotgun_gun.png" id="5_ak8wf"]
@@ -32,7 +32,7 @@ MachineTitle = "M5-PHONEIX"
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_mp070")
 
-[node name="Destruction" parent="." instance=ExtResource("2_tolj2")]
+[node name="Destruction" parent="." instance=ExtResource("2_pb1a6")]
 Delay = 3.0
 
 [node name="GunCooldown" type="Timer" parent="."]

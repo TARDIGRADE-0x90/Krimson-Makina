@@ -12,8 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="9_w0jcr"]
 [ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="10_lnmwd"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_d22ns"]
-radius = 180.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vnujr"]
+size = Vector2(180, 180)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v6sx8"]
 size = Vector2(32, 32)
@@ -28,7 +28,7 @@ shader_parameter/flash_modifier = 0.0
 resource_local_to_scene = true
 shader = ExtResource("2_dlrn3")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
-shader_parameter/flash_modifier = 1.0
+shader_parameter/flash_modifier = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ebtjp"]
 resource_local_to_scene = true
@@ -43,7 +43,7 @@ size = Vector2(196, 384)
 script = ExtResource("1_2uy8n")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_d22ns")
+shape = SubResource("RectangleShape2D_vnujr")
 
 [node name="Hurtbox" type="Area2D" parent="."]
 

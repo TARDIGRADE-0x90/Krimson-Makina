@@ -16,6 +16,7 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		var coll := CollisionPolygon2D.new()
 		coll.polygon = Visual.polygon
+		#coll.build_mode = coll.BUILD_SEGMENTS
 		add_child(coll)
 		
 		CollisionBits.set_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, true)
