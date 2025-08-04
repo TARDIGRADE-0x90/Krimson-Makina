@@ -16,7 +16,7 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		var coll := CollisionPolygon2D.new()
 		coll.polygon = Visual.polygon
-		#coll.build_mode = coll.BUILD_SEGMENTS
+		#coll.build_mode = coll.BUILD_SEGMENTS #this allows for proper vertex alignment but collision this way is currently fucky
 		add_child(coll)
 		
 		CollisionBits.set_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, true)
