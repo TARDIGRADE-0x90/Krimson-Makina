@@ -60,10 +60,13 @@ const CORE_HEAT_INITIAL_MAX: float = 200.0
 const RUSH_HEAT_DEFAULT: float = 35.0
 const HIT_HEAT: float = 40.0
 
-const WEAPON_HEAT_MAX: float = 150.0
-const WEAPON_COOL_RATE: float = 45 #multiplied against delta
-const WEAPON_COOL_RATE_FOCUSED: float = 24 #multiplied against delta
-const OVERHEAT_DAMAGE: float = 4 #multiplied against delta
+const AUXILARY_HEAT_MAX: float = 150.0
+const OVERHEAT_EMERGENCY_THRESHOLD: float = 1.75
+
+const AUXILLARY_COOL_RATE: float = 45 #multiplied against delta
+const AUXILLARY_COOL_RATE_FOCUSED: float = 24 #multiplied against delta
+const AUXILLARY_EMERGENCY_COOLING: float = 2.0 #multiplies against cool rate when heat exceeds a threshold
+const OVERHEAT_DAMAGE_RATE: float = 4 #multiplied against delta
 
 const EXECUTION_COOLING: float = 20.0
 
@@ -145,9 +148,9 @@ var execution_point: Vector2 = ZERO_VECTOR
 var core_heat_max: float = CORE_HEAT_INITIAL_MAX
 var core_heat: float = CORE_HEAT_INITIAL_MAX
 
-var weapon_heat_range: Vector2
-var weapon_heat_max: float = WEAPON_HEAT_MAX
-var weapon_heat: float = 0
+var auxillary_heat_range: Vector2
+var auxillary_heat_max: float = AUXILARY_HEAT_MAX
+var auxillary_heat: float = 0
 
 var auxillary_firerate: float
 var aim_choke: float = 1.0
@@ -174,7 +177,7 @@ func _ready() -> void:
 	AuxillaryAnchor.position = AUXILLARY_START
 	
 	
-	weapon_heat_range = PlayerGun.get_gun().HeatRange
+	auxillary_heat_range = PlayerGun.get_gun().HeatRange
 	auxillary_firerate = PlayerGun.get_gun().FireRate
 	
 	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
@@ -406,9 +409,6 @@ func trigger_thrust() -> void:
 func animate_thrust() -> void:
 	Blade.translate(Vector2.from_angle(Blade.rotation + (PI * 0.5) ) * THRUST_PUSH * sin(ThrustTimer.time_left * THRUST_TIME_FACTOR))
 
-"""
-this is dogshit and needs to be revisited
-"""
 var melee_hits: Array[Meleeable] #very very dumb but I'm doing this anyway
 func check_blade_collision() -> void:
 	if Blade.has_overlapping_bodies():
@@ -429,7 +429,6 @@ func center_blade() -> void:
 func clear_melee_hits() -> void:
 	for i in range(melee_hits.size()):
 		melee_hits[i].melee_cleared.emit()
-		#melee_hits.pop_at(i).melee_cleared.emit()
 
 func reset_blade() -> void:
 	slashing = false
@@ -450,6 +449,7 @@ func reset_blade() -> void:
 	clear_melee_hits()
 
 func trigger_execution() -> void:
+	melee_hits.clear() ## ABYSMAL DOGSHIT WARNING ##
 	blade_damage = BLADE_BASE_DAMAGE
 	
 	executing = true
@@ -496,13 +496,13 @@ func clear_execution() -> void:
 	reset_blade()
 	
 	core_heat = min(core_heat_max, core_heat + EXECUTION_COOLING)
-	weapon_heat = 0
-	Events.weapon_heat_updated.emit(weapon_heat)
+	auxillary_heat = 0
+	Events.weapon_heat_updated.emit(auxillary_heat)
 
 func trigger_rush() -> void:
 	rushing = true
-	weapon_heat += rush_heat
-	Events.weapon_heat_updated.emit(weapon_heat)
+	auxillary_heat += rush_heat
+	Events.weapon_heat_updated.emit(auxillary_heat)
 	RushTimer.start()
 
 func animate_rush() -> void:
@@ -533,7 +533,7 @@ preferrably reduced by some factor
 func fire_auxillary() -> void:
 	AuxillaryCooldown.start()
 	
-	var heat: float = randf_range(weapon_heat_range.x, weapon_heat_range.y) 
+	var heat: float = randf_range(auxillary_heat_range.x, auxillary_heat_range.y) 
 	
 	if PlayerGun.get_gun().Shots > 1:
 		heat = heat + (PlayerGun.get_gun().Shots * 0.75)
@@ -543,19 +543,25 @@ func fire_auxillary() -> void:
 	
 	PlayerGun.fire(CannonPoint.global_position, AuxillaryAnchor.global_rotation)
 	
-	weapon_heat += heat
-	Events.weapon_heat_updated.emit(weapon_heat)
+	auxillary_heat += heat
+	Events.weapon_heat_updated.emit(auxillary_heat)
 
+var cooling: float = 1.0
 func cool_weapon() -> void:
-	if move_state == MOVEMENT_STATES.FOCUS:
-		weapon_heat = max(0, weapon_heat - WEAPON_COOL_RATE_FOCUSED * get_physics_process_delta_time())
+	if auxillary_heat >= auxillary_heat_max * OVERHEAT_EMERGENCY_THRESHOLD:
+		cooling = AUXILLARY_EMERGENCY_COOLING
 	else:
-		weapon_heat = max(0, weapon_heat - WEAPON_COOL_RATE * get_physics_process_delta_time())
+		cooling = 1.0
 	
-	Events.weapon_heat_updated.emit(weapon_heat)
+	if move_state == MOVEMENT_STATES.FOCUS:
+		auxillary_heat = max(0, auxillary_heat - AUXILLARY_COOL_RATE_FOCUSED * cooling * get_physics_process_delta_time())
+	else:
+		auxillary_heat = max(0, auxillary_heat - AUXILLARY_COOL_RATE * cooling * get_physics_process_delta_time())
+	
+	Events.weapon_heat_updated.emit(auxillary_heat)
 
 func check_heat(value: float) -> void:
-	if value >= weapon_heat_max:
+	if value >= auxillary_heat_max:
 		overheated = true
 		Events.core_overheated.emit()
 	else:
@@ -565,10 +571,10 @@ func read_damage(amount: float) -> void:
 	if not executing: #invincible during execution
 		core_heat -= amount
 		
-		weapon_heat += HIT_HEAT
-		Events.weapon_heat_updated.emit(weapon_heat)
+		auxillary_heat += HIT_HEAT
+		Events.weapon_heat_updated.emit(auxillary_heat)
 		
 		FlashHandler.trigger_flash()
 
 func tick_overheat_damage() -> void:
-	core_heat -= OVERHEAT_DAMAGE * get_physics_process_delta_time()
+	core_heat -= OVERHEAT_DAMAGE_RATE * get_physics_process_delta_time()
