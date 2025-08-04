@@ -5,6 +5,7 @@ const ERR_TIMEOUT_METHOD_INVALID: String = "Error in Global.gd: timeout_method i
 enum GAME_STATES {START_SCREEN, GAME_LOOP}
 
 const META_SHOOTABLE_REF: String = "shot_detection_reference"
+const META_MELEEABLE_REF: String = "melee_detection_reference"
 
 const MELEE_DETECTOR: String = "Meleeable"
 const SHOOT_DETECTOR: String = "Shootable"

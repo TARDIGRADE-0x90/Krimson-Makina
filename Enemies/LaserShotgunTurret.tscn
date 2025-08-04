@@ -59,7 +59,8 @@ GunInfo = ExtResource("8_exchb")
 CollisionType = 2
 Collider = NodePath("..")
 
-[node name="Meleeable" parent="." instance=ExtResource("9_4gd2k")]
+[node name="Meleeable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("9_4gd2k")]
+Collider = NodePath("..")
 
 [node name="HitFlashHandler" parent="." instance=ExtResource("10_dart4")]
 Duration = 0.25

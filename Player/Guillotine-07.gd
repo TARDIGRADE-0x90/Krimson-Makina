@@ -70,9 +70,10 @@ const EXECUTION_COOLING: float = 20.0
 const DEFAULT_CHOKE: float = 1.0
 const FOCUS_CHOKE: float = 0.4
 
-const BLADE_START = Vector2(0, 320)
-const BLADE_SLASH_REST = Vector2(0, -320)
-const BLADE_T_X_DEFAULT = Vector2(1, 0)
+const BLADE_SCALE := Vector2(1.2, 1.2)
+const BLADE_START := Vector2(0, 320)
+const BLADE_SLASH_REST := Vector2(0, -320)
+const BLADE_T_X_DEFAULT := Vector2(1, 0)
 
 const SLASH_ANGLE: float = (PI * 0.06)
 const SLASH_DEGREE: float = 0.2
@@ -87,8 +88,8 @@ const EXECUTION_X_OFFSET: int = 128
 const EXECUTION_TIME_FACTOR: int = 24
 const EXECUTION_PUSH: int = 260
 
-const AUXILLARY_START = Vector2(0, -64)
-const FOCUS_AIM_BOUND = Vector2(100, 0)
+const AUXILLARY_START := Vector2(0, -64)
+const FOCUS_AIM_BOUND := Vector2(100, 0)
 
 const Z_BLADE: int = 1
 const Z_AUXILLARY: int = 1
@@ -168,6 +169,7 @@ func _ready() -> void:
 	move_state_stack.append(MOVEMENT_STATES.HOVER) #default speed in the movement queue VERY IMPORTANT
 	current_speed = SPEED_DICT[MOVEMENT_STATES.HOVER]
 	
+	Blade.scale = BLADE_SCALE
 	Blade.position = BLADE_START
 	AuxillaryAnchor.position = AUXILLARY_START
 	
@@ -376,6 +378,7 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 			Global.active_camera.tilt_to_angle(0)
 
 func trigger_slash() -> void:
+	melee_hits.clear() ## ABYSMAL DOGSHIT WARNING ##
 	blade_damage = BLADE_BASE_DAMAGE
 	if rushing:
 		blade_damage *= RUSH_DAMAGE_MODIFIER
@@ -389,6 +392,7 @@ func animate_slash() -> void:
 	Blade.rotation += SLASH_DEGREE * blade_direction
 
 func trigger_thrust() -> void:
+	melee_hits.clear() ## ABYSMAL DOGSHIT WARNING ##
 	blade_damage = BLADE_BASE_DAMAGE * THRUST_DAMAGE_MODIFIER
 	if rushing:
 		blade_damage *= RUSH_DAMAGE_MODIFIER
@@ -402,16 +406,21 @@ func trigger_thrust() -> void:
 func animate_thrust() -> void:
 	Blade.translate(Vector2.from_angle(Blade.rotation + (PI * 0.5) ) * THRUST_PUSH * sin(ThrustTimer.time_left * THRUST_TIME_FACTOR))
 
-var melee_hits: Array[CollisionObject2D] #very very dumb but I'm doing this anyway
+"""
+this is dogshit and needs to be revisited
+"""
+var melee_hits: Array[Meleeable] #very very dumb but I'm doing this anyway
 func check_blade_collision() -> void:
 	if Blade.has_overlapping_bodies():
 		for i in range(Blade.get_overlapping_bodies().size()):
 			var melee_body: CollisionObject2D = Blade.get_overlapping_bodies()[i]
+			var melee_detector: Meleeable
 			
-			if melee_body.has_node(Global.MELEE_DETECTOR): #Note that this only checks the first layer of nodes
-				if !melee_body.get_node(Global.MELEE_DETECTOR).struck:
-					melee_body.get_node(Global.MELEE_DETECTOR).melee_detected.emit(blade_damage)
-					melee_hits.append(Blade.get_overlapping_bodies()[i])
+			if melee_body.has_meta(Global.META_MELEEABLE_REF):
+				melee_detector = melee_body.get_meta(Global.META_MELEEABLE_REF)
+				if !melee_hits.has(melee_detector):
+					melee_detector.melee_detected.emit(blade_damage)
+					melee_hits.append(melee_detector)
 
 func center_blade() -> void:
 	Blade.transform.origin.y = Head.rotation #center the blade
@@ -419,9 +428,8 @@ func center_blade() -> void:
 
 func clear_melee_hits() -> void:
 	for i in range(melee_hits.size()):
-		var hit_body: CollisionObject2D = melee_hits[i]
-		hit_body.get_node(Global.MELEE_DETECTOR).melee_cleared.emit()
-		melee_hits.erase(hit_body)
+		melee_hits[i].melee_cleared.emit()
+		#melee_hits.pop_at(i).melee_cleared.emit()
 
 func reset_blade() -> void:
 	slashing = false
