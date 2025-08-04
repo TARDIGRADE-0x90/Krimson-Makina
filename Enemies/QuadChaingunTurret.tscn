@@ -1,0 +1,67 @@
+[gd_scene load_steps=14 format=3 uid="uid://bd402lrwxwgvg"]
+
+[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="1_4oqvl"]
+[ext_resource type="Script" path="res://Enemies/QuadChaingunTurret.gd" id="1_td80g"]
+[ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="2_2dyvq"]
+[ext_resource type="Resource" uid="uid://brsdp16dmltpn" path="res://Projectile/EnemyProjectiles/UraniumRound.tres" id="3_6bg8r"]
+[ext_resource type="Shader" path="res://HitFlash.gdshader" id="3_xdhbu"]
+[ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="4_a77yq"]
+[ext_resource type="Texture2D" uid="uid://bavt1mgbgwe3e" path="res://Assets/quadchain_turret_base.png" id="4_lel7y"]
+[ext_resource type="Texture2D" uid="uid://cmsvcymkl1kg7" path="res://Assets/quadchain_gun.png" id="5_03o35"]
+[ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="5_tosjs"]
+[ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="6_j6a3e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sp1nu"]
+size = Vector2(256, 256)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_311gc"]
+resource_local_to_scene = true
+shader = ExtResource("3_xdhbu")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_modifier = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oytwh"]
+resource_local_to_scene = true
+shader = ExtResource("3_xdhbu")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_modifier = 0.0
+
+[node name="QuadChaingunTurret" type="StaticBody2D"]
+script = ExtResource("1_td80g")
+MachineTitle = "X4-VIPER"
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sp1nu")
+
+[node name="Destruction" parent="." instance=ExtResource("1_4oqvl")]
+Delay = 5.0
+
+[node name="Firerate" type="Timer" parent="."]
+
+[node name="BurstDelay" type="Timer" parent="."]
+
+[node name="FullBody" type="Node2D" parent="."]
+
+[node name="Base" type="Sprite2D" parent="FullBody"]
+material = SubResource("ShaderMaterial_311gc")
+texture = ExtResource("4_lel7y")
+
+[node name="Barrels" type="Sprite2D" parent="FullBody"]
+material = SubResource("ShaderMaterial_oytwh")
+texture = ExtResource("5_03o35")
+
+[node name="Muzzle" type="Marker2D" parent="FullBody/Barrels"]
+position = Vector2(64, 0)
+
+[node name="QuadChaingun" parent="." instance=ExtResource("2_2dyvq")]
+ShotData = ExtResource("3_6bg8r")
+MaxPool = 128
+
+[node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("4_a77yq")]
+CollisionType = 2
+Collider = NodePath("..")
+
+[node name="Meleeable" parent="." instance=ExtResource("5_tosjs")]
+
+[node name="HitFlashHandler" parent="." instance=ExtResource("6_j6a3e")]
+Duration = 0.25

@@ -22,21 +22,31 @@ const OFFSET_MAX: float = 500.0
 @export var ShotData: ProjectileData
 @export var MaxPool: int
 
+var shot_data_copy: ProjectileData = ProjectileData.new()
 var current_shot: Projectile #bad practice? maybe
 var shot_pool: Array[Projectile]
 var pool_index: int = 0
 
+var override_type: int = 0
+
 func _ready() -> void:
+	shot_data_copy.copy_data(ShotData)
 	initialize_projectiles()
 
 func initialize_projectiles() -> void:
 	for i in range(MaxPool):
 		var projectile = PROJECTILE.instantiate()
-		projectile.ShotData = ShotData
+		projectile.ShotData = shot_data_copy
+		
+		if override_type > 0:
+			projectile.ShotData.CollisionType = override_type
 		
 		Global.current_level.call_deferred("add_child", projectile)
 		
 		shot_pool.append(projectile)
+
+func flag_collision_override(type: int) -> void:
+	shot_data_copy.CollisionType = type
 
 func fire(start: Vector2, angle: float) -> void:
 	current_shot = shot_pool[pool_index]

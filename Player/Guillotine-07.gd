@@ -29,6 +29,7 @@ const EXECUTION_TIME: float = 0.8
 
 const BLADE_BASE_DAMAGE: float = 25.0
 const THRUST_DAMAGE_MODIFIER: float = 0.8
+const RUSH_DAMAGE_MODIFIER: float = 1.2
 
 const MINIGUN_POOL_SIZE: int = 2000
 const MINIGUN_FIRERATE: float = 0.075
@@ -46,7 +47,7 @@ const HIT_HEAT: float = 40.0
 
 const WEAPON_HEAT_MAX: float = 150.0
 const WEAPON_COOL_RATE: float = 45 #multiplied against delta
-const WEAPON_COOL_RATE_FOCUSED: float = 20 #multiplied against delta
+const WEAPON_COOL_RATE_FOCUSED: float = 24 #multiplied against delta
 const OVERHEAT_DAMAGE: float = 4 #multiplied against delta
 
 const EXECUTION_COOLING: float = 20.0
@@ -156,6 +157,8 @@ func _ready() -> void:
 	Blade.position = BLADE_START
 	AuxillaryAnchor.position = AUXILLARY_START
 	auxillary_firerate = MINIGUN_FIRERATE
+	
+	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
 	PlayerGun.MaxPool = auxillary_pool_size
 	
 	initialize_rush_timer()
@@ -358,6 +361,8 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 
 func trigger_slash() -> void:
 	blade_damage = BLADE_BASE_DAMAGE
+	if rushing:
+		blade_damage *= RUSH_DAMAGE_MODIFIER
 	
 	blade_direction *= -1
 	SlashTimer.start()
@@ -369,6 +374,8 @@ func animate_slash() -> void:
 
 func trigger_thrust() -> void:
 	blade_damage = BLADE_BASE_DAMAGE * THRUST_DAMAGE_MODIFIER
+	if rushing:
+		blade_damage *= RUSH_DAMAGE_MODIFIER
 	
 	Blade.transform.origin.y = Head.rotation #center the blade
 	Blade.set_rotation(Head.rotation + (-PI * 0.5)) 
@@ -469,6 +476,7 @@ func clear_execution() -> void:
 	Events.weapon_heat_updated.emit(weapon_heat)
 
 func trigger_rush() -> void:
+	rushing = true
 	weapon_heat += rush_heat
 	Events.weapon_heat_updated.emit(weapon_heat)
 	RushTimer.start()
@@ -484,6 +492,7 @@ func handle_rush() -> void:
 	animate_rush()
 
 func clear_rush() -> void: #reset movement and chassis part positioning
+	rushing = false
 	move_state = move_state_stack.back()
 	current_speed = SPEED_DICT[move_state]
 	
@@ -500,7 +509,7 @@ preferrably reduced by some factor
 func fire_auxillary() -> void:
 	AuxillaryCooldown.start()
 	
-	var shots: int = 1
+	var shots: int = 4
 	var spread: float = 0.4 * aim_choke
 	var shot_angle: float = AuxillaryAnchor.global_rotation
 	var shot_start = CannonPoint.global_position
@@ -512,9 +521,9 @@ func fire_auxillary() -> void:
 		heat = heat + (shots * 0.75)
 	
 	#PlayerGun.multifire_radial(shot_start, shot_angle, shots, spread)
-	PlayerGun.multifire_parallel(shot_start, shot_angle, shots, offset)
+	#PlayerGun.multifire_parallel(shot_start, shot_angle, shots, offset)
 	
-	#PlayerGun.fire(shot_start, shot_angle)
+	PlayerGun.fire(shot_start, shot_angle)
 	
 	weapon_heat += heat
 	Events.weapon_heat_updated.emit(weapon_heat)

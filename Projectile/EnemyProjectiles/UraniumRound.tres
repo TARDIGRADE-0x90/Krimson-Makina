@@ -10,5 +10,5 @@ ShotVisual = ExtResource("1_ceqpg")
 CollisionData = ExtResource("1_p3n82")
 CollisionType = 3
 Lifetime = 0.8
-Speed = 80.0
-BaseDamage = 8.0
+Speed = 65.0
+BaseDamage = 5.0

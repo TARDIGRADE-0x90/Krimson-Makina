@@ -23,7 +23,7 @@ const DEATH_DELAY: float = 5.0
 @onready var Cannon: Sprite2D = $FullBody/Cannon
 @onready var Muzzle: Marker2D = $FullBody/Cannon/Muzzle
 @onready var Destruction: DeathDelay = $Destruction
-@onready var GunCooldown: Timer = $GunCooldown
+@onready var Firerate: Timer = $Firerate
 @onready var LaserShotgun: ProjectileManager = $LaserShotgun
 @onready var ShootDetect: Shootable = $Shootable
 @onready var MeleeDetect: Meleeable = $Meleeable
@@ -34,7 +34,7 @@ var health: float = BASE_HEALTH
 var destroyed: bool = false
 
 func _ready() -> void:
-	initialize_gun_cooldown()
+	initialize_firerate()
 	FlashHandler.assign_sprites([Base, Cannon])
 	
 	MeleeDetect.melee_detected.connect(read_damage)
@@ -46,13 +46,13 @@ func _physics_process(delta) -> void:
 	
 	smooth_to_target(delta)
 	
-	if GunCooldown.is_stopped():
+	if Firerate.is_stopped():
 		fire_cannon()
 
-func initialize_gun_cooldown() -> void:
-	GunCooldown.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
-	GunCooldown.set_wait_time(GUN_COOLDOWN)
-	GunCooldown.set_one_shot(true)
+func initialize_firerate() -> void:
+	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
+	Firerate.set_wait_time(GUN_COOLDOWN)
+	Firerate.set_one_shot(true)
 
 func update_target(newTarget: Vector2) -> void:
 	target = newTarget
@@ -62,7 +62,7 @@ func smooth_to_target(delta: float) -> void:
 
 func fire_cannon() -> void:
 	LaserShotgun.multifire_radial(Muzzle.global_position, Muzzle.global_rotation, SHOTS, SPREAD)
-	GunCooldown.start()
+	Firerate.start()
 
 func read_damage(amount: float) -> void:
 	health -= amount

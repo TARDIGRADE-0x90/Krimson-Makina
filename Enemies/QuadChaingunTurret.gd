@@ -1,5 +1,5 @@
 extends StaticBody2D
-class_name PlasmaTrigunTurret
+class_name QuadChaingunTurret
 
 const BLAST_MARK_PATH: String = "res://BlastMark.tscn"
 const BLAST_MARK: PackedScene = preload(BLAST_MARK_PATH)
@@ -9,32 +9,40 @@ const BASE_HEALTH: float = 100.0
 const AIM_TIME: float = 1.0
 const AIM_DAMP: float = 0.5
 
-const ROTATION_RATE: int = 100
+const ROTATION_RATE: int = 120
 
-const GUN_COOLDOWN: float = 0.25
+const SHOTS: int = 4
+const OFFSET: float = 120.0
+const FIRERATE: float = 0.05
+const BURST_COUNT: int = 6
+const BURST_DELAY: float = 1.2
 
 const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
 
 @onready var Base: Sprite2D = $FullBody/Base
-@onready var Guns: Sprite2D = $FullBody/Guns
+@onready var Barrels: Sprite2D = $FullBody/Barrels
+@onready var Muzzle: Marker2D = $FullBody/Barrels/Muzzle
 @onready var Destruction: DeathDelay = $Destruction
 @onready var Firerate: Timer = $Firerate
-@onready var PlasmaGun: ProjectileManager = $PlasmaGun
+@onready var BurstDelay: Timer = $BurstDelay
+
+@onready var QuadChaingun: ProjectileManager = $QuadChaingun
 @onready var ShootDetect: Shootable = $Shootable
 @onready var MeleeDetect: Meleeable = $Meleeable
-@onready var FlashHandler: HitFlashHandler = $FlashHandler
+@onready var FlashHandler: HitFlashHandler = $HitFlashHandler
 
 var target: Vector2
 var health: float = BASE_HEALTH
-var cannon_index: int = 0
 var destroyed: bool = false
+var burst_step: int = 0
 
 func _ready() -> void:
-	initialize_Firerate()
+	initialize_firerate()
+	initialize_burst_delay()
+	FlashHandler.assign_sprites([Base, Barrels])
 	
-	FlashHandler.assign_sprites([Base, Guns])
 	MeleeDetect.melee_detected.connect(read_damage)
 	ShootDetect.shot_detected.connect(read_damage)
 
@@ -44,27 +52,33 @@ func _physics_process(delta) -> void:
 	
 	smooth_to_target(delta)
 	
-	if Firerate.is_stopped():
-		fire_cannons()
+	if Firerate.is_stopped() and BurstDelay.is_stopped():
+		fire_cannon()
 
-func initialize_Firerate() -> void:
+func initialize_firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
-	Firerate.set_wait_time(GUN_COOLDOWN)
+	Firerate.set_wait_time(FIRERATE)
 	Firerate.set_one_shot(true)
+
+func initialize_burst_delay() -> void:
+	BurstDelay.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
+	BurstDelay.set_wait_time(BURST_DELAY)
+	BurstDelay.set_one_shot(true)
 
 func update_target(newTarget: Vector2) -> void:
 	target = newTarget
 
 func smooth_to_target(delta: float) -> void:
-	Guns.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Guns.get_angle_to(target)))
+	Barrels.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Barrels.get_angle_to(target)))
 
-func fire_cannons() -> void:
-	var current_cannon_point: Marker2D = Guns.get_children()[cannon_index]
-	PlasmaGun.fire(current_cannon_point.global_position, current_cannon_point.global_rotation)
-	
-	cannon_index = (cannon_index + 1) % Guns.get_child_count()
-	
+func fire_cannon() -> void:
+	burst_step += 1
+	QuadChaingun.multifire_parallel(Muzzle.global_position, Muzzle.global_rotation, SHOTS, OFFSET)
 	Firerate.start()
+	
+	if burst_step >= BURST_COUNT:
+		burst_step = 0
+		BurstDelay.start()
 
 func read_damage(amount: float) -> void:
 	health -= amount

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://df44147ji6wgv"]
+[gd_scene load_steps=9 format=3 uid="uid://df44147ji6wgv"]
 
 [ext_resource type="PackedScene" uid="uid://bn834txfdx660" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
 [ext_resource type="Script" path="res://Level/MainWorld.gd" id="1_g5bsb"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_n2egp"]
 [ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="6_rq1np"]
 [ext_resource type="PackedScene" uid="uid://gb10noi2smvd" path="res://Enemies/LaserShotgunTurret.tscn" id="7_3q3p8"]
+[ext_resource type="PackedScene" uid="uid://bd402lrwxwgvg" path="res://Enemies/QuadChaingunTurret.tscn" id="8_bn47r"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_g5bsb")
@@ -34,7 +35,7 @@ position = Vector2(5911, 1350)
 position = Vector2(8131, 223)
 
 [node name="LaserShotgunTurret2" parent="." instance=ExtResource("7_3q3p8")]
-position = Vector2(10279, -1157)
+position = Vector2(19017, 1195)
 
 [node name="LaserShotgunTurret3" parent="." instance=ExtResource("7_3q3p8")]
 position = Vector2(9464, 4285)
@@ -44,3 +45,51 @@ position = Vector2(11309, 3274)
 
 [node name="LaserShotgunTurret4" parent="." instance=ExtResource("7_3q3p8")]
 position = Vector2(12793, 2035)
+
+[node name="QuadChaingunTurret" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(10295, -1144)
+
+[node name="LaserShotgunTurret5" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(20580, 4809)
+
+[node name="QuadChaingunTurret2" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(21534, 3445)
+
+[node name="QuadChaingunTurret3" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(18290, 3445)
+
+[node name="PlasmaTrigunTurret5" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(17178, 2206)
+
+[node name="PlasmaTrigunTurret6" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(17203, 4819)
+
+[node name="PlasmaTrigunTurret7" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(22746, 1820)
+
+[node name="LaserShotgunTurret6" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(19098, 5654)
+
+[node name="LaserShotgunTurret7" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(20544, 2118)
+
+[node name="QuadChaingunTurret4" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(27593, 4177)
+
+[node name="QuadChaingunTurret5" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(30456, 2835)
+
+[node name="LaserShotgunTurret8" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(24173, 4837)
+
+[node name="LaserShotgunTurret9" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(24200, 2376)
+
+[node name="QuadChaingunTurret6" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(24540, 5663)
+
+[node name="QuadChaingunTurret7" parent="." instance=ExtResource("8_bn47r")]
+position = Vector2(24441, 1272)
+
+[node name="PlasmaTrigunTurret8" parent="." instance=ExtResource("6_rq1np")]
+position = Vector2(22722, 5313)

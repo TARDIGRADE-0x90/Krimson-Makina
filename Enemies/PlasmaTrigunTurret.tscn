@@ -36,7 +36,7 @@ shape = SubResource("RectangleShape2D_nn2xq")
 [node name="Destruction" parent="." instance=ExtResource("2_b2r0b")]
 Delay = 3.0
 
-[node name="GunCooldown" type="Timer" parent="."]
+[node name="Firerate" type="Timer" parent="."]
 
 [node name="FullBody" type="Node2D" parent="."]
 

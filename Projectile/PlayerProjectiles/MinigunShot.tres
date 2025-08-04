@@ -1,12 +1,12 @@
-[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://de7yhp8jeek62"]
 
 [ext_resource type="Shape2D" uid="uid://cphqu5naqwqvq" path="res://Projectile/ProjectileColliders/ColliderMed.tres" id="1_dl5rk"]
-[ext_resource type="Texture2D" uid="uid://b0nor3piqvlty" path="res://Assets/uranium_round.png" id="2_jog26"]
+[ext_resource type="Texture2D" uid="uid://c65cekhfck3uk" path="res://Assets/mingun_shot.png" id="2_is21b"]
 [ext_resource type="Script" path="res://Projectile/ProjectileData.gd" id="3_voyh6"]
 
 [resource]
 script = ExtResource("3_voyh6")
-ShotVisual = ExtResource("2_jog26")
+ShotVisual = ExtResource("2_is21b")
 CollisionData = ExtResource("1_dl5rk")
 CollisionType = 2
 Lifetime = 1.2
