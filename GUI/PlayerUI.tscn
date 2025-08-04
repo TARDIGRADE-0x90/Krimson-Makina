@@ -93,6 +93,13 @@ text = "ENEMY TITLE :: ENEMY_HEALTH"
 label_settings = SubResource("LabelSettings_d2aph")
 vertical_alignment = 2
 
+[node name="EnemyHealthBar" type="ColorRect" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 0
+color = Color(0.764706, 0.713726, 0.662745, 0.65098)
+
 [node name="DestructionLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "TARGET DESTROYED"

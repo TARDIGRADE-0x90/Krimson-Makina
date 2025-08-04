@@ -9,6 +9,7 @@ const META_SHOOTABLE_REF: String = "shot_detection_reference"
 const MELEE_DETECTOR: String = "Meleeable"
 const SHOOT_DETECTOR: String = "Shootable"
 
+var current_level: Node
 var active_camera: MainCamera
 var player: Player
 var player_position = Vector2(0, 0) #allows for initialization even as the player is not loaded in yet

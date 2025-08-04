@@ -6,12 +6,6 @@ TO DO:
 	- Create Options UI and input rebinding ASAP
 	
 	- Begin streamlining the creation of enemies, spawn structures, turrets, etc.
-	
-	- Before worrying about background texture, first draft up the level layout itself,
-		then go over it with whatever visuals needed (how to do this? idk - One Giant Image
-		is a worst case fix but there ought to be a better way to break it into pieces)
-	
-	- Hit penalties such as auxillary weapon heat getting pulsed up, and reduced cooling rate for a moment
 """
 
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
@@ -33,8 +27,8 @@ const SLASH_TIME: float = 0.3
 const THRUST_TIME: float = 0.2
 const EXECUTION_TIME: float = 0.8
 
-const BLADE_BASE_DAMAGE: float = 20.0
-const THRUST_DAMAGE_MODIFIER: float = 0.75
+const BLADE_BASE_DAMAGE: float = 25.0
+const THRUST_DAMAGE_MODIFIER: float = 0.8
 
 const MINIGUN_POOL_SIZE: int = 2000
 const MINIGUN_FIRERATE: float = 0.075
@@ -48,8 +42,10 @@ const BODY_SHIFT_FACTOR: float = 1.2
 const CORE_HEAT_INITIAL_MAX: float = 200.0
 
 const RUSH_HEAT_DEFAULT: float = 35.0
-const WEAPON_HEAT_MAX: float = 140.0
-const WEAPON_COOL_RATE: float = 44 #multiplied against delta
+const HIT_HEAT: float = 40.0
+
+const WEAPON_HEAT_MAX: float = 150.0
+const WEAPON_COOL_RATE: float = 45 #multiplied against delta
 const WEAPON_COOL_RATE_FOCUSED: float = 20 #multiplied against delta
 const OVERHEAT_DAMAGE: float = 4 #multiplied against delta
 
@@ -211,7 +207,7 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event : InputEvent) -> void:
 	parse_input_movement(event)
 	parse_input_attack(event)
-	parse_input_execution(event)
+	#parse_input_execution(event)
 
 func initialize_rush_timer() -> void:
 	RushTimer.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
@@ -371,13 +367,11 @@ func animate_slash() -> void:
 	Blade.transform.origin = Blade.transform.origin.rotated(SLASH_ANGLE * blade_direction)
 	Blade.rotation += SLASH_DEGREE * blade_direction
 
-var aim_vector: Vector2
 func trigger_thrust() -> void:
 	blade_damage = BLADE_BASE_DAMAGE * THRUST_DAMAGE_MODIFIER
 	
-	Blade.transform.y.y = 1
 	Blade.transform.origin.y = Head.rotation #center the blade
-	Blade.set_rotation(Head.rotation + (-PI * 0.5))
+	Blade.set_rotation(Head.rotation + (-PI * 0.5)) 
 	
 	ThrustTimer.start()
 	thrusting = true
@@ -420,9 +414,6 @@ func reset_blade() -> void:
 		_:
 			print("Error in Guillotine-07 : why is there another direction")
 	
-	Blade.transform.x = BLADE_T_X_DEFAULT
-	Blade.transform.y.x = 0
-	Blade.transform.y.y = blade_direction
 	Blade.position = blade_position
 	blade_damage = BLADE_BASE_DAMAGE #then multiply by any ongoing modifiers after
 	clear_melee_hits()
@@ -509,15 +500,21 @@ preferrably reduced by some factor
 func fire_auxillary() -> void:
 	AuxillaryCooldown.start()
 	
-	var shots: int = 8
+	var shots: int = 1
 	var spread: float = 0.4 * aim_choke
 	var shot_angle: float = AuxillaryAnchor.global_rotation
 	var shot_start = CannonPoint.global_position
 	var heat: float = randf_range(weapon_heat_range.x, weapon_heat_range.y) 
 	
-	#heat *= (shots * 0.4) 
-	#PlayerGun.multifire_radial(shots, spread, shot_angle, shot_start)
-	PlayerGun.fire(shot_angle, shot_start)
+	var offset: float = 100.0 * aim_choke
+	
+	if shots > 1:
+		heat = heat + (shots * 0.75)
+	
+	#PlayerGun.multifire_radial(shot_start, shot_angle, shots, spread)
+	PlayerGun.multifire_parallel(shot_start, shot_angle, shots, offset)
+	
+	#PlayerGun.fire(shot_start, shot_angle)
 	
 	weapon_heat += heat
 	Events.weapon_heat_updated.emit(weapon_heat)
@@ -540,6 +537,10 @@ func check_heat(value: float) -> void:
 func read_damage(amount: float) -> void:
 	if not executing: #invincible during execution
 		core_heat -= amount
+		
+		weapon_heat += HIT_HEAT
+		Events.weapon_heat_updated.emit(weapon_heat)
+		
 		FlashHandler.trigger_flash()
 
 func tick_overheat_damage() -> void:

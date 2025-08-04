@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c04vi3vcgfk46"]
+[gd_scene load_steps=18 format=3 uid="uid://bn834txfdx660"]
 
 [ext_resource type="Script" path="res://Player/Guillotine-07.gd" id="1_2uy8n"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_dlrn3"]
@@ -6,11 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://b4t8skqxmo2rg" path="res://Assets/guillotine-body-draft.png" id="5_aulbw"]
 [ext_resource type="Texture2D" uid="uid://dwry8ylxb6cxu" path="res://Assets/guillotine-head-draft.png" id="6_8bemu"]
 [ext_resource type="Texture2D" uid="uid://t6oqb4tbi8w5" path="res://Assets/guillotine-blade-draft.png" id="7_p2rxt"]
-[ext_resource type="Resource" uid="uid://bfxhyvx6mv1av" path="res://Projectile/PlayerProjectiles/MinigunShot.tres" id="8_002k6"]
+[ext_resource type="Resource" path="res://Projectile/PlayerProjectiles/MinigunShot.tres" id="8_002k6"]
 [ext_resource type="Texture2D" uid="uid://b4jiulrlpn05t" path="res://Assets/guillotine_minigun_draft.png" id="8_7dn3a"]
-[ext_resource type="PackedScene" uid="uid://dlwc6u5k8g6eq" path="res://HitFlashHandler.tscn" id="9_r8kcf"]
+[ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="9_r8kcf"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="9_w0jcr"]
-[ext_resource type="PackedScene" uid="uid://5q1chrrp83rm" path="res://Shootable.tscn" id="10_lnmwd"]
+[ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="10_lnmwd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d22ns"]
 radius = 180.0
@@ -105,7 +105,6 @@ texture = ExtResource("8_7dn3a")
 position = Vector2(96, -8)
 
 [node name="PlayerGun" parent="AuxillaryAnchor" instance=ExtResource("9_w0jcr")]
-position = Vector2(-64, 64)
 ShotData = ExtResource("8_002k6")
 MaxPool = 128
 

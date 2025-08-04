@@ -1,6 +1,9 @@
 extends StaticBody2D
 class_name LaserShotgunTurret
 
+const BLAST_MARK_PATH: String = "res://BlastMark.tscn"
+const BLAST_MARK: PackedScene = preload(BLAST_MARK_PATH)
+
 const BASE_HEALTH: float = 100.0
 
 const AIM_TIME: float = 1.0
@@ -28,6 +31,7 @@ const DEATH_DELAY: float = 5.0
 
 var target: Vector2
 var health: float = BASE_HEALTH
+var destroyed: bool = false
 
 func _ready() -> void:
 	initialize_gun_cooldown()
@@ -57,7 +61,7 @@ func smooth_to_target(delta: float) -> void:
 	Cannon.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Cannon.get_angle_to(target)))
 
 func fire_cannon() -> void:
-	LaserShotgun.multifire_radial(SHOTS, SPREAD, Muzzle.global_rotation, Muzzle.global_position)
+	LaserShotgun.multifire_radial(Muzzle.global_position, Muzzle.global_rotation, SHOTS, SPREAD)
 	GunCooldown.start()
 
 func read_damage(amount: float) -> void:
@@ -68,16 +72,24 @@ func read_damage(amount: float) -> void:
 		return
 	
 	FlashHandler.trigger_flash()
-	Events.new_target_hit.emit(MachineTitle, health)
+	Events.new_target_hit.emit(MachineTitle, health, BASE_HEALTH)
 
 func destroy() -> void:
-	Events.target_destroyed.emit()
-	
-	CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
-	CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
-	CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
-	
-	Destruction.start()
-	
-	set_physics_process(false)
-	set_visible(false)
+	if !destroyed:
+		destroyed = true
+		
+		set_physics_process(false)
+		set_visible(false)
+		
+		Events.target_destroyed.emit()
+		
+		var blast_mark: Sprite2D = BLAST_MARK.instantiate()
+		Global.current_level.call_deferred("add_child", blast_mark)
+		blast_mark.set_rotation_degrees(randi_range(0, 360))
+		blast_mark.global_position = global_position
+		
+		CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
+		
+		Destruction.start()

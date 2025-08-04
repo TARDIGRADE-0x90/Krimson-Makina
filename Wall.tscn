@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://datcvjue16f26"]
+
+[ext_resource type="Script" path="res://Wall.gd" id="1_knsg6"]
+[ext_resource type="Texture2D" uid="uid://dmh1vtukdkb4w" path="res://Assets/steel_wall.png" id="2_nielj"]
+[ext_resource type="Texture2D" uid="uid://cylc5upb5yaja" path="res://Assets/steel_beam.png" id="3_3q07j"]
+
+[node name="Wall" type="StaticBody2D"]
+script = ExtResource("1_knsg6")
+PolygonData = null
+
+[node name="WallVisual" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("2_nielj")
+
+[node name="WallOutline" type="Line2D" parent="."]
+texture_repeat = 3
+width = 24.0
+texture = ExtResource("3_3q07j")
+texture_mode = 1
+joint_mode = 2
+begin_cap_mode = 1
+end_cap_mode = 1

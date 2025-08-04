@@ -1,6 +1,9 @@
 extends StaticBody2D
 class_name PlasmaTrigunTurret
 
+const BLAST_MARK_PATH: String = "res://BlastMark.tscn"
+const BLAST_MARK: PackedScene = preload(BLAST_MARK_PATH)
+
 const BASE_HEALTH: float = 100.0
 
 const AIM_TIME: float = 1.0
@@ -26,6 +29,7 @@ const DEATH_DELAY: float = 5.0
 var target: Vector2
 var health: float = BASE_HEALTH
 var cannon_index: int = 0
+var destroyed: bool = false
 
 func _ready() -> void:
 	initialize_firing_cooldown()
@@ -56,7 +60,7 @@ func smooth_to_target(delta: float) -> void:
 
 func fire_cannons() -> void:
 	var current_cannon_point: Marker2D = Guns.get_children()[cannon_index]
-	PlasmaGun.fire(current_cannon_point.global_rotation, current_cannon_point.global_position)
+	PlasmaGun.fire(current_cannon_point.global_position, current_cannon_point.global_rotation)
 	
 	cannon_index = (cannon_index + 1) % Guns.get_child_count()
 	
@@ -70,16 +74,24 @@ func read_damage(amount: float) -> void:
 		return
 	
 	FlashHandler.trigger_flash()
-	Events.new_target_hit.emit(MachineTitle, health)
+	Events.new_target_hit.emit(MachineTitle, health, BASE_HEALTH)
 
 func destroy() -> void:
-	Events.target_destroyed.emit()
-	
-	CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
-	CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
-	CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
-	
-	Destruction.start()
-	
-	set_physics_process(false)
-	set_visible(false)
+	if !destroyed:
+		destroyed = true
+		
+		set_physics_process(false)
+		set_visible(false)
+		
+		Events.target_destroyed.emit()
+		
+		var blast_mark: Sprite2D = BLAST_MARK.instantiate()
+		Global.current_level.call_deferred("add_child", blast_mark)
+		blast_mark.set_rotation_degrees(randi_range(0, 360))
+		blast_mark.global_position = global_position
+		
+		CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
+		
+		Destruction.start()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://menr1trsc80q"
-path="res://.godot/imported/plasma_shotgun_gun.png-ccfc694d082da1d52c078aa946715212.ctex"
+uid="uid://dn8sxpqvnbe5m"
+path="res://.godot/imported/blast_mark.png-c180d91aa8ceaac7838e52572ed685c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/plasma_shotgun_gun.png"
-dest_files=["res://.godot/imported/plasma_shotgun_gun.png-ccfc694d082da1d52c078aa946715212.ctex"]
+source_file="res://Assets/blast_mark.png"
+dest_files=["res://.godot/imported/blast_mark.png-c180d91aa8ceaac7838e52572ed685c8.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false
 mipmaps/limit=-1
-roughness/mode=1
+roughness/mode=0
 roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
@@ -31,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

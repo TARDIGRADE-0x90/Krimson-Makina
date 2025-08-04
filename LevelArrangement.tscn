@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dimcpy1wi0m6v"]
+[gd_scene load_steps=4 format=3 uid="uid://dimcpy1wi0m6v"]
 
-[ext_resource type="Script" path="res://Walls.gd" id="1_0eknv"]
 [ext_resource type="Texture2D" uid="uid://bw7kbvr7f64y4" path="res://Assets/undergrating.png" id="1_2wlli"]
 [ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="1_qg5gr"]
-[ext_resource type="Texture2D" uid="uid://dmh1vtukdkb4w" path="res://Assets/steel_wall.png" id="3_uupkf"]
-[ext_resource type="Texture2D" uid="uid://cylc5upb5yaja" path="res://Assets/steel_beam.png" id="5_pyoca"]
+[ext_resource type="PackedScene" uid="uid://datcvjue16f26" path="res://Wall.tscn" id="5_rpmpn"]
 
 [node name="LevelArrangement" type="Node2D"]
 
@@ -12,30 +10,32 @@
 texture_repeat = 3
 texture = ExtResource("1_2wlli")
 texture_rotation = 1.5708
-polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
+polygon = PackedVector2Array(-11725, 10649, 44405, 11360, 44059, -17921, -11981, -17712)
 
 [node name="Floor" type="Polygon2D" parent="."]
 texture_repeat = 2
 texture = ExtResource("1_qg5gr")
-polygon = PackedVector2Array(0, 0, 0, 4936, 2248, 4960, 2240, 2472, 3344, 1600, 8456, 1600, 9072, 2440, 9072, 4376, 16520, 4392, 16640, 272, 13744, 2400, 11260, 2400, 11260, -2840, 9256, -2880, 9248, -744, 8464, 0)
+polygon = PackedVector2Array(-11021, 10021, 42481, 10670, 42909, -17445, -11437, -17319)
 
-[node name="Walls" type="StaticBody2D" parent="."]
-collision_layer = 15
-collision_mask = 15
-script = ExtResource("1_0eknv")
+[node name="Walls" type="Node2D" parent="."]
 
-[node name="WallVisual" type="Polygon2D" parent="Walls"]
-texture_repeat = 3
-texture = ExtResource("3_uupkf")
-invert_border = 4000.0
-polygon = PackedVector2Array(0, 0, 8464, 0, 9248, -744, 9256, -2880, 11264, -2840, 11260, 2400, 13745, 2400, 16640, 272, 24101, 230, 24179, -6338, -5903, -6212, -5597, 8773, 24028, 9014, 24101, 230, 16640, 272, 16520, 4392, 9072, 4376, 9072, 2440, 8456, 1600, 3344, 1600, 2240, 2472, 2248, 4960, 0, 4937)
+[node name="WallBorder" parent="Walls" instance=ExtResource("5_rpmpn")]
+PolygonData = PackedVector2Array()
 
-[node name="Outline" type="Line2D" parent="Walls"]
-position = Vector2(12.6587, 0)
-points = PackedVector2Array(0, 0, 8464, 0, 9248, -744, 9256, -2880, 11264, -2840, 11260, 2400, 13745, 2400, 16640, 272, 24101, 230, 24179, -6338, -5903, -6212, -5597, 8773, 24028, 9014, 24101, 230, 16640, 272, 16520, 4392, 9072, 4376, 9072, 2440, 8456, 1600, 3344, 1600, 2240, 2472, 2248, 4960, 0, 4937, 0, 0)
-width = 64.0
-default_color = Color(0.533333, 0.478431, 0.792157, 1)
-texture = ExtResource("5_pyoca")
-texture_mode = 1
-begin_cap_mode = 1
-end_cap_mode = 1
+[node name="WallVisual" parent="Walls/WallBorder" index="0"]
+polygon = PackedVector2Array(0, 0, 8464, 0, 9248, -744, 9252, -8170, 2176, -8230, 17, -6109, -3543, -6160, -5690, -7824, -5690, 11159, 44359, 11637, 44667, -18051, -12698, -18398, -12623, 11172, -5690, 11159, -5686, -10270, -3476, -11973, 44, -11989, 2056, -10156, 13413, -10095, 17309, -12844, 23833, -12633, 27428, -10095, 35432, -9944, 35588, 4530, 26618, 4531, 24460, 6017, 18107, 6089, 16381, 4675, 9022, 4651, 9072, 2440, 8456, 1600, 3344, 1600, 2240, 2472, 2248, 4960, 0, 4937)
+
+[node name="WallOutline" parent="Walls/WallBorder" index="1"]
+points = PackedVector2Array(0, 0, 8464, 0, 9248, -744, 9252, -8170, 2176, -8230, 17, -6109, -3543, -6160, -5690, -7824, -5690, 11159, 44359, 11637, 44667, -18051, -12698, -18398, -12623, 11172, -5690, 11159, -5686, -10270, -3476, -11973, 44, -11989, 2056, -10156, 13413, -10095, 17309, -12844, 23833, -12633, 27428, -10095, 35432, -9944, 35588, 4530, 26618, 4531, 24460, 6017, 18107, 6089, 16381, 4675, 9022, 4651, 9072, 2440, 8456, 1600, 3344, 1600, 2240, 2472, 2248, 4960, 0, 4937, 0, 0)
+
+[node name="WallInterior1" parent="Walls" instance=ExtResource("5_rpmpn")]
+PolygonData = PackedVector2Array()
+
+[node name="WallVisual" parent="Walls/WallInterior1" index="0"]
+polygon = PackedVector2Array(11227, 96, 11268, -8123, 15040, -8098, 17643, -10129, 23218, -10142, 25797, -7679, 31003, -7678, 33123, -5647, 33019, 911, 30645, 2565, 26546, 2517, 24484, 1127, 18179, 1222, 16094, 2469, 13816, 2397)
+
+[node name="WallOutline" parent="Walls/WallInterior1" index="1"]
+points = PackedVector2Array(11227, 96, 11268, -8123, 15040, -8098, 17643, -10129, 23218, -10142, 25797, -7679, 31003, -7678, 33123, -5647, 33019, 911, 30645, 2565, 26546, 2517, 24484, 1127, 18179, 1222, 16094, 2469, 13816, 2397, 11227, 96)
+
+[editable path="Walls/WallBorder"]
+[editable path="Walls/WallInterior1"]

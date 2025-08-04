@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://menr1trsc80q"
-path="res://.godot/imported/plasma_shotgun_gun.png-ccfc694d082da1d52c078aa946715212.ctex"
+uid="uid://b0nor3piqvlty"
+path="res://.godot/imported/uranium_round.png-b4e25f9c13185b981fb5a2ac9a08eff5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/plasma_shotgun_gun.png"
-dest_files=["res://.godot/imported/plasma_shotgun_gun.png-ccfc694d082da1d52c078aa946715212.ctex"]
+source_file="res://Assets/uranium_round.png"
+dest_files=["res://.godot/imported/uranium_round.png-b4e25f9c13185b981fb5a2ac9a08eff5.ctex"]
 
 [params]
 

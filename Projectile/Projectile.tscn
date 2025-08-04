@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Projectile/Projectile.gd" id="1_oed1u"]
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("Sprite", "Collider", "ShotLifetime")]
+z_index = 1
 collision_layer = 0
 script = ExtResource("1_oed1u")
 Sprite = NodePath("Sprite")

@@ -1,12 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://jxk1a63v6s5o"]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource type="PackedScene" uid="uid://c04vi3vcgfk46" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
+[ext_resource type="PackedScene" path="res://Player/Guillotine-07.tscn" id="1_fk2mu"]
 [ext_resource type="Script" path="res://MainWorld.gd" id="1_g5bsb"]
 [ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="2_eupmn"]
 [ext_resource type="PackedScene" uid="uid://dimcpy1wi0m6v" path="res://LevelArrangement.tscn" id="2_nvf3a"]
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_n2egp"]
-[ext_resource type="PackedScene" uid="uid://den6r6d30mayi" path="res://PlasmaTrigunTurret.tscn" id="6_rq1np"]
-[ext_resource type="PackedScene" uid="uid://cka0gycinnaq1" path="res://LaserShotgunTurret.tscn" id="7_3q3p8"]
+[ext_resource type="PackedScene" path="res://Enemies/PlasmaTrigunTurret.tscn" id="6_rq1np"]
+[ext_resource type="PackedScene" path="res://Enemies/LaserShotgunTurret.tscn" id="7_3q3p8"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_g5bsb")
@@ -37,7 +37,10 @@ position = Vector2(8131, 223)
 position = Vector2(10279, -1157)
 
 [node name="LaserShotgunTurret3" parent="." instance=ExtResource("7_3q3p8")]
-position = Vector2(9464, 4045)
+position = Vector2(9464, 4285)
 
 [node name="PlasmaTrigunTurret4" parent="." instance=ExtResource("6_rq1np")]
-position = Vector2(11597, 3434)
+position = Vector2(11309, 3274)
+
+[node name="LaserShotgunTurret4" parent="." instance=ExtResource("7_3q3p8")]
+position = Vector2(12793, 2035)

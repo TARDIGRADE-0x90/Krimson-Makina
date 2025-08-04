@@ -10,6 +10,8 @@ const MSG_IDLE: String = "OPTICAL FEED :: ACTIVE"
 const MSG_FOCUSED: String = "OPTICAL FEED :: SCANNING"
 const MSG_COMBAT: String = "ENGAGING"
 
+const ENEMY_BAR_MIN: int = 300
+
 const COMBATANT_TEXT_BUFFER: String = " :: "
 
 const CORE_HEAT_PREFIX: String = "GUILLOTINE-07 TEMPERATURE:"
@@ -34,6 +36,7 @@ const DESTRUCTION_FLICKER: float = 1.4
 
 @onready var OpticalLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/OpticalLabel
 @onready var EnemyLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/EnemyLabel
+@onready var EnemyHealthBar: ColorRect = $OpticalIndicator/MarginContainer/VBoxContainer/EnemyHealthBar
 @onready var DestructionLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/DestructionLabel
 
 @onready var CoreHeatPanel: Control = $CoreHeatPanel
@@ -62,6 +65,7 @@ func _ready() -> void:
 	
 	OpticalLabel.set_text(MSG_IDLE)
 	EnemyLabel.set_visible(false)
+	EnemyHealthBar.set_visible(false)
 	DestructionLabel.set_visible(false)
 	
 	CoreHeatHeader.set_text(CORE_HEAT_PREFIX)
@@ -133,21 +137,29 @@ func adjust_weapon_heat(value: float) -> void:
 	
 	fully_cooled = (value <= 0)
 
-func trigger_combat_behavior(new_target: String, hp: float) -> void:
+func trigger_combat_behavior(new_target: String, hp: float, max_hp: float) -> void:
 	DestructionLabel.set_visible(false)
 	DestroyFlicker.stop()
 	
 	in_combat = true
 	combatant = new_target
-	EnemyLabel.set_text("%s %s %6.2f" % [combatant, COMBATANT_TEXT_BUFFER, hp])
+	
 	EnemyLabel.set_visible(true)
+	EnemyHealthBar.set_visible(true)
+	
+	EnemyLabel.set_text("%s %s %6.2f" % [combatant, COMBATANT_TEXT_BUFFER, hp])
+	EnemyHealthBar.size.x = ENEMY_BAR_MIN * (hp / max_hp)
+	
 	BattleDelay.start()
 
 func clear_combat_behavior() -> void:
 	in_combat = false
 	combatant = ""
-	EnemyLabel.set_text("%s %s %6.2f" % [combatant, COMBATANT_TEXT_BUFFER, 0])
+	
 	EnemyLabel.set_visible(false)
+	EnemyHealthBar.set_visible(false)
+	
+	EnemyLabel.set_text("%s %s %6.2f" % [combatant, COMBATANT_TEXT_BUFFER, 0])
 
 func display_destruction_label() -> void:
 	clear_combat_behavior()
