@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cpbfnumyppfm7"]
+[gd_scene load_steps=15 format=3 uid="uid://cpbfnumyppfm7"]
 
 [ext_resource type="Script" path="res://Enemies/PlasmaTrigunTurret.gd" id="1_f3274"]
 [ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="2_b2r0b"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="6_hb6ao"]
 [ext_resource type="Resource" uid="uid://r33v0q0km25v" path="res://Projectile/EnemyProjectiles/PlasmaShot.tres" id="7_fhqag"]
 [ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="8_iq04c"]
+[ext_resource type="Resource" uid="uid://bi0os3gplg078" path="res://Projectile/Guns/PlasmaGun.tres" id="8_u04wr"]
 [ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="9_nprw4"]
 [ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="10_iirp3"]
 
@@ -61,7 +62,7 @@ rotation = 0.261799
 
 [node name="PlasmaGun" parent="." instance=ExtResource("6_hb6ao")]
 ShotData = ExtResource("7_fhqag")
-MaxPool = 32
+GunInfo = ExtResource("8_u04wr")
 
 [node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("8_iq04c")]
 CollisionType = 2

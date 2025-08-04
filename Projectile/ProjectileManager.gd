@@ -10,6 +10,10 @@ do later - create destructible projectiles like large missiles, debris, shrapnel
 
 enum MULTIFIRE_TYPE {NONE, RADIAL, PARALLEL} #make export var later
 
+const ERR_SHOTS_LOW: String = "ERROR :: ProjectileManager.gd - multifire modes require >1 shots"
+const ERR_SPREAD_NIL: String = "ERROR :: ProjectileManager.gd - spread data must be greater than 0"
+const ERR_OFFSET_NIL: String = "ERROR :: ProjectileManager.gd - offset data must be greater than 0"
+
 const PROJECTILE_PATH: String = "res://Projectile/Projectile.tscn"
 const PROJECTILE: PackedScene = preload(PROJECTILE_PATH)
 
@@ -20,9 +24,10 @@ const OFFSET_MIN: float = 30.0
 const OFFSET_MAX: float = 500.0
 
 @export var ShotData: ProjectileData
-@export var MaxPool: int
+@export var GunInfo: GunData
 
 var shot_data_copy: ProjectileData = ProjectileData.new()
+var gun_data_copy: GunData = GunData.new()
 var current_shot: Projectile #bad practice? maybe
 var shot_pool: Array[Projectile]
 var pool_index: int = 0
@@ -31,10 +36,12 @@ var override_type: int = 0
 
 func _ready() -> void:
 	shot_data_copy.copy_data(ShotData)
+	gun_data_copy.copy_data(GunInfo)
+	
 	initialize_projectiles()
 
 func initialize_projectiles() -> void:
-	for i in range(MaxPool):
+	for i in range(gun_data_copy.PoolSize):
 		var projectile = PROJECTILE.instantiate()
 		projectile.ShotData = shot_data_copy
 		
@@ -49,6 +56,24 @@ func flag_collision_override(type: int) -> void:
 	shot_data_copy.CollisionType = type
 
 func fire(start: Vector2, angle: float) -> void:
+	match gun_data_copy.FiringPattern:
+		GunData.FiringPatterns.NIL:
+			print("ProjectileManger.gd :: NIL firing pattern for some reason")
+		
+		GunData.FiringPatterns.SINGLE:
+			fire_single(start, angle)
+		
+		GunData.FiringPatterns.RADIAL:
+			assert(gun_data_copy.Shots > 1, ERR_SHOTS_LOW)
+			assert(gun_data_copy.Spread >= 0, ERR_SPREAD_NIL)
+			multifire_radial(start, angle, gun_data_copy.Shots, gun_data_copy.Spread)
+		
+		GunData.FiringPatterns.PARALLEL:
+			assert(gun_data_copy.Shots > 1, ERR_SHOTS_LOW)
+			assert(gun_data_copy.Offset >= 0, ERR_OFFSET_NIL)
+			multifire_parallel(start, angle, gun_data_copy.Shots, gun_data_copy.Offset)
+
+func fire_single(start: Vector2, angle: float) -> void:
 	current_shot = shot_pool[pool_index]
 	
 	if not current_shot.active:
@@ -94,3 +119,6 @@ func multifire_parallel(start: Vector2, angle: float, shots: int, bullet_offset:
 			current_shot.set_rotation(angle)
 			current_shot.trigger(Vector2.from_angle(angle) * ShotData.Speed)
 			pool_index = (pool_index + 1) % shot_pool.size()
+
+func get_gun() -> GunData:
+	return gun_data_copy

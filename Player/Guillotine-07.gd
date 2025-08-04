@@ -5,7 +5,26 @@ class_name Player
 TO DO:
 	- Create Options UI and input rebinding ASAP
 	
-	- Begin streamlining the creation of enemies, spawn structures, turrets, etc.
+	- Execution:
+		blade has 5% chance to apply Uncalibration
+		guns have varying rates to apply Uncalibration, but the Minigun's base is 1%
+		
+		Blade-triggered Uncalibration has a slightly higher window than Gun-triggered
+		Uncalibration
+		
+		if an enemy is Uncalibrated, they can still fire, but their aiming and movement
+		is disrupted (slowed down?)
+		
+		Killing an enemy before this effect wears off leaves the enemy in a Critical state, 
+		and if the global position of your cursor is within the bound for Execution targetting, 
+		you can press F to perform an Execution before it detonates
+		
+		Critical enemies have their collisions disabled; cursor checking is purely just
+		determining if cursor.x and y are within execution_bound x and y
+		
+		Executions restore 25% health and fully cool auxillary heating
+	
+	
 """
 
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
@@ -30,10 +49,6 @@ const EXECUTION_TIME: float = 0.8
 const BLADE_BASE_DAMAGE: float = 25.0
 const THRUST_DAMAGE_MODIFIER: float = 0.8
 const RUSH_DAMAGE_MODIFIER: float = 1.2
-
-const MINIGUN_POOL_SIZE: int = 2000
-const MINIGUN_FIRERATE: float = 0.075
-const MINIGUN_HEAT_RANGE = Vector2(2.1, 3.6)
 
 const EXECUTION_RUSH_TIME_FACTOR: int = 120
 const RUSH_TIME_FACTOR: int = 100
@@ -129,11 +144,10 @@ var execution_point: Vector2 = ZERO_VECTOR
 var core_heat_max: float = CORE_HEAT_INITIAL_MAX
 var core_heat: float = CORE_HEAT_INITIAL_MAX
 
-var weapon_heat_range: Vector2 = MINIGUN_HEAT_RANGE
+var weapon_heat_range: Vector2
 var weapon_heat_max: float = WEAPON_HEAT_MAX
 var weapon_heat: float = 0
 
-var auxillary_pool_size: int = MINIGUN_POOL_SIZE
 var auxillary_firerate: float
 var aim_choke: float = 1.0
 
@@ -156,10 +170,12 @@ func _ready() -> void:
 	
 	Blade.position = BLADE_START
 	AuxillaryAnchor.position = AUXILLARY_START
-	auxillary_firerate = MINIGUN_FIRERATE
+	
+	
+	weapon_heat_range = PlayerGun.get_gun().HeatRange
+	auxillary_firerate = PlayerGun.get_gun().FireRate
 	
 	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
-	PlayerGun.MaxPool = auxillary_pool_size
 	
 	initialize_rush_timer()
 	initialize_slash_timer()
@@ -325,7 +341,7 @@ func parse_input_attack(event: InputEvent) -> void:
 		auxillary_held = false
 
 func parse_input_execution(event: InputEvent) -> void:
-	#do later - add conditional for execution_ready, true if player is within a "Vulnerable" area2d
+	#do later - add conditional for execution_ready, true if cursor is within a "Vulnerable" vec2 by vec2 bound
 	if event.is_action_pressed(Inputs.EXECUTE) and !executing:
 		trigger_execution()
 
@@ -509,21 +525,15 @@ preferrably reduced by some factor
 func fire_auxillary() -> void:
 	AuxillaryCooldown.start()
 	
-	var shots: int = 4
-	var spread: float = 0.4 * aim_choke
-	var shot_angle: float = AuxillaryAnchor.global_rotation
-	var shot_start = CannonPoint.global_position
 	var heat: float = randf_range(weapon_heat_range.x, weapon_heat_range.y) 
 	
-	var offset: float = 100.0 * aim_choke
+	if PlayerGun.get_gun().Shots > 1:
+		heat = heat + (PlayerGun.get_gun().Shots * 0.75)
 	
-	if shots > 1:
-		heat = heat + (shots * 0.75)
+	if PlayerGun.get_gun().Spread >= 0:
+		PlayerGun.get_gun().Spread *= aim_choke
 	
-	#PlayerGun.multifire_radial(shot_start, shot_angle, shots, spread)
-	#PlayerGun.multifire_parallel(shot_start, shot_angle, shots, offset)
-	
-	PlayerGun.fire(shot_start, shot_angle)
+	PlayerGun.fire(CannonPoint.global_position, AuxillaryAnchor.global_rotation)
 	
 	weapon_heat += heat
 	Events.weapon_heat_updated.emit(weapon_heat)

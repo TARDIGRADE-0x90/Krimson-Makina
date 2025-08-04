@@ -11,8 +11,6 @@ const AIM_DAMP: float = 0.5
 
 const ROTATION_RATE: int = 100
 
-const GUN_COOLDOWN: float = 0.25
-
 const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
@@ -49,7 +47,7 @@ func _physics_process(delta) -> void:
 
 func initialize_Firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
-	Firerate.set_wait_time(GUN_COOLDOWN)
+	Firerate.set_wait_time(PlasmaGun.get_gun().FireRate)
 	Firerate.set_one_shot(true)
 
 func update_target(newTarget: Vector2) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bd402lrwxwgvg"]
+[gd_scene load_steps=15 format=3 uid="uid://bd402lrwxwgvg"]
 
 [ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="1_4oqvl"]
 [ext_resource type="Script" path="res://Enemies/QuadChaingunTurret.gd" id="1_td80g"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cmsvcymkl1kg7" path="res://Assets/quadchain_gun.png" id="5_03o35"]
 [ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="5_tosjs"]
 [ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="6_j6a3e"]
+[ext_resource type="Resource" uid="uid://kuqhcmh1rxoy" path="res://Projectile/Guns/QuadChaingun.tres" id="8_fnjus"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sp1nu"]
 size = Vector2(256, 256)
@@ -55,7 +56,7 @@ position = Vector2(64, 0)
 
 [node name="QuadChaingun" parent="." instance=ExtResource("2_2dyvq")]
 ShotData = ExtResource("3_6bg8r")
-MaxPool = 128
+GunInfo = ExtResource("8_fnjus")
 
 [node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("4_a77yq")]
 CollisionType = 2

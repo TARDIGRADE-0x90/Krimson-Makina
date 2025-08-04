@@ -11,10 +11,6 @@ const AIM_DAMP: float = 0.5
 
 const ROTATION_RATE: int = 65
 
-const SHOTS: int = 5
-const SPREAD: float = 0.4
-const GUN_COOLDOWN: float = 1.4
-
 const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
@@ -51,7 +47,7 @@ func _physics_process(delta) -> void:
 
 func initialize_firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
-	Firerate.set_wait_time(GUN_COOLDOWN)
+	Firerate.set_wait_time(LaserShotgun.get_gun().FireRate)
 	Firerate.set_one_shot(true)
 
 func update_target(newTarget: Vector2) -> void:
@@ -61,7 +57,7 @@ func smooth_to_target(delta: float) -> void:
 	Cannon.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Cannon.get_angle_to(target)))
 
 func fire_cannon() -> void:
-	LaserShotgun.multifire_radial(Muzzle.global_position, Muzzle.global_rotation, SHOTS, SPREAD)
+	LaserShotgun.fire(Muzzle.global_position, Muzzle.global_rotation)
 	Firerate.start()
 
 func read_damage(amount: float) -> void:

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GunData" load_steps=2 format=3 uid="uid://daql7blaot7km"]
+
+[ext_resource type="Script" path="res://Projectile/GunData.gd" id="1_uwn3r"]
+
+[resource]
+script = ExtResource("1_uwn3r")
+FiringPattern = 0
+Shots = 1
+FireRate = 0.075
+PoolSize = 80
+HeatRange = Vector2(2.1, 3.6)
+Spread = -1.0
+Offset = -1.0

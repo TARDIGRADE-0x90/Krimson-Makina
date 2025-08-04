@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bn834txfdx660"]
+[gd_scene load_steps=19 format=3 uid="uid://bn834txfdx660"]
 
 [ext_resource type="Script" path="res://Player/Guillotine-07.gd" id="1_2uy8n"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_dlrn3"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="9_r8kcf"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="9_w0jcr"]
 [ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="10_lnmwd"]
+[ext_resource type="Resource" uid="uid://daql7blaot7km" path="res://Projectile/Guns/Minigun.tres" id="10_sllhg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j8os6"]
 radius = 160.0
@@ -108,7 +109,7 @@ position = Vector2(96, -8)
 
 [node name="PlayerGun" parent="AuxillaryAnchor" instance=ExtResource("9_w0jcr")]
 ShotData = ExtResource("8_002k6")
-MaxPool = 128
+GunInfo = ExtResource("10_sllhg")
 
 [node name="FlashHandler" parent="." instance=ExtResource("9_r8kcf")]
 Duration = 0.6

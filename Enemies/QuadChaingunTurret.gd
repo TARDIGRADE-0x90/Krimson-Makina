@@ -11,9 +11,6 @@ const AIM_DAMP: float = 0.5
 
 const ROTATION_RATE: int = 120
 
-const SHOTS: int = 4
-const OFFSET: float = 120.0
-const FIRERATE: float = 0.05
 const BURST_COUNT: int = 6
 const BURST_DELAY: float = 1.2
 
@@ -57,7 +54,7 @@ func _physics_process(delta) -> void:
 
 func initialize_firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
-	Firerate.set_wait_time(FIRERATE)
+	Firerate.set_wait_time(QuadChaingun.get_gun().FireRate)
 	Firerate.set_one_shot(true)
 
 func initialize_burst_delay() -> void:
@@ -73,7 +70,7 @@ func smooth_to_target(delta: float) -> void:
 
 func fire_cannon() -> void:
 	burst_step += 1
-	QuadChaingun.multifire_parallel(Muzzle.global_position, Muzzle.global_rotation, SHOTS, OFFSET)
+	QuadChaingun.fire(Muzzle.global_position, Muzzle.global_rotation)
 	Firerate.start()
 	
 	if burst_step >= BURST_COUNT:
