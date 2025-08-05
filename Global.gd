@@ -47,3 +47,18 @@ func mirrored_half(size: int) -> Array[int]: #O(n)
 		count += 1
 	
 	return output
+
+
+## Apply this for bound checking for enemy aggroing
+"""
+const BOUND_WIDTH: int = 200
+const BOUND_HEIGHT: int = 400
+
+var test_bound: Vector4
+func update_bound() -> void:
+	test_bound = Vector4(
+	(-BOUND_WIDTH * 0.5) + global_position.x, 
+	(BOUND_HEIGHT * 0.5) + global_position.y, 
+	(BOUND_WIDTH * 0.5)  + global_position.x, 
+	(BOUND_HEIGHT * 0.5) + global_position.y)
+"""

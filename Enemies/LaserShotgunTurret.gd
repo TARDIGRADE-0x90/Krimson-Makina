@@ -15,6 +15,7 @@ const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
 
+@onready var _AggroCast: AggroCast = $AggroCast
 @onready var Base: Sprite2D = $FullBody/Base
 @onready var Cannon: Sprite2D = $FullBody/Cannon
 @onready var Muzzle: Marker2D = $FullBody/Cannon/Muzzle
@@ -30,6 +31,7 @@ var health: float = BASE_HEALTH
 var destroyed: bool = false
 
 func _ready() -> void:
+	Cannon.rotation_degrees = randi_range(0, 360)
 	initialize_firerate()
 	FlashHandler.assign_sprites([Base, Cannon])
 	
@@ -40,9 +42,10 @@ func _physics_process(delta) -> void:
 	if Global.player:
 		update_target(Global.player_position)
 	
-	smooth_to_target(delta)
+	if _AggroCast.is_aggroed():
+		smooth_to_target(delta)
 	
-	if Firerate.is_stopped():
+	if Firerate.is_stopped() and _AggroCast.is_aggroed():
 		fire_cannon()
 
 func initialize_firerate() -> void:

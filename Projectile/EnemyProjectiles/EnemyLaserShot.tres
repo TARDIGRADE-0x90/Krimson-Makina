@@ -9,6 +9,6 @@ script = ExtResource("1_4l6mo")
 ShotVisual = ExtResource("2_75w28")
 CollisionData = ExtResource("1_d4o3k")
 CollisionType = 3
-Lifetime = 0.8
+Lifetime = 1.2
 Speed = 45.0
 BaseDamage = 12.0

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://0wu02j7iqkpw"]
+
+[ext_resource type="Script" path="res://Enemies/AggroCast.gd" id="1_x1oib"]
+
+[node name="AggroCast" type="RayCast2D"]
+script = ExtResource("1_x1oib")

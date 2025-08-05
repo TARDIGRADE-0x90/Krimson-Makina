@@ -24,6 +24,22 @@ TO DO:
 		
 		Executions restore 25% health and fully cool auxillary heating
 	
+	EXECUTION/UNCALIBRATED VFX STEPS
+	
+	Uncalibration
+	> Uncalibration crosshair is made visible, shakes briefly upon triggering
+	> "UNCALIBRATED" header below enemy made visible
+	> Window time left displayed underneath this header
+	> Horizontal bar above enemy to represent window time left (right to left)
+	> All remain visible until window closes
+	
+	Execution
+	> Calibration crosshair vanishes instantly
+	> Blitzskull visibilty triggers, lerping above enemy to a bound before disappearing
+	> Blitzskull alpha channel also lerped?
+	> "EXPIRING" header below enemy made visible (or header text changes to that)
+	> Horizontal bar above enemy to represent window time left (right to left)
+	> All remain visible until window closes - after that, destroy and wait to queue_free
 	
 """
 

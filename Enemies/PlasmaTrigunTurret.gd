@@ -15,6 +15,7 @@ const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
 
+@onready var _AggroCast: AggroCast = $AggroCast
 @onready var Base: Sprite2D = $FullBody/Base
 @onready var Guns: Sprite2D = $FullBody/Guns
 @onready var Destruction: DeathDelay = $Destruction
@@ -30,7 +31,8 @@ var cannon_index: int = 0
 var destroyed: bool = false
 
 func _ready() -> void:
-	initialize_Firerate()
+	Guns.rotation_degrees = randi_range(0, 360)
+	initialize_firerate()
 	
 	FlashHandler.assign_sprites([Base, Guns])
 	MeleeDetect.melee_detected.connect(read_damage)
@@ -40,18 +42,20 @@ func _physics_process(delta) -> void:
 	if Global.player:
 		update_target(Global.player_position)
 	
-	smooth_to_target(delta)
+	if _AggroCast.is_aggroed():
+		smooth_to_target(delta)
 	
-	if Firerate.is_stopped():
+	if Firerate.is_stopped() and _AggroCast.is_aggroed():
 		fire_cannons()
 
-func initialize_Firerate() -> void:
+func initialize_firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
 	Firerate.set_wait_time(PlasmaGun.get_gun().FireRate)
 	Firerate.set_one_shot(true)
 
 func update_target(newTarget: Vector2) -> void:
 	target = newTarget
+	_AggroCast.set_aggro_target(target)
 
 func smooth_to_target(delta: float) -> void:
 	Guns.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Guns.get_angle_to(target)))

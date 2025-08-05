@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://bd402lrwxwgvg"]
+[gd_scene load_steps=16 format=3 uid="uid://bd402lrwxwgvg"]
 
 [ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="1_4oqvl"]
 [ext_resource type="Script" path="res://Enemies/QuadChaingunTurret.gd" id="1_td80g"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="2_2dyvq"]
+[ext_resource type="PackedScene" uid="uid://0wu02j7iqkpw" path="res://Enemies/AggroCast.tscn" id="2_yau36"]
 [ext_resource type="Resource" uid="uid://brsdp16dmltpn" path="res://Projectile/EnemyProjectiles/UraniumRound.tres" id="3_6bg8r"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="3_xdhbu"]
 [ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="4_a77yq"]
@@ -30,6 +31,13 @@ shader_parameter/flash_modifier = 0.0
 [node name="QuadChaingunTurret" type="StaticBody2D"]
 script = ExtResource("1_td80g")
 MachineTitle = "X4-VIPER"
+
+[node name="AggroCast" parent="." instance=ExtResource("2_yau36")]
+CastMagnitude = 4000.0
+AggroWidth = 8000
+AggroHeight = 8000
+TickCap = 120
+IntervalRange = Vector2(4, 16)
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_sp1nu")
