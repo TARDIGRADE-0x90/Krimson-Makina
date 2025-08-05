@@ -48,9 +48,6 @@ func update_aggro_cast() -> void:
 		if (is_instance_of(get_collider(), Player)):
 			set_aggroed(true)
 
-func is_target_inbound() -> bool:
-	return (AggroTarget.x >= aggro_bound.x && AggroTarget.x <= aggro_bound.y && AggroTarget.y >= aggro_bound.z && AggroTarget.y <= aggro_bound.w)
-
 func set_aggro_target(new_target: Vector2) -> void:
 	AggroTarget = new_target
 

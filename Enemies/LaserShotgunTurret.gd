@@ -10,11 +10,13 @@ const AIM_TIME: float = 1.0
 const AIM_DAMP: float = 0.5
 
 const ROTATION_RATE: int = 65
+const ROTATION_DEBUFF: float = 0.25
 
 const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
 
+@onready var _UncalibrationUI: UncalibrationUI = $UncalibrationUI
 @onready var _AggroCast: AggroCast = $AggroCast
 @onready var Base: Sprite2D = $FullBody/Base
 @onready var Cannon: Sprite2D = $FullBody/Cannon
@@ -28,15 +30,22 @@ const DEATH_DELAY: float = 5.0
 
 var target: Vector2
 var health: float = BASE_HEALTH
+var rotation_rate: float = ROTATION_RATE
+var uncalibrated: bool = false
 var destroyed: bool = false
 
 func _ready() -> void:
 	Cannon.rotation_degrees = randi_range(0, 360)
+	
 	initialize_firerate()
 	FlashHandler.assign_sprites([Base, Cannon])
 	
 	MeleeDetect.melee_detected.connect(read_damage)
 	ShootDetect.shot_detected.connect(read_damage)
+	_UncalibrationUI.cleared.connect(func(): uncalibrated = false)
+	
+	Events.execution_initiated.connect(prepare_to_die)
+	Events.execution_struck.connect(execute)
 
 func _physics_process(delta) -> void:
 	if Global.player:
@@ -57,21 +66,43 @@ func update_target(newTarget: Vector2) -> void:
 	target = newTarget
 
 func smooth_to_target(delta: float) -> void:
-	Cannon.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Cannon.get_angle_to(target)))
+	if uncalibrated: rotation_rate = ROTATION_RATE * ROTATION_DEBUFF
+	else: rotation_rate = ROTATION_RATE
+	
+	Cannon.rotation_degrees += rotation_rate * delta * signi(rad_to_deg(Cannon.get_angle_to(target)))
 
 func fire_cannon() -> void:
 	LaserShotgun.fire(Muzzle.global_position, Muzzle.global_rotation)
 	Firerate.start()
 
-func read_damage(amount: float) -> void:
+var crit_query: float = 0.0
+func read_damage(amount: float, crit: float = 0.0) -> void:
 	health -= amount
 	
 	if health <= 0:
 		destroy()
 		return
 	
+	crit_query = randf()
+	
+	if crit_query <= crit:
+		uncalibrated = true
+		_UncalibrationUI.trigger()
+	
 	FlashHandler.trigger_flash()
 	Events.new_target_hit.emit(MachineTitle, health, BASE_HEALTH)
+
+func prepare_to_die(body_arg: Node2D) -> void:
+	if self != body_arg:
+		return
+	else:
+		set_physics_process(false)
+
+func execute(body_arg: Node2D) -> void:
+	if self != body_arg:
+		return
+	else:
+		destroy()
 
 func destroy() -> void:
 	if !destroyed:

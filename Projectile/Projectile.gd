@@ -10,6 +10,7 @@ const NO_TARGET = Vector2(0, 0)
 @export var Velocity: Vector2
 
 var damage: float = 0.0
+var crit: float = 1.0
 var active: bool = false
 
 func _ready() -> void:
@@ -45,9 +46,10 @@ func initialize_lifetime(data: ProjectileData = ShotData) -> void:
 	ShotLifetime.set_one_shot(true)
 	ShotLifetime.timeout.connect(expire)
 
-func trigger(target: Vector2, damage_modifier: float = 1.0) -> void:
+func trigger(target: Vector2, damage_modifier: float = 1.0, crit_mod: float = 0.0) -> void:
 	active = true
-	damage *= damage_modifier
+	damage = ShotData.BaseDamage * damage_modifier
+	crit *= crit_mod
 	set_presence(true)
 	ShotLifetime.start()
 	Velocity = target
@@ -61,7 +63,7 @@ func collide(obj: CollisionObject2D) -> void:
 	if active:
 		
 		if obj.has_meta(Global.META_SHOOTABLE_REF) and damage > 0:
-			obj.get_meta(Global.META_SHOOTABLE_REF).shot_detected.emit(damage)
+			obj.get_meta(Global.META_SHOOTABLE_REF).shot_detected.emit(damage, crit)
 		
 		explode()
 

@@ -63,7 +63,7 @@ one_shot = true
 
 [node name="ExecutionTimer" type="Timer" parent="."]
 
-[node name="AuxillaryCooldown" type="Timer" parent="."]
+[node name="GunCooldown" type="Timer" parent="."]
 process_callback = 0
 
 [node name="FullBody" type="Node2D" parent="."]
@@ -97,17 +97,17 @@ texture = ExtResource("7_p2rxt")
 shape = SubResource("RectangleShape2D_o2cho")
 debug_color = Color(0.921569, 0.247059, 0.337255, 0.419608)
 
-[node name="AuxillaryAnchor" type="Node2D" parent="."]
+[node name="GunAnchor" type="Node2D" parent="."]
 z_index = 1
 position = Vector2(0, -64)
 
-[node name="GunVisual" type="Sprite2D" parent="AuxillaryAnchor"]
+[node name="GunVisual" type="Sprite2D" parent="GunAnchor"]
 texture = ExtResource("8_7dn3a")
 
-[node name="CannonPoint" type="Marker2D" parent="AuxillaryAnchor"]
+[node name="CannonPoint" type="Marker2D" parent="GunAnchor"]
 position = Vector2(96, -8)
 
-[node name="PlayerGun" parent="AuxillaryAnchor" instance=ExtResource("9_w0jcr")]
+[node name="PlayerGun" parent="GunAnchor" instance=ExtResource("9_w0jcr")]
 ShotData = ExtResource("8_002k6")
 GunInfo = ExtResource("10_sllhg")
 

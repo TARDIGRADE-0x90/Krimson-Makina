@@ -25,7 +25,7 @@ const OVERHEAT_WARNING: String = "[! OVERHEATING !]"
 
 const WEAPON_HEAT_SUFFIX: String = "° C"
 
-const WEAPON_HEAT_HEADER: String = "AUXILLARY HEAT"
+const WEAPON_HEAT_HEADER: String = "AUXILIARY HEAT"
 
 const HEAT_WARN_FACTOR: float = 0.65
 
@@ -100,15 +100,15 @@ func display_weapon_heat() -> void:
 	WeaponHeatPanel.visible = !fully_cooled
 	
 	if Global.player:
-		if Global.player.auxillary_heat >= Global.player.auxillary_heat_max:
+		if Global.player.auxiliary_heat >= Global.player.auxiliary_heat_max:
 			OverheatWarning.set_visible(true)
-			WeaponMaxHeat.set_text("%s %2.1f %s" % [WEAPON_MAX_HEAT_PREFIX, Global.player.auxillary_heat_max, WEAPON_MAX_HEAT_SUFFIX_WARN])
-		elif Global.player.auxillary_heat >= Global.player.auxillary_heat_max * HEAT_WARN_FACTOR:
+			WeaponMaxHeat.set_text("%s %2.1f %s" % [WEAPON_MAX_HEAT_PREFIX, Global.player.auxiliary_heat_max, WEAPON_MAX_HEAT_SUFFIX_WARN])
+		elif Global.player.auxiliary_heat >= Global.player.auxiliary_heat_max * HEAT_WARN_FACTOR:
 			OverheatWarning.set_visible(false)
-			WeaponMaxHeat.set_text("%s %2.1f %s" % [WEAPON_MAX_HEAT_PREFIX, Global.player.auxillary_heat_max, WEAPON_MAX_HEAT_SUFFIX_WARN])
+			WeaponMaxHeat.set_text("%s %2.1f %s" % [WEAPON_MAX_HEAT_PREFIX, Global.player.auxiliary_heat_max, WEAPON_MAX_HEAT_SUFFIX_WARN])
 		else:
 			OverheatWarning.set_visible(false)
-			WeaponMaxHeat.set_text("%s %2.1f %s" % [WEAPON_MAX_HEAT_PREFIX, Global.player.auxillary_heat_max, WEAPON_MAX_HEAT_SUFFIX])
+			WeaponMaxHeat.set_text("%s %2.1f %s" % [WEAPON_MAX_HEAT_PREFIX, Global.player.auxiliary_heat_max, WEAPON_MAX_HEAT_SUFFIX])
 
 func display_core_heat() -> void:
 	if Global.player:

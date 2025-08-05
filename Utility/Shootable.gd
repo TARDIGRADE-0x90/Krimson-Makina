@@ -1,7 +1,7 @@
 extends Node
 class_name Shootable
 
-signal shot_detected(shot_damage: float)
+signal shot_detected(shot_damage: float, shot_crit: float)
 
 @export var CollisionType: ProjectileData.CollisionTypes
 @export var Collider: CollisionObject2D
@@ -11,5 +11,5 @@ func _ready() -> void:
 	Collider.set_meta(Global.META_SHOOTABLE_REF, self)
 	shot_detected.connect(read_shot)
 
-func read_shot(amount: float) -> void:
+func read_shot(amount: float, crit: float = 0.0) -> void:
 	pass

@@ -3,44 +3,12 @@ class_name Player
 
 """
 TO DO:
+	- Uncalibrated ping at top center of player UI, ficker when an enemy becomes uncalibrated
+	
 	- Create Options UI and input rebinding ASAP
 	
 	- Execution:
-		blade has 5% chance to apply Uncalibration
-		guns have varying rates to apply Uncalibration, but the Minigun's base is 1%
-		
-		Blade-triggered Uncalibration has a slightly higher window than Gun-triggered
-		Uncalibration
-		
-		if an enemy is Uncalibrated, they can still fire, but their aiming and movement
-		is disrupted (slowed down?)
-		
-		Killing an enemy before this effect wears off leaves the enemy in a Critical state, 
-		and if the global position of your cursor is within the bound for Execution targetting, 
-		you can press F to perform an Execution before it detonates
-		
-		Critical enemies have their collisions disabled; cursor checking is purely just
-		determining if cursor.x and y are within execution_bound x and y
-		
-		Executions restore 25% health and fully cool auxillary heating
-	
-	EXECUTION/UNCALIBRATED VFX STEPS
-	
-	Uncalibration
-	> Uncalibration crosshair is made visible, shakes briefly upon triggering
-	> "UNCALIBRATED" header below enemy made visible
-	> Window time left displayed underneath this header
-	> Horizontal bar above enemy to represent window time left (right to left)
-	> All remain visible until window closes
-	
-	Execution
-	> Calibration crosshair vanishes instantly
-	> Blitzskull visibilty triggers, lerping above enemy to a bound before disappearing
-	> Blitzskull alpha channel also lerped?
-	> "EXPIRING" header below enemy made visible (or header text changes to that)
-	> Horizontal bar above enemy to represent window time left (right to left)
-	> All remain visible until window closes - after that, destroy and wait to queue_free
-	
+		Boss or otherwise more significant enemies are immune to Uncalibration
 """
 
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
@@ -62,6 +30,13 @@ const SLASH_TIME: float = 0.3
 const THRUST_TIME: float = 0.2
 const EXECUTION_TIME: float = 0.8
 
+const BLADE_BASE_CRIT: float = 0.05
+const GUN_BASE_CRIT: float = 0.02
+const CRIT_MOD_DEFAULT: float = 10.0
+const CRIT_MOD_FOCUS: float = 10.25
+const CRIT_MOD_RUSH: float = 10.5
+const CRIT_MOD_EXECUTING: float = 12.0
+
 const BLADE_BASE_DAMAGE: float = 25.0
 const THRUST_DAMAGE_MODIFIER: float = 0.8
 const RUSH_DAMAGE_MODIFIER: float = 1.2
@@ -76,18 +51,19 @@ const CORE_HEAT_INITIAL_MAX: float = 200.0
 const RUSH_HEAT_DEFAULT: float = 35.0
 const HIT_HEAT: float = 40.0
 
-const AUXILARY_HEAT_MAX: float = 150.0
-const OVERHEAT_EMERGENCY_THRESHOLD: float = 1.75
+const AUXILIARY_HEAT_MAX: float = 150.0
+const AUXILIARY_COOL_RATE: float = 45 #multiplied against delta
+const AUXILIARY_COOL_RATE_FOCUSED: float = 24 #multiplied against delta
+const AUXILIARY_EMERGENCY_COOLING: float = 2.0 #multiplies against cool rate when heat exceeds a threshold
 
-const AUXILLARY_COOL_RATE: float = 45 #multiplied against delta
-const AUXILLARY_COOL_RATE_FOCUSED: float = 24 #multiplied against delta
-const AUXILLARY_EMERGENCY_COOLING: float = 2.0 #multiplies against cool rate when heat exceeds a threshold
+const OVERHEAT_EMERGENCY_THRESHOLD: float = 1.75
 const OVERHEAT_DAMAGE_RATE: float = 4 #multiplied against delta
 
-const EXECUTION_COOLING: float = 20.0
+const EXECUTION_CORE_HEAL: float = 0.5
 
-const DEFAULT_CHOKE: float = 1.0
-const FOCUS_CHOKE: float = 0.4
+const AIM_CHOKE_DEFAULT: float = 1.0
+const AIM_CHOKE_FOCUS: float = 0.4
+const AIM_CHOKE_RUSH: float = 1.5
 
 const BLADE_SCALE := Vector2(1.2, 1.2)
 const BLADE_START := Vector2(0, 320)
@@ -107,11 +83,11 @@ const EXECUTION_X_OFFSET: int = 128
 const EXECUTION_TIME_FACTOR: int = 24
 const EXECUTION_PUSH: int = 260
 
-const AUXILLARY_START := Vector2(0, -64)
+const GUN_START := Vector2(0, -64)
 const FOCUS_AIM_BOUND := Vector2(100, 0)
 
 const Z_BLADE: int = 1
-const Z_AUXILLARY: int = 1
+const Z_GUN: int = 1
 const Z_WINGS: int = 0
 const Z_BODY: int = 2
 const Z_HEAD: int = 3
@@ -122,7 +98,7 @@ const Z_HEAD: int = 3
 @onready var SlashTimer: Timer = $SlashTimer
 @onready var ThrustTimer: Timer = $ThrustTimer
 @onready var ExecutionTimer: Timer = $ExecutionTimer
-@onready var AuxillaryCooldown: Timer = $AuxillaryCooldown
+@onready var GunCooldown: Timer = $GunCooldown
 
 @onready var Hurtbox: Area2D = $Hurtbox
 @onready var FullBody: Node2D = $FullBody
@@ -130,9 +106,9 @@ const Z_HEAD: int = 3
 @onready var Body: Sprite2D  = $FullBody/Body
 @onready var Head: Sprite2D  = $FullBody/Head
 @onready var Blade: Area2D = $Blade
-@onready var AuxillaryAnchor: Node2D = $AuxillaryAnchor
-@onready var CannonPoint: Marker2D = $AuxillaryAnchor/CannonPoint
-@onready var PlayerGun: ProjectileManager = $AuxillaryAnchor/PlayerGun
+@onready var GunAnchor: Node2D = $GunAnchor
+@onready var CannonPoint: Marker2D = $GunAnchor/CannonPoint
+@onready var PlayerGun: ProjectileManager = $GunAnchor/PlayerGun
 
 @onready var FlashHandler: HitFlashHandler = $FlashHandler
 @onready var ShotDetector: Shootable = $ShotDetector
@@ -152,23 +128,29 @@ var blade_direction: int = 1
 var blade_position: Vector2 = BLADE_START
 var blade_damage: float = BLADE_BASE_DAMAGE
 
-var auxillary_held: bool = false
+var crit_modifier: float = 1.0
+var shot_dmg_mod: float = 1.0
+
+var gun_held: bool = false
 var focus_held: bool = false
 
 var rushing: bool = false
 var slashing: bool = false
 var thrusting: bool = false
+
+var can_execute: bool = false
 var executing: bool = false
 var execution_point: Vector2 = ZERO_VECTOR
+var execution_body: Node2D
 
 var core_heat_max: float = CORE_HEAT_INITIAL_MAX
 var core_heat: float = CORE_HEAT_INITIAL_MAX
 
-var auxillary_heat_range: Vector2
-var auxillary_heat_max: float = AUXILARY_HEAT_MAX
-var auxillary_heat: float = 0
+var auxiliary_heat_max: float = AUXILIARY_HEAT_MAX
+var auxiliary_heat: float = 0
 
-var auxillary_firerate: float
+var gun_heat_range: Vector2
+var gun_firerate: float
 var aim_choke: float = 1.0
 
 var rush_heat: float = RUSH_HEAT_DEFAULT
@@ -190,11 +172,10 @@ func _ready() -> void:
 	
 	Blade.scale = BLADE_SCALE
 	Blade.position = BLADE_START
-	AuxillaryAnchor.position = AUXILLARY_START
+	GunAnchor.position = GUN_START
 	
-	
-	auxillary_heat_range = PlayerGun.get_gun().HeatRange
-	auxillary_firerate = PlayerGun.get_gun().FireRate
+	gun_heat_range = PlayerGun.get_gun().HeatRange
+	gun_firerate = PlayerGun.get_gun().FireRate
 	
 	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
 	
@@ -202,8 +183,10 @@ func _ready() -> void:
 	initialize_slash_timer()
 	initialize_thrust_timer()
 	initialize_execution_timer()
-	initialize_auxillary_cooldown()
+	initialize_gun_cooldown()
 	
+	Events.execution_ready.connect(prime_execution)
+	Events.execution_unready.connect(func(): can_execute = false)
 	Events.weapon_heat_updated.connect(check_heat)
 	ShotDetector.shot_detected.connect(read_damage)
 
@@ -216,6 +199,8 @@ func _physics_process(delta: float) -> void:
 		look_at(cursor)
 	
 	handle_looking()
+	handle_aim_choke()
+	handle_crit_modifier()
 	
 	update_direction()
 	update_velocity()
@@ -232,10 +217,10 @@ func _physics_process(delta: float) -> void:
 	if move_state == MOVEMENT_STATES.RUSH:
 		handle_rush()
 	
-	if auxillary_held and AuxillaryCooldown.is_stopped() and !executing:
-		fire_auxillary()
+	if gun_held and GunCooldown.is_stopped() and !executing:
+		fire_gun()
 	
-	if !auxillary_held:
+	if !gun_held:
 		cool_weapon()
 	
 	if executing:
@@ -247,7 +232,7 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event : InputEvent) -> void:
 	parse_input_movement(event)
 	parse_input_attack(event)
-	#parse_input_execution(event)
+	parse_input_execution(event)
 
 func initialize_rush_timer() -> void:
 	RushTimer.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
@@ -273,17 +258,17 @@ func initialize_execution_timer() -> void:
 	ExecutionTimer.set_one_shot(true)
 	ExecutionTimer.timeout.connect(clear_execution)
 
-func initialize_auxillary_cooldown() -> void:
-	AuxillaryCooldown.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
-	AuxillaryCooldown.set_wait_time(auxillary_firerate)
-	AuxillaryCooldown.set_one_shot(true)
+func initialize_gun_cooldown() -> void:
+	GunCooldown.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
+	GunCooldown.set_wait_time(gun_firerate)
+	GunCooldown.set_one_shot(true)
 
 func initialize_z_ordering() -> void:
 	Head.z_index = Z_HEAD
 	Body.z_index = Z_BODY
 	Wings.z_index = Z_WINGS
 	Blade.z_index = Z_BLADE
-	AuxillaryAnchor.z_index = Z_AUXILLARY
+	GunAnchor.z_index = Z_GUN
 
 func look_at_with_bound(obj: Node2D, target: Vector2, bound: Vector2) -> void:
 	var localized_target = to_local(target)
@@ -356,20 +341,19 @@ func parse_input_attack(event: InputEvent) -> void:
 		trigger_slash()
 	
 	if event.is_action_pressed(Inputs.AUXILLARY):
-		auxillary_held = true
+		gun_held = true
 	
 	if event.is_action_released(Inputs.AUXILLARY):
-		auxillary_held = false
+		gun_held = false
 
 func parse_input_execution(event: InputEvent) -> void:
 	#do later - add conditional for execution_ready, true if cursor is within a "Vulnerable" vec2 by vec2 bound
-	if event.is_action_pressed(Inputs.EXECUTE) and !executing:
+	if event.is_action_pressed(Inputs.EXECUTE) and !executing and can_execute:
 		trigger_execution()
 
 func handle_looking() -> void: #remember that this method, as it is now, is literally running every frame
 	if move_state == MOVEMENT_STATES.FOCUS and !executing:
-		aim_choke = FOCUS_CHOKE 
-		look_at_with_bound(AuxillaryAnchor, cursor, FOCUS_AIM_BOUND)
+		look_at_with_bound(GunAnchor, cursor, FOCUS_AIM_BOUND)
 		look_at_with_bound(Head, cursor, FOCUS_AIM_BOUND)
 		
 		if Global.active_camera:
@@ -379,22 +363,41 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 	
 	elif executing:
 		set_rotation(global_position.angle_to_point(execution_point))
-		AuxillaryAnchor.set_rotation(0)
+		GunAnchor.set_rotation(0)
 		Head.set_rotation(0)
 		
 		Global.active_camera.set_focused(false)
 		Global.active_camera.snap_to_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_EXECUTION)
-		#Global.active_camera.tilt_to_angle(0)
 
 	else:
-		aim_choke = DEFAULT_CHOKE
-		AuxillaryAnchor.set_rotation(0)
+		GunAnchor.set_rotation(0)
 		Head.set_rotation(0)
 		
 		if Global.active_camera:
 			Global.active_camera.set_focused(false)
 			Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_DEFAULT)
 			Global.active_camera.tilt_to_angle(0)
+
+func handle_crit_modifier() -> void:
+	if executing:
+		crit_modifier = CRIT_MOD_EXECUTING
+	else:
+		match move_state:
+			MOVEMENT_STATES.HOVER:
+				crit_modifier = CRIT_MOD_DEFAULT
+			MOVEMENT_STATES.FOCUS:
+				crit_modifier = CRIT_MOD_FOCUS
+			MOVEMENT_STATES.RUSH:
+				crit_modifier = CRIT_MOD_RUSH
+
+func handle_aim_choke() -> void:
+	match move_state:
+		MOVEMENT_STATES.HOVER:
+			aim_choke = AIM_CHOKE_DEFAULT
+		MOVEMENT_STATES.FOCUS:
+			aim_choke = AIM_CHOKE_FOCUS
+		MOVEMENT_STATES.RUSH:
+			aim_choke = AIM_CHOKE_RUSH
 
 func trigger_slash() -> void:
 	melee_hits.clear() ## ABYSMAL DOGSHIT WARNING ##
@@ -435,7 +438,7 @@ func check_blade_collision() -> void:
 			if melee_body.has_meta(Global.META_MELEEABLE_REF):
 				melee_detector = melee_body.get_meta(Global.META_MELEEABLE_REF)
 				if !melee_hits.has(melee_detector):
-					melee_detector.melee_detected.emit(blade_damage)
+					melee_detector.melee_detected.emit(blade_damage, BLADE_BASE_CRIT * crit_modifier)
 					melee_hits.append(melee_detector)
 
 func center_blade() -> void:
@@ -464,8 +467,16 @@ func reset_blade() -> void:
 	blade_damage = BLADE_BASE_DAMAGE #then multiply by any ongoing modifiers after
 	clear_melee_hits()
 
+func prime_execution(target: Vector2, target_body: Node2D) -> void:
+	can_execute = true
+	execution_body = target_body
+	execution_point = target
+
 func trigger_execution() -> void:
 	melee_hits.clear() ## ABYSMAL DOGSHIT WARNING ##
+	
+	Events.execution_initiated.emit(execution_body)
+	
 	blade_damage = BLADE_BASE_DAMAGE
 	
 	executing = true
@@ -482,22 +493,29 @@ func trigger_execution() -> void:
 	
 	reset_blade() #safeguard
 	
-	execution_point = cursor
 	ExecutionTimer.start()
+
+var execution_thrusted: bool = false
 
 func animate_execution_strike() -> void: #spin into a thrust
 	if ExecutionTimer.time_left >= EXECUTION_TIME * 0.5:
 		Blade.transform.origin = Blade.transform.origin.rotated(EXECUTION_ANGLE * blade_direction)
 		Blade.rotation += EXECUTION_DEGREE * blade_direction
 	else:
-		center_blade()
+		
+		if !execution_thrusted: ## spaghetti warning
+			Events.execution_struck.emit(execution_body)
+			execution_thrusted = true
+		
+		Blade.transform.origin.y = Head.rotation #center the blade
+		Blade.set_rotation(Head.rotation + (-PI * 0.5)) 
 		Blade.transform.origin.x = EXECUTION_X_OFFSET - sin(ExecutionTimer.time_left * EXECUTION_TIME_FACTOR) * EXECUTION_PUSH
 
 func animate_execution_movement() -> void: #animate the launch toward an enemy
 	Wings.position.x = -( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
 	Head.position.x = ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR * HEAD_SHIFT_FACTOR)
 	Body.position.x = ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR * BODY_SHIFT_FACTOR)
-	AuxillaryAnchor.position.x = AUXILLARY_START.x + ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
+	GunAnchor.position.x = GUN_START.x + ( (ExecutionTimer.time_left * 0.5) * EXECUTION_RUSH_TIME_FACTOR)
 
 func handle_execution() -> void:
 	global_position.x = Global.interpolate_value(global_position.x, execution_point.x, 0.3, 0.5)
@@ -507,25 +525,26 @@ func handle_execution() -> void:
 	animate_execution_movement()
 
 func clear_execution() -> void:
+	execution_thrusted = false
 	executing = false
 	
 	reset_blade()
 	
-	core_heat = min(core_heat_max, core_heat + EXECUTION_COOLING)
-	auxillary_heat = 0
-	Events.weapon_heat_updated.emit(auxillary_heat)
+	core_heat = min(core_heat_max, core_heat + (core_heat_max * EXECUTION_CORE_HEAL))
+	auxiliary_heat = 0
+	Events.weapon_heat_updated.emit(auxiliary_heat)
 
 func trigger_rush() -> void:
 	rushing = true
-	auxillary_heat += rush_heat
-	Events.weapon_heat_updated.emit(auxillary_heat)
+	auxiliary_heat += rush_heat
+	Events.weapon_heat_updated.emit(auxiliary_heat)
 	RushTimer.start()
 
 func animate_rush() -> void:
 	Wings.position.x = -(RushTimer.time_left * RUSH_TIME_FACTOR)
 	Head.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR * HEAD_SHIFT_FACTOR)
 	Body.position.x = (RushTimer.time_left * RUSH_TIME_FACTOR * BODY_SHIFT_FACTOR)
-	AuxillaryAnchor.position.x = AUXILLARY_START.x + (RushTimer.time_left * RUSH_TIME_FACTOR)
+	GunAnchor.position.x = GUN_START.x + (RushTimer.time_left * RUSH_TIME_FACTOR)
 
 func handle_rush() -> void:
 	velocity = Vector2(cos(rotation), sin(rotation)).normalized() * current_speed
@@ -539,17 +558,17 @@ func clear_rush() -> void: #reset movement and chassis part positioning
 	Wings.position.x = 0
 	Body.position.x = 0
 	Head.position.x = 0
-	AuxillaryAnchor.position.x = AUXILLARY_START.x 
+	GunAnchor.position.x = GUN_START.x 
 
 """
 do later -
 figure out some equation for heat generation with relation to number of shots,
 preferrably reduced by some factor
 """
-func fire_auxillary() -> void:
-	AuxillaryCooldown.start()
+func fire_gun() -> void:
+	GunCooldown.start()
 	
-	var heat: float = randf_range(auxillary_heat_range.x, auxillary_heat_range.y) 
+	var heat: float = randf_range(gun_heat_range.x, gun_heat_range.y) 
 	
 	if PlayerGun.get_gun().Shots > 1:
 		heat = heat + (PlayerGun.get_gun().Shots * 0.75)
@@ -557,38 +576,38 @@ func fire_auxillary() -> void:
 	if PlayerGun.get_gun().Spread >= 0:
 		PlayerGun.get_gun().Spread *= aim_choke
 	
-	PlayerGun.fire(CannonPoint.global_position, AuxillaryAnchor.global_rotation)
+	PlayerGun.fire(CannonPoint.global_position, GunAnchor.global_rotation, shot_dmg_mod, GUN_BASE_CRIT * crit_modifier)
 	
-	auxillary_heat += heat
-	Events.weapon_heat_updated.emit(auxillary_heat)
+	auxiliary_heat += heat
+	Events.weapon_heat_updated.emit(auxiliary_heat)
 
 var cooling: float = 1.0
 func cool_weapon() -> void:
-	if auxillary_heat >= auxillary_heat_max * OVERHEAT_EMERGENCY_THRESHOLD:
-		cooling = AUXILLARY_EMERGENCY_COOLING
+	if auxiliary_heat >= auxiliary_heat_max * OVERHEAT_EMERGENCY_THRESHOLD:
+		cooling = AUXILIARY_EMERGENCY_COOLING
 	else:
 		cooling = 1.0
 	
 	if move_state == MOVEMENT_STATES.FOCUS:
-		auxillary_heat = max(0, auxillary_heat - AUXILLARY_COOL_RATE_FOCUSED * cooling * get_physics_process_delta_time())
+		auxiliary_heat = max(0, auxiliary_heat - AUXILIARY_COOL_RATE_FOCUSED * cooling * get_physics_process_delta_time())
 	else:
-		auxillary_heat = max(0, auxillary_heat - AUXILLARY_COOL_RATE * cooling * get_physics_process_delta_time())
+		auxiliary_heat = max(0, auxiliary_heat - AUXILIARY_COOL_RATE * cooling * get_physics_process_delta_time())
 	
-	Events.weapon_heat_updated.emit(auxillary_heat)
+	Events.weapon_heat_updated.emit(auxiliary_heat)
 
 func check_heat(value: float) -> void:
-	if value >= auxillary_heat_max:
+	if value >= auxiliary_heat_max:
 		overheated = true
 		Events.core_overheated.emit()
 	else:
 		overheated = false
 
-func read_damage(amount: float) -> void:
+func read_damage(amount: float, crit: float = 0.0) -> void:
 	if not executing: #invincible during execution
 		core_heat -= amount
 		
-		auxillary_heat += HIT_HEAT
-		Events.weapon_heat_updated.emit(auxillary_heat)
+		auxiliary_heat += HIT_HEAT
+		Events.weapon_heat_updated.emit(auxiliary_heat)
 		
 		FlashHandler.trigger_flash()
 

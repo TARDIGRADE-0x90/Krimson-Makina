@@ -1,7 +1,7 @@
 extends Node
 class_name Meleeable
 
-signal melee_detected(melee_damage: float)
+signal melee_detected(melee_damage: float, crit: float)
 signal melee_cleared
 
 @export var Collider: CollisionObject2D
@@ -18,7 +18,7 @@ func _ready() -> void:
 	melee_detected.connect(read_melee)
 	melee_cleared.connect(reset_melee_detection)
 
-func read_melee(amount: float) -> void:
+func read_melee(amount: float, crit: float) -> void:
 	struck = true
 
 func reset_melee_detection() -> void:

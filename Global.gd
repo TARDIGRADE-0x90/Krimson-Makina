@@ -48,6 +48,8 @@ func mirrored_half(size: int) -> Array[int]: #O(n)
 	
 	return output
 
+func is_vector_in_bound(query: Vector2, bound: Vector4) -> bool:
+	return query.x >= bound.x && query.x <= bound.y && query.y >= bound.z && query.y <= bound.w
 
 ## Apply this for bound checking for enemy aggroing
 """

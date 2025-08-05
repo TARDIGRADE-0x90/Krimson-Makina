@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bd402lrwxwgvg"]
+[gd_scene load_steps=17 format=3 uid="uid://bd402lrwxwgvg"]
 
 [ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="1_4oqvl"]
 [ext_resource type="Script" path="res://Enemies/QuadChaingunTurret.gd" id="1_td80g"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="5_tosjs"]
 [ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="6_j6a3e"]
 [ext_resource type="Resource" uid="uid://kuqhcmh1rxoy" path="res://Projectile/Guns/QuadChaingun.tres" id="8_fnjus"]
+[ext_resource type="PackedScene" uid="uid://dtn83xn0u1hpe" path="res://GUI/UncalibrationUI.tscn" id="13_o1w4h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sp1nu"]
 size = Vector2(256, 256)
@@ -75,3 +76,7 @@ Collider = NodePath("..")
 
 [node name="HitFlashHandler" parent="." instance=ExtResource("6_j6a3e")]
 Duration = 0.25
+
+[node name="UncalibrationUI" parent="." node_paths=PackedStringArray("Body") instance=ExtResource("13_o1w4h")]
+BoxSize = 512
+Body = NodePath("..")

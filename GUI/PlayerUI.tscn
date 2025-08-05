@@ -243,7 +243,7 @@ layout_mode = 2
 
 [node name="WeaponHeatHeader" type="Label" parent="WeaponHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "AUXILLARY HEAT"
+text = "AUXILIARY HEAT"
 label_settings = SubResource("LabelSettings_haf7r")
 horizontal_alignment = 1
 

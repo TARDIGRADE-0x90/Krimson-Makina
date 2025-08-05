@@ -55,34 +55,34 @@ func initialize_projectiles() -> void:
 func flag_collision_override(type: int) -> void:
 	shot_data_copy.CollisionType = type
 
-func fire(start: Vector2, angle: float) -> void:
+func fire(start: Vector2, angle: float, dmg_mod: float = 1.0, crit_mod: float = 0.0) -> void:
 	match gun_data_copy.FiringPattern:
 		GunData.FiringPatterns.NIL:
 			print("ProjectileManger.gd :: NIL firing pattern for some reason")
 		
 		GunData.FiringPatterns.SINGLE:
-			fire_single(start, angle)
+			fire_single(start, angle, dmg_mod, crit_mod)
 		
 		GunData.FiringPatterns.RADIAL:
 			assert(gun_data_copy.Shots > 1, ERR_SHOTS_LOW)
 			assert(gun_data_copy.Spread >= 0, ERR_SPREAD_NIL)
-			multifire_radial(start, angle, gun_data_copy.Shots, gun_data_copy.Spread)
+			multifire_radial(start, angle, gun_data_copy.Shots, gun_data_copy.Spread, dmg_mod, crit_mod)
 		
 		GunData.FiringPatterns.PARALLEL:
 			assert(gun_data_copy.Shots > 1, ERR_SHOTS_LOW)
 			assert(gun_data_copy.Offset >= 0, ERR_OFFSET_NIL)
-			multifire_parallel(start, angle, gun_data_copy.Shots, gun_data_copy.Offset)
+			multifire_parallel(start, angle, gun_data_copy.Shots, gun_data_copy.Offset, dmg_mod, crit_mod)
 
-func fire_single(start: Vector2, angle: float) -> void:
+func fire_single(start: Vector2, angle: float, dmg_mod: float = 1.0, crit_mod: float = 0.0) -> void:
 	current_shot = shot_pool[pool_index]
 	
 	if not current_shot.active:
 		current_shot.global_position = start
 		current_shot.set_rotation(angle)
-		current_shot.trigger(Vector2.from_angle(angle) * ShotData.Speed)
+		current_shot.trigger(Vector2.from_angle(angle) * ShotData.Speed, dmg_mod, crit_mod)
 		pool_index = (pool_index + 1) % shot_pool.size()
 
-func multifire_radial(start: Vector2, angle: float, shots: int, spread: float) -> void:
+func multifire_radial(start: Vector2, angle: float, shots: int, spread: float,  dmg_mod: float = 1.0, crit_mod: float = 0.0) -> void:
 	var deviation: float = 0.0
 	var organized_shots: Array[int] = Global.mirrored_half(shots)
 	var even_offset: float = 0.5 if (shots % 2 == 0) else 0.0
@@ -99,10 +99,10 @@ func multifire_radial(start: Vector2, angle: float, shots: int, spread: float) -
 		if not current_shot.active:
 			current_shot.global_position = start
 			current_shot.set_rotation(angle + deviation)
-			current_shot.trigger( Vector2.from_angle(angle + deviation) * ShotData.Speed)
+			current_shot.trigger( Vector2.from_angle(angle + deviation) * ShotData.Speed, dmg_mod, crit_mod)
 			pool_index = (pool_index + 1) % shot_pool.size()
 
-func multifire_parallel(start: Vector2, angle: float, shots: int, bullet_offset: float) -> void:
+func multifire_parallel(start: Vector2, angle: float, shots: int, bullet_offset: float,  dmg_mod: float = 1.0, crit_mod: float = 0.0) -> void:
 	var organized_shots: Array[int] = Global.mirrored_half(shots)
 	var even_offset: float = 0.5 if (shots % 2 == 0) else 0.0
 	
@@ -117,7 +117,7 @@ func multifire_parallel(start: Vector2, angle: float, shots: int, bullet_offset:
 		if not current_shot.active:
 			current_shot.global_position = start + (Vector2.from_angle((angle - PI * 0.5 * 1)) * bullet_offset * (i + even_offset))
 			current_shot.set_rotation(angle)
-			current_shot.trigger(Vector2.from_angle(angle) * ShotData.Speed)
+			current_shot.trigger(Vector2.from_angle(angle) * ShotData.Speed, dmg_mod, crit_mod)
 			pool_index = (pool_index + 1) % shot_pool.size()
 
 func get_gun() -> GunData:

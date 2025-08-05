@@ -1,4 +1,4 @@
-[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://cy1srnumm2skd"]
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://dml5osi0xwm0y"]
 
 [sub_resource type="FontFile" id="FontFile_bo17v"]
 face_index = null
@@ -6074,12 +6074,41 @@ cache/208/72/16/glyphs/0/offset = Vector2(0, 0)
 cache/208/72/16/glyphs/0/size = Vector2(0, 0)
 cache/208/72/16/glyphs/0/uv_rect = Rect2(0, 0, 0, 0)
 cache/208/72/16/glyphs/0/texture_idx = -1
+cache/209/variation_coordinates = {}
+face_index = null
+embolden = null
+transform = null
+cache/209/16/0/ascent = 0.0
+cache/209/16/0/descent = 0.0
+cache/209/16/0/underline_position = 0.0
+cache/209/16/0/underline_thickness = 0.0
+cache/209/16/0/scale = 1.0
+cache/209/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/209/16/0/kerning_overrides/72/0 = Vector2(0, 0)
+cache/209/16/0/kerning_overrides/72/16 = Vector2(0, 0)
+cache/209/72/0/ascent = 0.0
+cache/209/72/0/descent = 0.0
+cache/209/72/0/underline_position = 0.0
+cache/209/72/0/underline_thickness = 0.0
+cache/209/72/0/scale = 1.0
+cache/209/72/0/glyphs/0/advance = Vector2(0, 0)
+cache/209/72/0/glyphs/0/offset = Vector2(0, 0)
+cache/209/72/0/glyphs/0/size = Vector2(0, 0)
+cache/209/72/0/glyphs/0/uv_rect = Rect2(0, 0, 0, 0)
+cache/209/72/0/glyphs/0/texture_idx = -1
+cache/209/72/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/209/72/0/kerning_overrides/72/0 = Vector2(0, 0)
+cache/209/72/0/kerning_overrides/72/16 = Vector2(0, 0)
+cache/209/72/16/glyphs/0/offset = Vector2(0, 0)
+cache/209/72/16/glyphs/0/size = Vector2(0, 0)
+cache/209/72/16/glyphs/0/uv_rect = Rect2(0, 0, 0, 0)
+cache/209/72/16/glyphs/0/texture_idx = -1
 
 [resource]
 base_font = SubResource("FontFile_bo17v")
 variation_embolden = -0.5
 variation_transform = Transform2D(1.2, 0, 0, 2, 0, 0)
-spacing_glyph = 8
+spacing_glyph = 20
 spacing_space = 8
 spacing_top = 4
 spacing_bottom = 4

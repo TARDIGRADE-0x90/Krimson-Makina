@@ -10,11 +10,13 @@ const AIM_TIME: float = 1.0
 const AIM_DAMP: float = 0.5
 
 const ROTATION_RATE: int = 100
+const ROTATION_DEBUFF: float = 0.25
 
 const DEATH_DELAY: float = 5.0
 
 @export var MachineTitle: String
 
+@onready var _UncalibrationUI: UncalibrationUI = $UncalibrationUI
 @onready var _AggroCast: AggroCast = $AggroCast
 @onready var Base: Sprite2D = $FullBody/Base
 @onready var Guns: Sprite2D = $FullBody/Guns
@@ -27,16 +29,23 @@ const DEATH_DELAY: float = 5.0
 
 var target: Vector2
 var health: float = BASE_HEALTH
-var cannon_index: int = 0
+var rotation_rate: float = ROTATION_RATE
+var uncalibrated: bool = false
 var destroyed: bool = false
+var cannon_index: int = 0
 
 func _ready() -> void:
 	Guns.rotation_degrees = randi_range(0, 360)
+	
 	initialize_firerate()
 	
 	FlashHandler.assign_sprites([Base, Guns])
 	MeleeDetect.melee_detected.connect(read_damage)
 	ShootDetect.shot_detected.connect(read_damage)
+	_UncalibrationUI.cleared.connect(func(): uncalibrated = false)
+	
+	Events.execution_initiated.connect(prepare_to_die)
+	Events.execution_struck.connect(execute)
 
 func _physics_process(delta) -> void:
 	if Global.player:
@@ -58,7 +67,10 @@ func update_target(newTarget: Vector2) -> void:
 	_AggroCast.set_aggro_target(target)
 
 func smooth_to_target(delta: float) -> void:
-	Guns.rotation_degrees += ROTATION_RATE * delta * signi(rad_to_deg(Guns.get_angle_to(target)))
+	if uncalibrated: rotation_rate = ROTATION_RATE * ROTATION_DEBUFF
+	else: rotation_rate = ROTATION_RATE
+	
+	Guns.rotation_degrees += rotation_rate * delta * signi(rad_to_deg(Guns.get_angle_to(target)))
 
 func fire_cannons() -> void:
 	var current_cannon_point: Marker2D = Guns.get_children()[cannon_index]
@@ -68,15 +80,34 @@ func fire_cannons() -> void:
 	
 	Firerate.start()
 
-func read_damage(amount: float) -> void:
+var crit_query: float = 0.0
+func read_damage(amount: float, crit: float = 0.0) -> void:
 	health -= amount
 	
 	if health <= 0:
 		destroy()
 		return
 	
+	crit_query = randf()
+	
+	if crit_query <= crit:
+		uncalibrated = true
+		_UncalibrationUI.trigger()
+	
 	FlashHandler.trigger_flash()
 	Events.new_target_hit.emit(MachineTitle, health, BASE_HEALTH)
+
+func prepare_to_die(body_arg: Node2D) -> void:
+	if self != body_arg:
+		return
+	else:
+		set_physics_process(false)
+
+func execute(body_arg: Node2D) -> void:
+	if self != body_arg:
+		return
+	else:
+		destroy()
 
 func destroy() -> void:
 	if !destroyed:
