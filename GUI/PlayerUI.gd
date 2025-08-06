@@ -33,6 +33,7 @@ const CORE_HEAT_BAR_X_FACTOR: int = 2
 
 const BATTLE_DELAY: float = 8.0
 const DESTRUCTION_FLICKER: float = 1.4
+const CRITICAL_FLICKER: float = 0.8
 
 @onready var OpticalLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/OpticalLabel
 @onready var EnemyLabel: Label = $OpticalIndicator/MarginContainer/VBoxContainer/EnemyLabel
@@ -52,10 +53,11 @@ const DESTRUCTION_FLICKER: float = 1.4
 @onready var AuxiliaryHeat: Label = $AuxiliaryHeatPanel/MarginContainer/VBoxContainer/AuxiliaryHeat
 
 @onready var CriticalPanel: Control = $CriticalPanel
-@onready var CriticalFlicker: Label = $CriticalPanel/MarginContainer/CriticalFlicker
+@onready var CriticalLabel: Label = $CriticalPanel/MarginContainer/CriticalLabel
 
 @onready var BattleDelay: Timer = $BattleDelay
 @onready var DestroyFlicker: Timer = $DestroyFlicker
+@onready var CriticalFlicker: Timer = $CriticalFlicker
 
 var fully_cooled: bool = false
 var in_combat: bool = false
@@ -65,6 +67,7 @@ func _ready() -> void:
 	adjust_weapon_heat(0)
 	initialize_battle_delay_timer()
 	intialize_destroy_flicker()
+	initialize_critical_flicker()
 	
 	OpticalLabel.set_text(MSG_IDLE)
 	EnemyLabel.set_visible(false)
@@ -101,6 +104,11 @@ func intialize_destroy_flicker() -> void:
 	DestroyFlicker.set_wait_time(DESTRUCTION_FLICKER)
 	DestroyFlicker.set_one_shot(true)
 	DestroyFlicker.timeout.connect(DestructionLabel.hide)
+
+func initialize_critical_flicker() -> void:
+	CriticalFlicker.set_wait_time(CRITICAL_FLICKER)
+	CriticalFlicker.set_one_shot(true)
+	CriticalFlicker.timeout.connect(CriticalPanel.hide)
 
 func display_weapon_heat() -> void:
 	AuxiliaryHeatPanel.visible = !fully_cooled
@@ -174,4 +182,5 @@ func display_destruction_label() -> void:
 	DestroyFlicker.start()
 
 func trigger_critical_flicker() -> void:
-	pass
+	CriticalPanel.set_visible(true)
+	CriticalFlicker.start()

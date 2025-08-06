@@ -65,6 +65,7 @@ shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_evf64"]
 font = ExtResource("4_6ie41")
+font_size = 24
 shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
@@ -297,7 +298,7 @@ offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_constants/margin_top = 20
 
-[node name="CriticalFlicker" type="Label" parent="CriticalPanel/MarginContainer"]
+[node name="CriticalLabel" type="Label" parent="CriticalPanel/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0

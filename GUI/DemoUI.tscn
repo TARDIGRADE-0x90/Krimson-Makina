@@ -1,14 +1,12 @@
-[gd_scene load_steps=23 format=3 uid="uid://c5s05gik05p3j"]
+[gd_scene load_steps=21 format=3 uid="uid://d0ydqga7c0k2w"]
 
-[ext_resource type="Script" path="res://GUI/StartScreen.gd" id="1_0kti6"]
-[ext_resource type="Texture2D" uid="uid://djvuiok6fs3ux" path="res://Assets/start_screen.png" id="1_vy43a"]
-[ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_1t8dm"]
-[ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="3_5f036"]
-[ext_resource type="Texture2D" uid="uid://d2oolrvyxmx63" path="res://Assets/demo_screenshot.png" id="4_ri4rm"]
-[ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="6_oj540"]
+[ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="1_54t10"]
+[ext_resource type="Texture2D" uid="uid://d2oolrvyxmx63" path="res://Assets/demo_screenshot.png" id="1_qf6cw"]
+[ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="2_0apcy"]
+[ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="3_ygevy"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_sxftd"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 font_size = 12
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
@@ -16,7 +14,7 @@ shadow_size = 4
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_njtv4"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 font_size = 18
 outline_size = 6
 outline_color = Color(0.423529, 0, 0, 1)
@@ -24,21 +22,21 @@ shadow_size = 12
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_2iwf6"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 font_size = 24
 
 [sub_resource type="LabelSettings" id="LabelSettings_cykny"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_44tq3"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ypl3v"]
-font = ExtResource("3_5f036")
+font = ExtResource("2_0apcy")
 font_size = 18
 font_color = Color(1, 0.682353, 0, 1)
 outline_size = 4
@@ -47,7 +45,7 @@ shadow_size = 20
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_vie6i"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 font_size = 12
 outline_size = 2
 outline_color = Color(1, 0.890196, 0.768627, 1)
@@ -55,121 +53,63 @@ shadow_size = 4
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_33io1"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_ns4xl"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 font_color = Color(1, 0.835294, 0.596078, 1)
 shadow_size = 12
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_4dptd"]
-font = ExtResource("6_oj540")
+font = ExtResource("3_ygevy")
 font_size = 24
 shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_f0brf"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_au60y"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 1
 shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_6lapp"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 1
 shadow_size = 4
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_medka"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 1
 shadow_size = 2
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_rj0lh"]
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_pp8s3"]
 line_spacing = 8.0
-font = ExtResource("2_1t8dm")
+font = ExtResource("1_54t10")
 outline_size = 1
 shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="StartScreen" type="Control"]
+[node name="DemoUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0kti6")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("1_vy43a")
-
-[node name="MenuButtonMargin" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -105.5
-offset_right = 142.0
-offset_bottom = 105.5
-grow_vertical = 2
-theme_override_constants/margin_left = 400
-theme_override_constants/margin_top = 162
-
-[node name="MenuButtons" type="VBoxContainer" parent="MenuButtonMargin"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 32
-
-[node name="StartButton" type="Button" parent="MenuButtonMargin/MenuButtons"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
-theme_override_fonts/font = ExtResource("3_5f036")
-theme_override_font_sizes/font_size = 24
-text = "START"
-
-[node name="GuideButton" type="Button" parent="MenuButtonMargin/MenuButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
-theme_override_fonts/font = ExtResource("3_5f036")
-theme_override_font_sizes/font_size = 24
-text = "GUIDE"
-
-[node name="ExitButton" type="Button" parent="MenuButtonMargin/MenuButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
-theme_override_fonts/font = ExtResource("3_5f036")
-theme_override_font_sizes/font_size = 24
-text = "EXIT"
-
-[node name="DemoUI" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="DemoBG" type="Control" parent="DemoUI"]
+[node name="DemoBG" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -179,10 +119,10 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BG" type="Sprite2D" parent="DemoUI/DemoBG"]
-texture = ExtResource("4_ri4rm")
+[node name="BG" type="Sprite2D" parent="DemoBG"]
+texture = ExtResource("1_qf6cw")
 
-[node name="OpticalIndicator" type="Control" parent="DemoUI"]
+[node name="OpticalIndicator" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.54902)
 layout_mode = 3
 anchors_preset = 0
@@ -190,42 +130,42 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="DemoUI/OpticalIndicator"]
+[node name="MarginContainer" type="MarginContainer" parent="OpticalIndicator"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DemoUI/OpticalIndicator/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="OpticalIndicator/MarginContainer"]
 layout_mode = 2
 
-[node name="OpticalLabel" type="Label" parent="DemoUI/OpticalIndicator/MarginContainer/VBoxContainer"]
+[node name="OpticalLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "ENGAGING
 "
 label_settings = SubResource("LabelSettings_sxftd")
 vertical_alignment = 2
 
-[node name="EnemyLabel" type="Label" parent="DemoUI/OpticalIndicator/MarginContainer/VBoxContainer"]
+[node name="EnemyLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "ENEMY TITLE :: ENEMY_HEALTH"
 label_settings = SubResource("LabelSettings_njtv4")
 vertical_alignment = 2
 
-[node name="EnemyHealthBar" type="ColorRect" parent="DemoUI/OpticalIndicator/MarginContainer/VBoxContainer"]
+[node name="EnemyHealthBar" type="ColorRect" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_horizontal = 0
 color = Color(0.764706, 0.713726, 0.662745, 0.65098)
 
-[node name="DestructionLabel" type="Label" parent="DemoUI/OpticalIndicator/MarginContainer/VBoxContainer"]
+[node name="DestructionLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "TARGET DESTROYED"
 label_settings = SubResource("LabelSettings_2iwf6")
 
-[node name="CoreHeatPanel" type="Control" parent="DemoUI"]
+[node name="CoreHeatPanel" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.572549)
 layout_mode = 3
 anchors_preset = 0
@@ -237,7 +177,7 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="DemoUI/CoreHeatPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CoreHeatPanel"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -251,23 +191,23 @@ grow_vertical = 0
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DemoUI/CoreHeatPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CoreHeatPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="CoreHeatHeader" type="Label" parent="DemoUI/CoreHeatPanel/MarginContainer/VBoxContainer"]
+[node name="CoreHeatHeader" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "GUILLOTINE-07 TEMPERATURE:
 "
 label_settings = SubResource("LabelSettings_cykny")
 horizontal_alignment = 2
 
-[node name="CoreHeat" type="Label" parent="DemoUI/CoreHeatPanel/MarginContainer/VBoxContainer"]
+[node name="CoreHeat" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "200° C FROM PEAK"
 label_settings = SubResource("LabelSettings_44tq3")
 horizontal_alignment = 2
 
-[node name="CoreHeatBar" type="ColorRect" parent="DemoUI/CoreHeatPanel"]
+[node name="CoreHeatBar" type="ColorRect" parent="CoreHeatPanel"]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 1
 anchors_preset = 3
@@ -284,7 +224,7 @@ grow_vertical = 0
 rotation = 3.14159
 color = Color(1, 0.717647, 0.611765, 0.580392)
 
-[node name="AuxiliaryHeatPanel" type="Control" parent="DemoUI"]
+[node name="AuxiliaryHeatPanel" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.486275)
 layout_mode = 1
 anchors_preset = 15
@@ -294,7 +234,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="AuxiliaryHeatBar" type="ColorRect" parent="DemoUI/AuxiliaryHeatPanel"]
+[node name="AuxiliaryHeatBar" type="ColorRect" parent="AuxiliaryHeatPanel"]
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 offset_left = 144.0
@@ -307,7 +247,7 @@ pivot_offset = Vector2(16, 90)
 size_flags_horizontal = 4
 color = Color(1, 0.603922, 0.486275, 0.419608)
 
-[node name="AuxiliaryHeatVisual" type="MarginContainer" parent="DemoUI/AuxiliaryHeatPanel"]
+[node name="AuxiliaryHeatVisual" type="MarginContainer" parent="AuxiliaryHeatPanel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -320,13 +260,13 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 80
 theme_override_constants/margin_bottom = 120
 
-[node name="AuxiliaryHeatLimit" type="ColorRect" parent="DemoUI/AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
+[node name="AuxiliaryHeatLimit" type="ColorRect" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
 custom_minimum_size = Vector2(64, 4)
 layout_mode = 2
 size_flags_vertical = 0
 color = Color(1, 1, 1, 0.784314)
 
-[node name="OverheatWarning" type="Label" parent="DemoUI/AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
+[node name="OverheatWarning" type="Label" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -341,7 +281,7 @@ label_settings = SubResource("LabelSettings_ypl3v")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AuxiliaryMaxHeat" type="Label" parent="DemoUI/AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
+[node name="AuxiliaryMaxHeat" type="Label" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -358,13 +298,13 @@ label_settings = SubResource("LabelSettings_vie6i")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AuxiliaryHeatBase" type="ColorRect" parent="DemoUI/AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
+[node name="AuxiliaryHeatBase" type="ColorRect" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
 custom_minimum_size = Vector2(64, 4)
 layout_mode = 2
 size_flags_vertical = 8
 color = Color(1, 1, 1, 0.784314)
 
-[node name="MarginContainer" type="MarginContainer" parent="DemoUI/AuxiliaryHeatPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="AuxiliaryHeatPanel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -376,22 +316,22 @@ theme_override_constants/margin_left = 48
 theme_override_constants/margin_top = 480
 theme_override_constants/margin_right = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DemoUI/AuxiliaryHeatPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AuxiliaryHeatPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="AuxiliaryHeatHeader" type="Label" parent="DemoUI/AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
+[node name="AuxiliaryHeatHeader" type="Label" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "AUXILIARY HEAT"
 label_settings = SubResource("LabelSettings_33io1")
 horizontal_alignment = 1
 
-[node name="AuxiliaryHeat" type="Label" parent="DemoUI/AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
+[node name="AuxiliaryHeat" type="Label" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "150.00° C"
 label_settings = SubResource("LabelSettings_ns4xl")
 horizontal_alignment = 1
 
-[node name="CriticalPanel" type="Control" parent="DemoUI"]
+[node name="CriticalPanel" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.662745)
 layout_mode = 1
 anchors_preset = 5
@@ -402,7 +342,7 @@ offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="DemoUI/CriticalPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CriticalPanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -413,7 +353,7 @@ offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_constants/margin_top = 20
 
-[node name="CriticalLabel" type="Label" parent="DemoUI/CriticalPanel/MarginContainer"]
+[node name="CriticalLabel" type="Label" parent="CriticalPanel/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -421,7 +361,7 @@ text = "CRITICAL  STRIKE"
 label_settings = SubResource("LabelSettings_4dptd")
 horizontal_alignment = 1
 
-[node name="Tutorial" type="Control" parent="DemoUI"]
+[node name="Tutorial" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -429,7 +369,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InputsContainer" type="MarginContainer" parent="DemoUI/Tutorial"]
+[node name="InputsContainer" type="MarginContainer" parent="Tutorial"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -444,47 +384,47 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/margin_right = 80
 
-[node name="Inputs" type="VBoxContainer" parent="DemoUI/Tutorial/InputsContainer"]
+[node name="Inputs" type="VBoxContainer" parent="Tutorial/InputsContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Header" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Header" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "CONTROLS"
 label_settings = SubResource("LabelSettings_f0brf")
 horizontal_alignment = 1
 
-[node name="Move" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Move" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Move: WASD"
 label_settings = SubResource("LabelSettings_f0brf")
 
-[node name="Melee" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Melee" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Melee: LMB"
 label_settings = SubResource("LabelSettings_f0brf")
 
-[node name="Fire" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Fire" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Fire: RMB"
 label_settings = SubResource("LabelSettings_f0brf")
 
-[node name="Focus" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Focus" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Focus: Ctrl"
 label_settings = SubResource("LabelSettings_f0brf")
 
-[node name="Rush" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Rush" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Rush: Space"
 label_settings = SubResource("LabelSettings_f0brf")
 
-[node name="Execute" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+[node name="Execute" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Execute: F"
 label_settings = SubResource("LabelSettings_f0brf")
 
-[node name="Overview" type="Label" parent="DemoUI/Tutorial"]
+[node name="Overview" type="Label" parent="Tutorial"]
 layout_mode = 0
 offset_left = 771.0
 offset_top = 328.0
@@ -499,7 +439,7 @@ and force the flow of combat."
 label_settings = SubResource("LabelSettings_au60y")
 horizontal_alignment = 1
 
-[node name="CritGude" type="Label" parent="DemoUI/Tutorial"]
+[node name="CritGude" type="Label" parent="Tutorial"]
 layout_mode = 0
 offset_left = 254.0
 offset_top = 66.0
@@ -510,7 +450,7 @@ label_settings = SubResource("LabelSettings_6lapp")
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="HeatGuide" type="Label" parent="DemoUI/Tutorial"]
+[node name="HeatGuide" type="Label" parent="Tutorial"]
 layout_mode = 0
 offset_left = 21.0
 offset_top = 249.0
@@ -523,7 +463,7 @@ While focused, the auxiliary cool rate is lowered."
 label_settings = SubResource("LabelSettings_medka")
 autowrap_mode = 2
 
-[node name="HealthGuide" type="Label" parent="DemoUI/Tutorial"]
+[node name="HealthGuide" type="Label" parent="Tutorial"]
 layout_mode = 0
 offset_left = 1145.0
 offset_top = 565.0
@@ -532,7 +472,7 @@ offset_bottom = 599.0
 text = "Health."
 label_settings = SubResource("LabelSettings_rj0lh")
 
-[node name="AimGuide" type="Label" parent="DemoUI/Tutorial"]
+[node name="AimGuide" type="Label" parent="Tutorial"]
 layout_mode = 0
 offset_left = 274.0
 offset_top = 541.0
@@ -545,7 +485,7 @@ label_settings = SubResource("LabelSettings_pp8s3")
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="ReturnButton" type="Button" parent="DemoUI"]
+[node name="ReturnButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -557,6 +497,6 @@ offset_bottom = -510.0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
-theme_override_fonts/font = ExtResource("3_5f036")
+theme_override_fonts/font = ExtResource("2_0apcy")
 theme_override_font_sizes/font_size = 28
 text = "RETURN"
