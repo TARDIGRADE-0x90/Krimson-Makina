@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c5s05gik05p3j"]
+[gd_scene load_steps=22 format=3 uid="uid://c5s05gik05p3j"]
 
 [ext_resource type="Script" path="res://GUI/StartScreen.gd" id="1_0kti6"]
 [ext_resource type="Texture2D" uid="uid://djvuiok6fs3ux" path="res://Assets/start_screen.png" id="1_vy43a"]
@@ -83,18 +83,14 @@ shadow_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_6lapp"]
 font = ExtResource("2_1t8dm")
 outline_size = 1
-shadow_size = 4
+shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_medka"]
 font = ExtResource("2_1t8dm")
 outline_size = 1
-shadow_size = 2
+shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_rj0lh"]
-font = ExtResource("2_1t8dm")
-outline_size = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_pp8s3"]
 line_spacing = 8.0
@@ -161,7 +157,6 @@ theme_override_font_sizes/font_size = 24
 text = "EXIT"
 
 [node name="DemoUI" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -470,6 +465,7 @@ text = "Fire: RMB"
 label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Focus" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+visible = false
 layout_mode = 2
 text = "Focus: Ctrl"
 label_settings = SubResource("LabelSettings_f0brf")
@@ -486,25 +482,25 @@ label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Overview" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 771.0
-offset_top = 328.0
-offset_right = 1274.0
-offset_bottom = 509.0
+offset_left = 761.0
+offset_top = 448.0
+offset_right = 1264.0
+offset_bottom = 629.0
 text = "Control a versatile mech to destroy
 enemies and progress to the
 next room.
 
 You must weave through projectiles
-and force the flow of combat."
+and wrestle the flow of combat."
 label_settings = SubResource("LabelSettings_au60y")
 horizontal_alignment = 1
 
 [node name="CritGude" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 254.0
-offset_top = 66.0
-offset_right = 1001.0
-offset_bottom = 249.0
+offset_left = 263.0
+offset_top = 54.0
+offset_right = 1010.0
+offset_bottom = 237.0
 text = "Attacks may trigger critical strikes, uncalibrating enemies and leaving them open for execution. Executions restore half of core heat, all of auxiliary heat, and destroy the enemy."
 label_settings = SubResource("LabelSettings_6lapp")
 horizontal_alignment = 1
@@ -512,10 +508,10 @@ autowrap_mode = 2
 
 [node name="HeatGuide" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 21.0
-offset_top = 249.0
-offset_right = 591.0
-offset_bottom = 475.0
+offset_left = 17.0
+offset_top = 463.0
+offset_right = 587.0
+offset_bottom = 689.0
 text = "Firing, rushing, and taking damage all raise auxiliary heat. When it exceeds the heat limit, your core heat begins to fall.
 
 
@@ -523,26 +519,16 @@ While focused, the auxiliary cool rate is lowered."
 label_settings = SubResource("LabelSettings_medka")
 autowrap_mode = 2
 
-[node name="HealthGuide" type="Label" parent="DemoUI/Tutorial"]
-layout_mode = 0
-offset_left = 1145.0
-offset_top = 565.0
-offset_right = 1242.0
-offset_bottom = 599.0
-text = "Health."
-label_settings = SubResource("LabelSettings_rj0lh")
-
 [node name="AimGuide" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 274.0
-offset_top = 541.0
-offset_right = 739.0
-offset_bottom = 716.0
+offset_left = 10.0
+offset_top = 220.0
+offset_right = 475.0
+offset_bottom = 395.0
 text = "Focusing looks forward, aims the gun, reduces spread, and allows the blade to be thrusted.
 
 Movement is slowed."
 label_settings = SubResource("LabelSettings_pp8s3")
-horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="ReturnButton" type="Button" parent="DemoUI"]
@@ -550,10 +536,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 35.0
-offset_top = -565.0
-offset_right = 245.0
-offset_bottom = -510.0
+offset_left = 30.0
+offset_top = -584.0
+offset_right = 240.0
+offset_bottom = -529.0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)

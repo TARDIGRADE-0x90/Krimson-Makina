@@ -14,6 +14,8 @@ enum FiringPatterns {NIL = -1, SINGLE = 0, RADIAL = 1, PARALLEL = 2}
 @export var HeatRange: Vector2
 @export var Spread: float = -1.0
 @export var Offset: float = -1.0
+@export var ShotData: ProjectileData
+@export var PlayerGunVisual: Texture
 
 func copy_data(data: GunData) -> void:
 	FiringPattern = data.FiringPattern
@@ -23,3 +25,5 @@ func copy_data(data: GunData) -> void:
 	HeatRange = data.HeatRange
 	Spread = data.Spread
 	Offset = data.Offset
+	ShotData = data.ShotData
+	PlayerGunVisual = data.PlayerGunVisual

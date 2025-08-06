@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://ca5lgf7rf871u"]
+
+[ext_resource type="Texture2D" uid="uid://0odg6yg4lx3r" path="res://Assets/jade_undergrating.png" id="1_swp5h"]
+[ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="2_3hp53"]
+[ext_resource type="Texture2D" uid="uid://bpnxpl48m3ndg" path="res://Assets/jade_wall.png" id="3_puduk"]
+[ext_resource type="Texture2D" uid="uid://dyrbgxjdrf5u5" path="res://Assets/jade_beam.png" id="4_8o3pa"]
+
+[node name="GreenLevelLayout" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("1_swp5h")
+texture_scale = Vector2(0.8, 4)
+texture_rotation = 1.5708
+polygon = PackedVector2Array(-400, -500, 3520, -500, 3500, 1200, -400, 1200)
+
+[node name="WallOutside" parent="." instance=ExtResource("2_3hp53")]
+position = Vector2(1916.04, 1905.99)
+
+[node name="WallVisual" parent="WallOutside" index="0"]
+texture = ExtResource("3_puduk")
+polygon = PackedVector2Array(-2301.04, -2403.99, 1586.96, -2412.99, 1568.96, -715.985, -2283.04, -733.985, -2299.04, -2322.99, -2072.04, -2320.99, -2037.04, -872.985, 1316.96, -890.985, 1343.96, -2255.99, -2297.04, -2324.99)
+
+[node name="WallOutline" parent="WallOutside" index="1"]
+points = PackedVector2Array(-2301.04, -2403.99, 1586.96, -2412.99, 1568.96, -715.985, -2283.04, -733.985, -2299.04, -2322.99, -2072.04, -2320.99, -2037.04, -872.985, 1316.96, -890.985, 1343.96, -2255.99, -2297.04, -2324.99, -2301.04, -2403.99)
+texture = ExtResource("4_8o3pa")
+
+[editable path="WallOutside"]

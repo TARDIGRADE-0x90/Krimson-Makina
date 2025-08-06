@@ -2,13 +2,24 @@ extends CharacterBody2D
 class_name Player
 
 """
-TO DO:
-	- Uncalibrated ping at top center of player UI, ficker when an enemy becomes uncalibrated
+NOTE:
+	Because this is due in 23 hours, for web export, just rebind controls
+	to "rdfg" for movement, "z" for focus, and for windows export keep everything 
+	normal
 	
-	- Create Options UI and input rebinding ASAP
+	why? Because HTML is very fucky with ctrl and shift and I lack the time to determine
+	where in the HTML/js of the export files this should be rectified
 	
-	- Execution:
-		Boss or otherwise more significant enemies are immune to Uncalibration
+	Jank ass fix but it'll at least be playable on both web and download this way
+	(input rebinding would be better though and you should really consider doing
+	that if there's still time left before the deadline)
+	
+	
+	also, do later:
+		when switching between levels, let player generate in a spawnpoint instead;
+		check if Global has the player object saved, and if so, set the position of
+		the player to the Spawnpoint; otherwise, generate a new player at the spawnpoint
+		This manner of preservation is crucial for retaining gun pickups between levels
 """
 
 enum MOVEMENT_STATES {HOVER, FOCUS, RUSH}
@@ -32,6 +43,7 @@ const EXECUTION_TIME: float = 0.8
 
 const BLADE_BASE_CRIT: float = 0.05
 const GUN_BASE_CRIT: float = 0.02
+
 const CRIT_MOD_DEFAULT: float = 1.0
 const CRIT_MOD_FOCUS: float = 1.25
 const CRIT_MOD_RUSH: float = 1.5
@@ -107,6 +119,7 @@ const Z_HEAD: int = 3
 @onready var Head: Sprite2D  = $FullBody/Head
 @onready var Blade: Area2D = $Blade
 @onready var GunAnchor: Node2D = $GunAnchor
+@onready var GunVisual: Sprite2D = $GunAnchor/GunVisual
 @onready var CannonPoint: Marker2D = $GunAnchor/CannonPoint
 @onready var PlayerGun: ProjectileManager = $GunAnchor/PlayerGun
 
@@ -176,6 +189,9 @@ func _ready() -> void:
 	
 	gun_heat_range = PlayerGun.get_gun().HeatRange
 	gun_firerate = PlayerGun.get_gun().FireRate
+	
+	if PlayerGun.get_gun().PlayerGunVisual:
+		GunVisual.set_texture(PlayerGun.get_gun().PlayerGunVisual)
 	
 	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
 	
@@ -346,6 +362,9 @@ func parse_input_attack(event: InputEvent) -> void:
 	if event.is_action_released(Inputs.AUXILLARY):
 		gun_held = false
 
+"""
+CRASHES STILL OCCUR - THOROUGHLY EXAMINE LATER
+"""
 func parse_input_execution(event: InputEvent) -> void:
 	if event.is_action_pressed(Inputs.EXECUTE):
 		if execution_body:
@@ -468,15 +487,18 @@ func reset_blade() -> void:
 	blade_damage = BLADE_BASE_DAMAGE #then multiply by any ongoing modifiers after
 	clear_melee_hits()
 
-func prime_execution(target: Vector2, target_body: Node2D) -> void:
+func prime_execution(target_body: Node2D) -> void:
 	can_execute = true
 	execution_body = target_body
-	execution_point = target
 
+"""
+do later - examine how to not have blade be directly responsible for keeping track of enemies hit
+"""
 func trigger_execution() -> void:
 	melee_hits.clear() ## ABYSMAL DOGSHIT WARNING ##
 	
 	Events.execution_initiated.emit(execution_body)
+	execution_point = execution_body.global_position
 	
 	blade_damage = BLADE_BASE_DAMAGE
 	
@@ -571,14 +593,23 @@ func fire_gun() -> void:
 	GunCooldown.start()
 	
 	var heat: float = randf_range(gun_heat_range.x, gun_heat_range.y) 
+	var final_crit_mod: float = crit_modifier
+	
+	"""
+	do later - apply inversely proportionate firerate bonus to crit mod
+	(lower RoF = higher crit, vice versa, minimum of 0.02 final crit)
+	"""
 	
 	if PlayerGun.get_gun().Shots > 1:
 		heat = heat + (PlayerGun.get_gun().Shots * 0.75)
 	
-	if PlayerGun.get_gun().Spread >= 0:
-		PlayerGun.get_gun().Spread *= aim_choke
+	if PlayerGun.get_gun().Spread > 0:
+		PlayerGun.set_spread_mod(aim_choke)
 	
-	PlayerGun.fire(CannonPoint.global_position, GunAnchor.global_rotation, shot_dmg_mod, GUN_BASE_CRIT * crit_modifier)
+	if PlayerGun.get_gun().Offset > 0:
+		PlayerGun.set_offset_mod(aim_choke)
+	
+	PlayerGun.fire(CannonPoint.global_position, GunAnchor.global_rotation, shot_dmg_mod, GUN_BASE_CRIT * final_crit_mod)
 	
 	auxiliary_heat += heat
 	Events.weapon_heat_updated.emit(auxiliary_heat)

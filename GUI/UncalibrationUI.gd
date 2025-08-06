@@ -28,7 +28,7 @@ func _physics_process(delta) -> void:
 		if Global.is_vector_in_bound(get_global_mouse_position(), target_bound):
 			
 			if !primed: ## spaghetti warning
-				Events.execution_ready.emit(ExecutionIcon.global_position, Body)
+				Events.execution_ready.emit(Body)
 			primed = true
 			
 			ExecutionIcon.set_visible(true)
@@ -51,6 +51,13 @@ func init_box_size() -> void:
 	pivot_offset.y += BoxSize * 0.5
 	
 	ExecutionIcon.position = pivot_offset
+	target_bound = Vector4(
+		ExecutionIcon.global_position.x - TARGET_THRESHOLD,
+		ExecutionIcon.global_position.x + TARGET_THRESHOLD,
+		ExecutionIcon.global_position.y - TARGET_THRESHOLD, 
+		ExecutionIcon.global_position.y + TARGET_THRESHOLD )
+
+func update_target_bound() -> void:
 	target_bound = Vector4(
 		ExecutionIcon.global_position.x - TARGET_THRESHOLD,
 		ExecutionIcon.global_position.x + TARGET_THRESHOLD,

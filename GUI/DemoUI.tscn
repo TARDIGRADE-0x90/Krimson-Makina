@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://d0ydqga7c0k2w"]
+[gd_scene load_steps=20 format=3 uid="uid://d0ydqga7c0k2w"]
 
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="1_54t10"]
 [ext_resource type="Texture2D" uid="uid://d2oolrvyxmx63" path="res://Assets/demo_screenshot.png" id="1_qf6cw"]
@@ -89,10 +89,6 @@ font = ExtResource("1_54t10")
 outline_size = 1
 shadow_size = 2
 shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_rj0lh"]
-font = ExtResource("1_54t10")
-outline_size = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_pp8s3"]
 line_spacing = 8.0
@@ -411,7 +407,7 @@ label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Focus" type="Label" parent="Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
-text = "Focus: Ctrl"
+text = "Focus: Shift"
 label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Rush" type="Label" parent="Tutorial/InputsContainer/Inputs"]
@@ -426,10 +422,10 @@ label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Overview" type="Label" parent="Tutorial"]
 layout_mode = 0
-offset_left = 771.0
-offset_top = 328.0
-offset_right = 1274.0
-offset_bottom = 509.0
+offset_left = 766.0
+offset_top = 425.0
+offset_right = 1269.0
+offset_bottom = 606.0
 text = "Control a versatile mech to destroy
 enemies and progress to the
 next room.
@@ -462,15 +458,6 @@ text = "Firing, rushing, and taking damage all raise auxiliary heat. When it exc
 While focused, the auxiliary cool rate is lowered."
 label_settings = SubResource("LabelSettings_medka")
 autowrap_mode = 2
-
-[node name="HealthGuide" type="Label" parent="Tutorial"]
-layout_mode = 0
-offset_left = 1145.0
-offset_top = 565.0
-offset_right = 1242.0
-offset_bottom = 599.0
-text = "Health."
-label_settings = SubResource("LabelSettings_rj0lh")
 
 [node name="AimGuide" type="Label" parent="Tutorial"]
 layout_mode = 0

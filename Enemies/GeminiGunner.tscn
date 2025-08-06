@@ -1,0 +1,83 @@
+[gd_scene load_steps=15 format=3 uid="uid://dgvp5iubtrbcf"]
+
+[ext_resource type="Texture2D" uid="uid://bee7xqv8tt05e" path="res://Assets/gemini_gun.png" id="1_fkjum"]
+[ext_resource type="Script" path="res://Enemies/GeminiGunner.gd" id="1_shpcs"]
+[ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_4rrjv"]
+[ext_resource type="Texture2D" uid="uid://df4uhw4um4ndd" path="res://Assets/gemini_core.png" id="2_w3oa5"]
+[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="3_wytnw"]
+[ext_resource type="PackedScene" uid="uid://gju4oyyv6dta" path="res://Enemies/AggroBound.tscn" id="5_vv74n"]
+[ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="6_at56l"]
+[ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="6_j41kf"]
+[ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="7_yfax6"]
+[ext_resource type="Resource" uid="uid://c6ve7a2hau8a1" path="res://Projectile/Guns/GammaGun.tres" id="8_5hp0q"]
+[ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="8_rfo1l"]
+[ext_resource type="PackedScene" uid="uid://dtn83xn0u1hpe" path="res://GUI/UncalibrationUI.tscn" id="9_ckuu5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sit25"]
+radius = 128.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lm3nt"]
+resource_local_to_scene = true
+shader = ExtResource("2_4rrjv")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_modifier = 0.0
+
+[node name="GeminiGunner" type="CharacterBody2D"]
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_shpcs")
+MachineTitle = "L2-GEMINI"
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_sit25")
+
+[node name="FullBody" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_lm3nt")
+
+[node name="TopGun" type="Sprite2D" parent="FullBody"]
+use_parent_material = true
+position = Vector2(0, -160)
+texture = ExtResource("1_fkjum")
+
+[node name="BottomGun" type="Sprite2D" parent="FullBody"]
+use_parent_material = true
+position = Vector2(0, 160)
+rotation = 3.14159
+texture = ExtResource("1_fkjum")
+
+[node name="Core" type="Sprite2D" parent="FullBody"]
+use_parent_material = true
+texture = ExtResource("2_w3oa5")
+
+[node name="MuzzleTop" type="Marker2D" parent="FullBody"]
+position = Vector2(0, -128)
+rotation = -3.14159
+
+[node name="MuzzleBottom" type="Marker2D" parent="FullBody"]
+position = Vector2(0, 128)
+
+[node name="AggroBound" parent="." instance=ExtResource("5_vv74n")]
+AggroWidth = 3600
+AggroHeight = 3600
+
+[node name="DeathDelay" parent="." instance=ExtResource("3_wytnw")]
+Delay = 5.0
+
+[node name="Firerate" type="Timer" parent="."]
+
+[node name="GammaGun" parent="." instance=ExtResource("6_j41kf")]
+GunInfo = ExtResource("8_5hp0q")
+
+[node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("6_at56l")]
+CollisionType = 2
+Collider = NodePath("..")
+
+[node name="Meleeable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("7_yfax6")]
+Collider = NodePath("..")
+
+[node name="HitFlashHandler" parent="." instance=ExtResource("8_rfo1l")]
+Duration = 0.25
+
+[node name="UncalibrationUI" parent="." node_paths=PackedStringArray("Body") instance=ExtResource("9_ckuu5")]
+BoxSize = 512
+Body = NodePath("..")

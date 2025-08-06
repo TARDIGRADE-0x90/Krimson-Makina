@@ -12,7 +12,7 @@ signal new_target_hit(title: String, current_hp: float, max_hp: float)
 signal enemy_uncalibrated
 signal target_destroyed
 
-signal execution_ready(target: Vector2, target_body: Node2D)
+signal execution_ready(target_body: Node2D)
 signal execution_unready
 signal execution_initiated(body: Node2D)
 signal execution_struck(body: Node2D)

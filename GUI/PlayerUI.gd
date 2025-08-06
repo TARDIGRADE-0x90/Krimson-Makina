@@ -3,7 +3,10 @@ class_name PlayerUI
 
 """
 do later -
-let WeaponHeat panel blink a bit upon reaching 0 before clearing
+	let WeaponHeat panel blink a bit upon reaching 0 before clearing
+	
+	display weapon cooldown (CYCLING...) with vertical bar to left of auxiliary heat
+	let the text for this also be vertical
 """
 
 const MSG_IDLE: String = "OPTICAL FEED :: ACTIVE"

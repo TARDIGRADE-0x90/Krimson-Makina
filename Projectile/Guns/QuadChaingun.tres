@@ -1,6 +1,8 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=2 format=3 uid="uid://kuqhcmh1rxoy"]
+[gd_resource type="Resource" script_class="GunData" load_steps=4 format=3 uid="uid://kuqhcmh1rxoy"]
 
 [ext_resource type="Script" path="res://Projectile/GunData.gd" id="1_8w7y7"]
+[ext_resource type="Texture2D" uid="uid://b2bo06lpwoosd" path="res://Assets/guillotine-quadchaingun.png" id="1_uo41b"]
+[ext_resource type="Resource" uid="uid://brsdp16dmltpn" path="res://Projectile/EnemyProjectiles/UraniumRound.tres" id="2_fycij"]
 
 [resource]
 script = ExtResource("1_8w7y7")
@@ -8,6 +10,8 @@ FiringPattern = 2
 Shots = 4
 FireRate = 0.05
 PoolSize = 128
-HeatRange = Vector2(0, 0)
+HeatRange = Vector2(7.3, 10.8)
 Spread = -1.0
 Offset = 120.0
+ShotData = ExtResource("2_fycij")
+PlayerGunVisual = ExtResource("1_uo41b")

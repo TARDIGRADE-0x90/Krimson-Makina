@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://gju4oyyv6dta"]
+
+[ext_resource type="Script" path="res://AggroBound.gd" id="1_s70rx"]
+
+[node name="AggroBound" type="Node2D"]
+script = ExtResource("1_s70rx")

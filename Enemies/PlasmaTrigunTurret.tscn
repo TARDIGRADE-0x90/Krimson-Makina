@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cpbfnumyppfm7"]
+[gd_scene load_steps=16 format=3 uid="uid://cpbfnumyppfm7"]
 
 [ext_resource type="Script" path="res://Enemies/PlasmaTrigunTurret.gd" id="1_f3274"]
 [ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="2_b2r0b"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://dq1utibhjvpsr" path="res://Assets/turret_base.png" id="4_g2bmg"]
 [ext_resource type="Texture2D" uid="uid://menr1trsc80q" path="res://Assets/plasma_shotgun_gun.png" id="5_0om4f"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="6_hb6ao"]
-[ext_resource type="Resource" uid="uid://r33v0q0km25v" path="res://Projectile/EnemyProjectiles/PlasmaShot.tres" id="7_fhqag"]
 [ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="8_iq04c"]
 [ext_resource type="Resource" uid="uid://bi0os3gplg078" path="res://Projectile/Guns/PlasmaGun.tres" id="8_u04wr"]
 [ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="9_nprw4"]
@@ -35,10 +34,8 @@ MachineTitle = "F3-HYDRA"
 
 [node name="AggroCast" parent="." instance=ExtResource("2_nkiup")]
 CastMagnitude = 3200.0
-AggroWidth = 8000
-AggroHeight = 8000
-TickCap = 120
-IntervalRange = Vector2(8, 16)
+TickCap = 60
+IntervalRange = Vector2(4, 16)
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_nn2xq")
@@ -70,7 +67,6 @@ position = Vector2(96, 96)
 rotation = 0.261799
 
 [node name="PlasmaGun" parent="." instance=ExtResource("6_hb6ao")]
-ShotData = ExtResource("7_fhqag")
 GunInfo = ExtResource("8_u04wr")
 
 [node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("8_iq04c")]

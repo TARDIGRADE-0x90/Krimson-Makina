@@ -12,7 +12,7 @@ const INITIAL_FLASH: float = 0.85
 @export var FlashTimer: Timer
 @export var FlashColor: Color = Color(1, 1, 1, 1)
 
-var sprites: Array[Sprite2D]
+var sprites: Array[Node2D]
 var shaders_present: bool = false
 var flash_tweak: float = 1.0
 
@@ -23,9 +23,9 @@ func _process(delta) -> void:
 	if not FlashTimer.is_stopped():
 		flash_sprites()
 
-func assign_sprites(args: Array[Sprite2D]) -> void:
+func assign_sprites(args: Array[Node2D]) -> void:
 	for i in range(args.size()):
-		assert(is_instance_of(args[i], Sprite2D), ERR_INVALID_TYPE)
+		assert(is_instance_of(args[i], Node2D), ERR_INVALID_TYPE)
 		sprites.append(args[i])
 		
 		if !has_shader_material(args[i]):
@@ -61,7 +61,7 @@ func update_flash_tweak() -> void:
 				sprites[i].material.set_shader_parameter(FLASH_PARAMETER, flash_tweak)
 				sprites[i].material.set_shader_parameter(FLASH_COLOR, FlashColor)
 
-func has_shader_material(sprite: Sprite2D) -> bool:
+func has_shader_material(sprite: Node2D) -> bool:
 	if sprite.material: #confirm a material has been set
 		if is_instance_of(sprite.material, ShaderMaterial):
 			shaders_present = true

@@ -1,6 +1,8 @@
-[gd_resource type="Resource" script_class="GunData" load_steps=2 format=3 uid="uid://bkvin8f8pc0ms"]
+[gd_resource type="Resource" script_class="GunData" load_steps=4 format=3 uid="uid://bkvin8f8pc0ms"]
 
+[ext_resource type="Texture2D" uid="uid://dtgo0waegi8vk" path="res://Assets/guillotine-laser-cannon.png" id="1_4bcjl"]
 [ext_resource type="Script" path="res://Projectile/GunData.gd" id="1_uyu1c"]
+[ext_resource type="Resource" uid="uid://c6j3hoksfcsh5" path="res://Projectile/EnemyProjectiles/LaserShot.tres" id="2_iqu2j"]
 
 [resource]
 script = ExtResource("1_uyu1c")
@@ -8,6 +10,8 @@ FiringPattern = 1
 Shots = 5
 FireRate = 1.4
 PoolSize = 64
-HeatRange = Vector2(0, 0)
+HeatRange = Vector2(31.4, 40.2)
 Spread = 0.4
 Offset = -1.0
+ShotData = ExtResource("2_iqu2j")
+PlayerGunVisual = ExtResource("1_4bcjl")

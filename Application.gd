@@ -15,7 +15,7 @@ func change_game_state(state: int) -> void:
 	game_state = state
 	match game_state:
 		Global.GAME_STATES.GAME_LOOP: 
-			load_scene(FilePaths.MAIN_LEVEL)
+			load_scene(FilePaths.RED_LEVEL)
 		Global.GAME_STATES.START_SCREEN: 
 			load_scene(FilePaths.START_SCREEN)
 		_:

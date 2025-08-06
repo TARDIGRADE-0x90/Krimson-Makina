@@ -31,6 +31,7 @@ const DEATH_DELAY: float = 5.0
 var target: Vector2
 var health: float = BASE_HEALTH
 var rotation_rate: float = ROTATION_RATE
+var aggroed: bool = false
 var uncalibrated: bool = false
 var destroyed: bool = false
 
@@ -47,15 +48,15 @@ func _ready() -> void:
 	Events.execution_initiated.connect(prepare_to_die)
 	Events.execution_struck.connect(execute)
 
-func _physics_process(delta) -> void:
+func _physics_process(delta: float) -> void:
 	if Global.player:
 		update_target(Global.player_position)
 	
-	if _AggroCast.is_aggroed():
+	if _AggroCast.is_aggroed() || aggroed:
 		smooth_to_target(delta)
-	
-	if Firerate.is_stopped() and _AggroCast.is_aggroed():
-		fire_cannon()
+		
+		if Firerate.is_stopped():
+			fire_cannon()
 
 func initialize_firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
@@ -77,6 +78,9 @@ func fire_cannon() -> void:
 
 var crit_query: float = 0.0
 func read_damage(amount: float, crit: float = 0.0) -> void:
+	if !aggroed:
+		aggroed = true
+	
 	health -= amount
 	
 	if health <= 0:

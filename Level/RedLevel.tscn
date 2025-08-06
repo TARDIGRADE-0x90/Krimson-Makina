@@ -1,0 +1,105 @@
+[gd_scene load_steps=10 format=3 uid="uid://le23duwh8y8f"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_d6cyv"]
+[ext_resource type="PackedScene" uid="uid://cjbci3qdvoae2" path="res://Level/RedLevelLayout.tscn" id="2_r37jr"]
+[ext_resource type="PackedScene" uid="uid://bn834txfdx660" path="res://Player/Guillotine-07.tscn" id="3_oypgq"]
+[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_0com1"]
+[ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="5_hk084"]
+[ext_resource type="PackedScene" uid="uid://cp3mgj3s0d6r8" path="res://Enemies/LaserShotgunTurret.tscn" id="6_ormva"]
+[ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="7_susgh"]
+[ext_resource type="PackedScene" uid="uid://bd402lrwxwgvg" path="res://Enemies/QuadChaingunTurret.tscn" id="8_j4cnb"]
+[ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="9_k4i8g"]
+
+[node name="RedLevel" type="Node"]
+script = ExtResource("1_d6cyv")
+
+[node name="RedLevelLayout" parent="." instance=ExtResource("2_r37jr")]
+
+[node name="Guillotine-07" parent="." instance=ExtResource("3_oypgq")]
+position = Vector2(1151, 4218)
+
+[node name="PlayerCamera" parent="." instance=ExtResource("4_0com1")]
+position = Vector2(967, -1573)
+
+[node name="PlayerUI" parent="." instance=ExtResource("5_hk084")]
+
+[node name="LaserShotgunTurret" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(211, 220)
+
+[node name="PlasmaTrigunTurret" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(3812, 240)
+
+[node name="PlasmaTrigunTurret2" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(5911, 1350)
+
+[node name="PlasmaTrigunTurret3" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(8131, 223)
+
+[node name="LaserShotgunTurret2" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(19017, 1195)
+
+[node name="LaserShotgunTurret3" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(9464, 4285)
+
+[node name="PlasmaTrigunTurret4" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(11309, 3274)
+
+[node name="LaserShotgunTurret4" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(12793, 2035)
+
+[node name="QuadChaingunTurret" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(10295, -1144)
+
+[node name="LaserShotgunTurret5" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(20580, 4809)
+
+[node name="QuadChaingunTurret2" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(21534, 3445)
+
+[node name="QuadChaingunTurret3" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(18290, 3445)
+
+[node name="PlasmaTrigunTurret5" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(17178, 2206)
+
+[node name="PlasmaTrigunTurret6" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(17203, 4819)
+
+[node name="PlasmaTrigunTurret7" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(22746, 1820)
+
+[node name="LaserShotgunTurret6" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(19098, 5654)
+
+[node name="LaserShotgunTurret7" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(20544, 2118)
+
+[node name="QuadChaingunTurret4" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(27593, 4177)
+
+[node name="QuadChaingunTurret5" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(30456, 2835)
+
+[node name="LaserShotgunTurret8" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(24173, 4837)
+
+[node name="LaserShotgunTurret9" parent="." instance=ExtResource("6_ormva")]
+position = Vector2(24200, 2376)
+
+[node name="QuadChaingunTurret6" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(24540, 5663)
+
+[node name="QuadChaingunTurret7" parent="." instance=ExtResource("8_j4cnb")]
+position = Vector2(24441, 1272)
+
+[node name="PlasmaTrigunTurret8" parent="." instance=ExtResource("7_susgh")]
+position = Vector2(22722, 5313)
+
+[node name="GeminiGunner" parent="." instance=ExtResource("9_k4i8g")]
+position = Vector2(9335, -3056)
+
+[node name="GeminiGunner2" parent="." instance=ExtResource("9_k4i8g")]
+position = Vector2(10960, -4824)
+
+[node name="GeminiGunner3" parent="." instance=ExtResource("9_k4i8g")]
+position = Vector2(9434, -6620)

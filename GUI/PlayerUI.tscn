@@ -169,6 +169,7 @@ offset_bottom = 2.0
 grow_horizontal = 0
 grow_vertical = 0
 rotation = 3.14159
+mouse_filter = 2
 color = Color(1, 0.717647, 0.611765, 0.580392)
 
 [node name="AuxiliaryHeatPanel" type="Control" parent="."]
@@ -191,6 +192,7 @@ grow_vertical = 2
 rotation = -3.14159
 pivot_offset = Vector2(16, 90)
 size_flags_horizontal = 4
+mouse_filter = 2
 color = Color(1, 0.603922, 0.486275, 0.419608)
 
 [node name="AuxiliaryHeatVisual" type="MarginContainer" parent="AuxiliaryHeatPanel"]
@@ -210,6 +212,7 @@ theme_override_constants/margin_bottom = 120
 custom_minimum_size = Vector2(64, 4)
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 2
 color = Color(1, 1, 1, 0.784314)
 
 [node name="OverheatWarning" type="Label" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
@@ -248,6 +251,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(64, 4)
 layout_mode = 2
 size_flags_vertical = 8
+mouse_filter = 2
 color = Color(1, 1, 1, 0.784314)
 
 [node name="MarginContainer" type="MarginContainer" parent="AuxiliaryHeatPanel"]
