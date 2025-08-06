@@ -526,6 +526,7 @@ func handle_execution() -> void:
 	animate_execution_movement()
 
 func clear_execution() -> void:
+	execution_body = null
 	execution_thrusted = false
 	executing = false
 	
