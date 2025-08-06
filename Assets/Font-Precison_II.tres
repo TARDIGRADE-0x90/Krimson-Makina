@@ -6375,6 +6375,24 @@ cache/218/24/0/kerning_overrides/72/0 = Vector2(0, 0)
 cache/218/24/0/kerning_overrides/16/0 = Vector2(0, 0)
 cache/218/24/0/kerning_overrides/72/16 = Vector2(0, 0)
 cache/218/24/0/kerning_overrides/24/0 = Vector2(0, 0)
+cache/219/variation_coordinates = {}
+face_index = null
+embolden = null
+transform = null
+cache/219/24/0/ascent = 0.0
+cache/219/24/0/descent = 0.0
+cache/219/24/0/underline_position = 0.0
+cache/219/24/0/underline_thickness = 0.0
+cache/219/24/0/scale = 1.0
+cache/219/24/0/kerning_overrides/24/0 = Vector2(0, 0)
+cache/219/24/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/219/16/0/ascent = 0.0
+cache/219/16/0/descent = 0.0
+cache/219/16/0/underline_position = 0.0
+cache/219/16/0/underline_thickness = 0.0
+cache/219/16/0/scale = 1.0
+cache/219/16/0/kerning_overrides/24/0 = Vector2(0, 0)
+cache/219/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [resource]
 base_font = SubResource("FontFile_bo17v")

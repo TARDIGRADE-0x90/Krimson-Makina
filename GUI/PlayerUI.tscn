@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://btojetc84kpdp"]
+[gd_scene load_steps=16 format=3 uid="uid://btojetc84kpdp"]
 
 [ext_resource type="Script" path="res://GUI/PlayerUI.gd" id="1_mbxyd"]
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_gei3a"]
+[ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="3_3g6s7"]
 [ext_resource type="PackedScene" uid="uid://t32j02e4nyx2" path="res://GUI/FPSLabel.tscn" id="3_jpwls"]
+[ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="4_6ie41"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yebyq"]
 font = ExtResource("2_gei3a")
@@ -35,11 +37,11 @@ outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_v5r0y"]
-font = ExtResource("2_gei3a")
-font_size = 24
-font_color = Color(1, 0.431373, 0, 1)
+font = ExtResource("3_3g6s7")
+font_size = 18
+font_color = Color(1, 0.682353, 0, 1)
 outline_size = 4
-outline_color = Color(0.705882, 0.0784314, 0.164706, 1)
+outline_color = Color(0.905882, 0, 0, 1)
 shadow_size = 20
 shadow_color = Color(0, 0, 0, 1)
 
@@ -59,6 +61,11 @@ outline_size = 2
 font = ExtResource("2_gei3a")
 font_color = Color(1, 0.835294, 0.596078, 1)
 shadow_size = 12
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_evf64"]
+font = ExtResource("4_6ie41")
+shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
 [node name="PlayerUI" type="CanvasLayer"]
@@ -163,7 +170,7 @@ grow_vertical = 0
 rotation = 3.14159
 color = Color(1, 0.717647, 0.611765, 0.580392)
 
-[node name="WeaponHeatPanel" type="Control" parent="."]
+[node name="AuxiliaryHeatPanel" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -172,31 +179,39 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="WeaponHeatBar" type="ColorRect" parent="WeaponHeatPanel"]
-custom_minimum_size = Vector2(24, 0)
+[node name="AuxiliaryHeatBar" type="ColorRect" parent="AuxiliaryHeatPanel"]
+custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
-offset_left = 170.0
-offset_top = 620.0
-offset_right = 194.0
-offset_bottom = 760.0
+offset_left = 144.0
+offset_top = 420.0
+offset_right = 176.0
+offset_bottom = 570.0
 grow_vertical = 2
-rotation = 3.14159
+rotation = -3.14159
+pivot_offset = Vector2(16, 90)
 size_flags_horizontal = 4
 color = Color(1, 0.603922, 0.486275, 0.419608)
 
-[node name="WeaponHeatLimit" type="ColorRect" parent="WeaponHeatPanel"]
+[node name="AuxiliaryHeatVisual" type="MarginContainer" parent="AuxiliaryHeatPanel"]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 138.0
-offset_top = 120.0
-offset_right = 178.0
-offset_bottom = 124.0
-grow_vertical = 2
-color = Color(1, 1, 1, 0.392157)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -300.0
+offset_right = 272.0
+grow_vertical = 0
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 120
 
-[node name="OverheatWarning" type="Label" parent="WeaponHeatPanel/WeaponHeatLimit"]
+[node name="AuxiliaryHeatLimit" type="ColorRect" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
+custom_minimum_size = Vector2(64, 4)
+layout_mode = 2
+size_flags_vertical = 0
+color = Color(1, 1, 1, 0.784314)
+
+[node name="OverheatWarning" type="Label" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -206,10 +221,12 @@ offset_top = 64.0
 offset_right = 132.0
 offset_bottom = 108.0
 grow_horizontal = 2
-text = "[! OVERHEATING !]"
+text = "OVERHEATING"
 label_settings = SubResource("LabelSettings_v5r0y")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="WeaponMaxHeat" type="Label" parent="WeaponHeatPanel/WeaponHeatLimit"]
+[node name="AuxiliaryMaxHeat" type="Label" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -221,12 +238,18 @@ offset_top = -34.0
 offset_right = 71.5
 grow_horizontal = 2
 grow_vertical = 0
-text = "MAX: 144° C"
+text = "MAX: 150° C"
 label_settings = SubResource("LabelSettings_r3nsp")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="WeaponHeatPanel"]
+[node name="AuxiliaryHeatBase" type="ColorRect" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
+custom_minimum_size = Vector2(64, 4)
+layout_mode = 2
+size_flags_vertical = 8
+color = Color(1, 1, 1, 0.784314)
+
+[node name="MarginContainer" type="MarginContainer" parent="AuxiliaryHeatPanel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -234,34 +257,70 @@ anchor_bottom = 1.0
 offset_top = -552.0
 offset_right = 292.0
 grow_vertical = 0
-theme_override_constants/margin_left = 24
+theme_override_constants/margin_left = 48
 theme_override_constants/margin_top = 480
 theme_override_constants/margin_right = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="WeaponHeatPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AuxiliaryHeatPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="WeaponHeatHeader" type="Label" parent="WeaponHeatPanel/MarginContainer/VBoxContainer"]
+[node name="AuxiliaryHeatHeader" type="Label" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "AUXILIARY HEAT"
 label_settings = SubResource("LabelSettings_haf7r")
 horizontal_alignment = 1
 
-[node name="WeaponHeat" type="Label" parent="WeaponHeatPanel/MarginContainer/VBoxContainer"]
+[node name="AuxiliaryHeat" type="Label" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "00.00° C"
 label_settings = SubResource("LabelSettings_xlmte")
+horizontal_alignment = 1
+
+[node name="CriticalPanel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CriticalPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -62.5
+offset_right = 62.5
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 20
+
+[node name="CriticalFlicker" type="Label" parent="CriticalPanel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "CRITICAL  STRIKE"
+label_settings = SubResource("LabelSettings_evf64")
 horizontal_alignment = 1
 
 [node name="BattleDelay" type="Timer" parent="."]
 
 [node name="DestroyFlicker" type="Timer" parent="."]
 
-[node name="FPSLabel" parent="." instance=ExtResource("3_jpwls")]
+[node name="CriticalFlicker" type="Timer" parent="."]
+
+[node name="FPS" type="MarginContainer" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
-anchor_bottom = 0.0
-offset_left = -31.0
-offset_bottom = 28.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
 grow_horizontal = 0
-grow_vertical = 1
+size_flags_horizontal = 4
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="FPSLabel" parent="FPS" instance=ExtResource("3_jpwls")]
+layout_mode = 2

@@ -32,10 +32,10 @@ const EXECUTION_TIME: float = 0.8
 
 const BLADE_BASE_CRIT: float = 0.05
 const GUN_BASE_CRIT: float = 0.02
-const CRIT_MOD_DEFAULT: float = 10.0
-const CRIT_MOD_FOCUS: float = 10.25
-const CRIT_MOD_RUSH: float = 10.5
-const CRIT_MOD_EXECUTING: float = 12.0
+const CRIT_MOD_DEFAULT: float = 1.0
+const CRIT_MOD_FOCUS: float = 1.25
+const CRIT_MOD_RUSH: float = 1.5
+const CRIT_MOD_EXECUTING: float = 2.0
 
 const BLADE_BASE_DAMAGE: float = 25.0
 const THRUST_DAMAGE_MODIFIER: float = 0.8
@@ -347,9 +347,10 @@ func parse_input_attack(event: InputEvent) -> void:
 		gun_held = false
 
 func parse_input_execution(event: InputEvent) -> void:
-	#do later - add conditional for execution_ready, true if cursor is within a "Vulnerable" vec2 by vec2 bound
-	if event.is_action_pressed(Inputs.EXECUTE) and !executing and can_execute:
-		trigger_execution()
+	if event.is_action_pressed(Inputs.EXECUTE):
+		if execution_body:
+			if !execution_body.destroyed and !executing and can_execute:
+				trigger_execution()
 
 func handle_looking() -> void: #remember that this method, as it is now, is literally running every frame
 	if move_state == MOVEMENT_STATES.FOCUS and !executing:

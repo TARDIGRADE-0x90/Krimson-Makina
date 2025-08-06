@@ -101,6 +101,7 @@ func prepare_to_die(body_arg: Node2D) -> void:
 	if self != body_arg:
 		return
 	else:
+		_UncalibrationUI.close()
 		set_physics_process(false)
 
 func execute(body_arg: Node2D) -> void:

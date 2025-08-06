@@ -4,7 +4,7 @@ class_name UncalibrationUI
 signal cleared
 
 const WINDOW: float = 5.0
-const TARGET_THRESHOLD: int = 96
+const TARGET_THRESHOLD: int = 128
 
 @export var BoxSize: int
 @export var Body: Node2D
@@ -67,8 +67,14 @@ func trigger() -> void:
 	active = true
 	set_visible(true)
 	UncalibrationWindow.start()
+	Events.enemy_uncalibrated.emit()
 
 func reset() -> void:
 	cleared.emit()
 	active = false
 	set_visible(false)
+
+func close() -> void:
+	set_visible(false)
+	set_process(false)
+	set_physics_process(false)
