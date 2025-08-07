@@ -1,0 +1,194 @@
+[gd_scene load_steps=5 format=3 uid="uid://cs0fbxw2mf0ma"]
+
+[ext_resource type="Texture2D" uid="uid://c02nradhgbqir" path="res://Assets/gold_undergrating.png" id="1_ahmb5"]
+[ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="2_gd5hu"]
+[ext_resource type="Texture2D" uid="uid://dlvg1kdk4xtpg" path="res://Assets/gold_wall.png" id="3_2pg0j"]
+[ext_resource type="Texture2D" uid="uid://cij1jiswieuo4" path="res://Assets/gold_beam.png" id="4_ns20v"]
+
+[node name="GoldLevelIILayout" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("1_ahmb5")
+polygon = PackedVector2Array(-3643, -2707, 20566, -2779, 20494, 9074, -3607, 8967)
+
+[node name="Wall" parent="." instance=ExtResource("2_gd5hu")]
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(-2541, -1291, 18807, -1373, 18879, 3308, 21943, 3318, 22362, -5051, -8222, -5051, -8671, 11795, 22090, 12051, 21938, 3333, 18875, 3326, 18927, 7905, -2481, 8049)
+
+[node name="WallOutline" parent="Wall" index="1"]
+points = PackedVector2Array(-2541, -1291, 18807, -1373, 18879, 3308, 21943, 3318, 22362, -5051, -8222, -5051, -8671, 11795, 22090, 12051, 21938, 3333, 18875, 3326, 18927, 7905, -2481, 8049, -2541, -1291)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall2" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-323, -121)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall2" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(17784, 5305, 17121, 5288, 15569, 6432, 15413, 7047)
+
+[node name="WallOutline" parent="Wall2" index="1"]
+points = PackedVector2Array(17784, 5305, 17121, 5288, 15569, 6432, 15413, 7047, 17784, 5305)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall12" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-14959, -1022)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall12" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(16776, 6989, 16701, 5721, 16323, 5826, 16339, 7065)
+
+[node name="WallOutline" parent="Wall12" index="1"]
+points = PackedVector2Array(16776, 6989, 16701, 5721, 16323, 5826, 16339, 7065, 16776, 6989)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall13" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(484, -5802)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall13" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(16776, 6989, 16701, 5721, 16323, 5826, 16339, 7065)
+
+[node name="WallOutline" parent="Wall13" index="1"]
+points = PackedVector2Array(16776, 6989, 16701, 5721, 16323, 5826, 16339, 7065, 16776, 6989)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall14" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-16542, -5515)
+
+[node name="WallVisual" parent="Wall14" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(16749, 7426, 16873, 6693, 17662, 6712, 17672, 6418, 16768, 6389, 16730, 5847, 16323, 5826, 16273, 6389, 15484, 6379, 15493, 6722, 16216, 6741, 16273, 7502)
+
+[node name="WallOutline" parent="Wall14" index="1"]
+points = PackedVector2Array(16749, 7426, 16873, 6693, 17662, 6712, 17672, 6418, 16768, 6389, 16730, 5847, 16323, 5826, 16273, 6389, 15484, 6379, 15493, 6722, 16216, 6741, 16273, 7502, 16749, 7426)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall3" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-4364, -4164)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall3" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall3" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall4" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-6248, -5632)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall4" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall4" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall5" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-6208, -2242)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall5" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall5" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall7" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-8361, -964)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall7" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall7" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall8" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-8348, -6870)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall8" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall8" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall6" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-8361, -4058)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall6" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall6" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall9" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-10218, -2202)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall9" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall9" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall10" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-11859, -3991)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall10" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall10" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[node name="Wall11" parent="." instance=ExtResource("2_gd5hu")]
+position = Vector2(-10339, -5632)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall11" index="0"]
+texture = ExtResource("3_2pg0j")
+polygon = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886)
+
+[node name="WallOutline" parent="Wall11" index="1"]
+points = PackedVector2Array(18030, 7198, 17437, 6659, 16862, 7216, 17422, 7886, 18030, 7198)
+texture = ExtResource("4_ns20v")
+
+[editable path="Wall"]
+[editable path="Wall2"]
+[editable path="Wall12"]
+[editable path="Wall13"]
+[editable path="Wall14"]
+[editable path="Wall3"]
+[editable path="Wall4"]
+[editable path="Wall5"]
+[editable path="Wall7"]
+[editable path="Wall8"]
+[editable path="Wall6"]
+[editable path="Wall9"]
+[editable path="Wall10"]
+[editable path="Wall11"]

@@ -35,7 +35,7 @@ MachineTitle = "F3-HYDRA"
 [node name="AggroCast" parent="." instance=ExtResource("2_nkiup")]
 CastMagnitude = 3200.0
 TickCap = 60
-IntervalRange = Vector2(4, 16)
+IntervalRange = Vector2i(4, 16)
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_nn2xq")

@@ -16,3 +16,5 @@ signal execution_ready(target_body: Node2D)
 signal execution_unready
 signal execution_initiated(body: Node2D)
 signal execution_struck(body: Node2D)
+
+signal all_clear

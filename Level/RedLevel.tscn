@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://le23duwh8y8f"]
+[gd_scene load_steps=9 format=3 uid="uid://le23duwh8y8f"]
 
 [ext_resource type="Script" path="res://Level/Level.gd" id="1_d6cyv"]
 [ext_resource type="PackedScene" uid="uid://cjbci3qdvoae2" path="res://Level/RedLevelLayout.tscn" id="2_r37jr"]
-[ext_resource type="PackedScene" uid="uid://bn834txfdx660" path="res://Player/Guillotine-07.tscn" id="3_oypgq"]
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_0com1"]
 [ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="5_hk084"]
 [ext_resource type="PackedScene" uid="uid://cp3mgj3s0d6r8" path="res://Enemies/LaserShotgunTurret.tscn" id="6_ormva"]
@@ -10,13 +9,14 @@
 [ext_resource type="PackedScene" uid="uid://bd402lrwxwgvg" path="res://Enemies/QuadChaingunTurret.tscn" id="8_j4cnb"]
 [ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="9_k4i8g"]
 
-[node name="RedLevel" type="Node"]
+[node name="RedLevel" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_d6cyv")
+PlayerSpawn = NodePath("PlayerSpan")
 
 [node name="RedLevelLayout" parent="." instance=ExtResource("2_r37jr")]
 
-[node name="Guillotine-07" parent="." instance=ExtResource("3_oypgq")]
-position = Vector2(1151, 4218)
+[node name="PlayerSpan" type="Marker2D" parent="."]
+position = Vector2(1057, 4424)
 
 [node name="PlayerCamera" parent="." instance=ExtResource("4_0com1")]
 position = Vector2(967, -1573)

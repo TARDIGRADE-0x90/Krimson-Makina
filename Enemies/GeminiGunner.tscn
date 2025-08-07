@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Enemies/GeminiGunner.gd" id="1_shpcs"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_4rrjv"]
 [ext_resource type="Texture2D" uid="uid://df4uhw4um4ndd" path="res://Assets/gemini_core.png" id="2_w3oa5"]
-[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="3_wytnw"]
+[ext_resource type="PackedScene" uid="uid://cpihldu12wvhc" path="res://Enemies/DeathDelay.tscn" id="3_wytnw"]
 [ext_resource type="PackedScene" uid="uid://gju4oyyv6dta" path="res://Enemies/AggroBound.tscn" id="5_vv74n"]
 [ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="6_at56l"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="6_j41kf"]
@@ -31,7 +31,7 @@ MachineTitle = "L2-GEMINI"
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_sit25")
 
-[node name="FullBody" type="Sprite2D" parent="."]
+[node name="FullBody" type="Node2D" parent="."]
 material = SubResource("ShaderMaterial_lm3nt")
 
 [node name="TopGun" type="Sprite2D" parent="FullBody"]
@@ -61,7 +61,7 @@ AggroWidth = 3600
 AggroHeight = 3600
 
 [node name="DeathDelay" parent="." instance=ExtResource("3_wytnw")]
-Delay = 5.0
+Delay = 3.0
 
 [node name="Firerate" type="Timer" parent="."]
 

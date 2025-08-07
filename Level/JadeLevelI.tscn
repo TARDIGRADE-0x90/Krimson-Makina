@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://07tsixdmads0"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_0ge3y"]
+[ext_resource type="PackedScene" uid="uid://da4qcouh7h52y" path="res://Level/JadeLevelILayout.tscn" id="1_6by1r"]
+[ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="3_poj3e"]
+[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_jxjru"]
+[ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="5_3664r"]
+[ext_resource type="PackedScene" uid="uid://mobmq4mmq76q" path="res://Enemies/Striker.tscn" id="6_pekcj"]
+
+[node name="JadeLevelI" type="Node" node_paths=PackedStringArray("LevelDelay", "PlayerSpawn", "Enemies")]
+script = ExtResource("1_0ge3y")
+LevelDelay = NodePath("LevelClearWait")
+PlayerSpawn = NodePath("PlayerSpawn")
+Enemies = NodePath("Enemies")
+
+[node name="JadeLevelILayout" parent="." instance=ExtResource("1_6by1r")]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1437, -172)
+
+[node name="PlayerCamera" parent="." instance=ExtResource("4_jxjru")]
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="PlasmaTrigunTurret" parent="Enemies" instance=ExtResource("3_poj3e")]
+position = Vector2(-125, 1178)
+
+[node name="PlasmaTrigunTurret2" parent="Enemies" instance=ExtResource("3_poj3e")]
+position = Vector2(3193, 1208)
+
+[node name="PlasmaTrigunTurret3" parent="Enemies" instance=ExtResource("3_poj3e")]
+position = Vector2(1568, 3478)
+
+[node name="PlasmaTrigunTurret4" parent="Enemies" instance=ExtResource("3_poj3e")]
+position = Vector2(983, 5427)
+
+[node name="PlasmaTrigunTurret5" parent="Enemies" instance=ExtResource("3_poj3e")]
+position = Vector2(2144, 5453)
+
+[node name="LevelClearWait" parent="." instance=ExtResource("5_3664r")]
+Delay = 5.0
+
+[node name="Striker" parent="." instance=ExtResource("6_pekcj")]
+position = Vector2(1585, 1576)

@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://da4qcouh7h52y"]
+
+[ext_resource type="Texture2D" uid="uid://0odg6yg4lx3r" path="res://Assets/jade_undergrating.png" id="1_g15la"]
+[ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="2_8g63s"]
+[ext_resource type="Texture2D" uid="uid://bpnxpl48m3ndg" path="res://Assets/jade_wall.png" id="3_yxdx2"]
+[ext_resource type="Texture2D" uid="uid://dyrbgxjdrf5u5" path="res://Assets/jade_beam.png" id="4_hbapi"]
+
+[node name="JadeLevelILayout" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 2
+texture = ExtResource("1_g15la")
+polygon = PackedVector2Array(-1474, -1372, 5406, -1192, 5025, 7187, -1651, 7270)
+
+[node name="Wall" parent="." instance=ExtResource("2_8g63s")]
+
+[node name="WallVisual" parent="Wall" index="0"]
+texture = ExtResource("3_yxdx2")
+polygon = PackedVector2Array(1637, -445, 3754, -467, 3796, 6407, -627, 6419, -661, -467, 1614, -443, 1597, -3991, -4664, -3979, -4618, 9607, 7794, 9824, 7569, -3979, 1620, -4002)
+
+[node name="WallOutline" parent="Wall" index="1"]
+points = PackedVector2Array(1637, -445, 3754, -467, 3796, 6407, -627, 6419, -661, -467, 1614, -443, 1597, -3991, -4664, -3979, -4618, 9607, 7794, 9824, 7569, -3979, 1620, -4002, 1637, -445)
+texture = ExtResource("4_hbapi")
+
+[node name="WallInterior" parent="." instance=ExtResource("2_8g63s")]
+
+[node name="WallVisual" parent="WallInterior" index="0"]
+texture = ExtResource("3_yxdx2")
+polygon = PackedVector2Array(766, 342, 2313, 345, 2310, 462, 772, 456)
+
+[node name="WallOutline" parent="WallInterior" index="1"]
+points = PackedVector2Array(766, 342, 2313, 345, 2310, 462, 772, 456, 766, 342)
+texture = ExtResource("4_hbapi")
+
+[node name="WallInterior2" parent="." instance=ExtResource("2_8g63s")]
+position = Vector2(12, 1941)
+
+[node name="WallVisual" parent="WallInterior2" index="0"]
+texture = ExtResource("3_yxdx2")
+polygon = PackedVector2Array(1205, 312, 1886, 309, 1875, 469, 1213, 480)
+
+[node name="WallOutline" parent="WallInterior2" index="1"]
+points = PackedVector2Array(1205, 312, 1886, 309, 1875, 469, 1213, 480, 1205, 312)
+texture = ExtResource("4_hbapi")
+
+[node name="WallInterior3" parent="." instance=ExtResource("2_8g63s")]
+position = Vector2(-36, 4039)
+
+[node name="WallVisual" parent="WallInterior3" index="0"]
+texture = ExtResource("3_yxdx2")
+polygon = PackedVector2Array(766, 342, 2313, 345, 2310, 462, 772, 456)
+
+[node name="WallOutline" parent="WallInterior3" index="1"]
+points = PackedVector2Array(766, 342, 2313, 345, 2310, 462, 772, 456, 766, 342)
+texture = ExtResource("4_hbapi")
+
+[editable path="Wall"]
+[editable path="WallInterior"]
+[editable path="WallInterior2"]
+[editable path="WallInterior3"]

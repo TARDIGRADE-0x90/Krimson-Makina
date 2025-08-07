@@ -17,8 +17,6 @@ const SPEED_ROAMING: int = 200
 const SPEED_AGGRO: int = 600
 const SPEED_DEBUFF: float = 0.25
 
-const DEATH_DELAY: float = 5.0
-
 @export var MachineTitle: String
 
 @onready var _UncalibrationUI: UncalibrationUI = $UncalibrationUI
@@ -30,7 +28,7 @@ const DEATH_DELAY: float = 5.0
 @onready var GammaGun: ProjectileManager = $GammaGun
 @onready var Firerate: Timer = $Firerate
 
-@onready var FullBody: Sprite2D = $FullBody
+@onready var FullBody: Node2D = $FullBody
 
 @onready var Gun1: Sprite2D = $FullBody/TopGun
 @onready var Gun2: Sprite2D = $FullBody/BottomGun
@@ -41,11 +39,11 @@ const DEATH_DELAY: float = 5.0
 
 var target: Vector2
 var health: float = BASE_HEALTH
-var damage: float = 0.0 #why do this when I can divide health by max health? because I don't want the division operator, that's why
 
 var last_wall_normal: Vector2
 var move_angle: float
 var speed: float
+var bonus_speed: float
 var spin_rate: int = BASE_SPIN_RATE
 
 var aggroed: bool = false
@@ -57,29 +55,20 @@ func _ready() -> void:
 	
 	initialize_firerate()
 	set_rotation_degrees(randi_range(0, 360))
-	set_velocity(Vector2.from_angle(rotation) * speed)
+	set_velocity(Vector2.from_angle(rotation) * (speed + bonus_speed))
 	
 	_AggroBound.global_position = global_position #safeguard
 	
 	_HitFlashHandler.assign_sprites([FullBody])
 	_Meleeable.melee_detected.connect(read_damage)
 	_Shootable.shot_detected.connect(read_damage)
-	_UncalibrationUI.cleared.connect(func(): uncalibrated = false)
+	_UncalibrationUI.triggered.connect(uncalibrate)
+	_UncalibrationUI.cleared.connect(recalibrate)
 	
 	Events.execution_initiated.connect(prepare_to_die)
 	Events.execution_struck.connect(execute)
 
 func _physics_process(delta: float) -> void:
-	if !aggroed:
-		_AggroBound.set_aggro_target(Global.player_position)
-		_AggroBound.update_bound()
-		
-		if _AggroBound.is_aggroed(): #big condition that runs until player vec is in aggro bound
-			speed = SPEED_AGGRO
-			set_velocity(Vector2.from_angle(rotation) * speed)
-			_AggroBound.stop()
-			aggroed = true
-	
 	if aggroed:
 		spin_guns(delta)
 		
@@ -89,24 +78,47 @@ func _physics_process(delta: float) -> void:
 	if (last_wall_normal != get_wall_normal()):
 		last_wall_normal = get_wall_normal()
 		set_rotation(-get_angle_to(last_wall_normal))
-		set_velocity(Vector2.from_angle(rotation + randf_range(BOUNCE_RANGE.y, BOUNCE_RANGE.x)) * speed)
-
-	_UncalibrationUI.update_target_bound()
+		set_velocity(Vector2.from_angle(rotation + randf_range(BOUNCE_RANGE.y, BOUNCE_RANGE.x)) * (speed + bonus_speed))
+	
 	move_and_slide()
+
+func _process(delta: float) -> void:
+	_UncalibrationUI.update_target_bound()
+	
+	if !aggroed: #big condition that runs until player vec is in aggro bound
+		_AggroBound.set_aggro_target(Global.player_position)
+		_AggroBound.update_bound()
+		
+		if _AggroBound.is_aggroed(): 
+			speed = SPEED_AGGRO
+			set_velocity(Vector2.from_angle(rotation) * (speed + bonus_speed))
+			_AggroBound.stop()
+			aggroed = true
 
 func initialize_firerate() -> void:
 	Firerate.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
 	Firerate.set_wait_time(GammaGun.get_gun().FireRate)
 	Firerate.set_one_shot(true)
 
+var incoming_spin_rate: float
 func spin_guns(delta: float) -> void:
-	FullBody.rotation_degrees += (spin_rate * delta)
+	incoming_spin_rate = spin_rate
+	if uncalibrated: incoming_spin_rate *= SPEED_DEBUFF
+	
+	FullBody.rotation_degrees += (incoming_spin_rate * delta)
 
 func fire() -> void:
 	GammaGun.fire(MuzzleTop.global_position, MuzzleTop.global_rotation + (PI * 0.5))
 	GammaGun.fire(MuzzleBottom.global_position, MuzzleBottom.global_rotation + (PI * 0.5))
 	
 	Firerate.start()
+
+func uncalibrate() -> void:
+	speed *= SPEED_DEBUFF
+
+func recalibrate() -> void:
+	uncalibrated = false
+	speed = SPEED_AGGRO
 
 var crit_query: float = 0.0
 func read_damage(amount: float, crit: float = 0.0) -> void:
@@ -115,7 +127,7 @@ func read_damage(amount: float, crit: float = 0.0) -> void:
 	
 	health -= amount
 	spin_rate += (amount * DAMAGE_SPIN_BUFF)
-	speed += (amount * DAMAGE_SPEED_BUFF)
+	bonus_speed += (amount * DAMAGE_SPEED_BUFF)
 	
 	Firerate.set_wait_time(Firerate.wait_time - DAMAGE_FIRERATE_BUFF)
 	
@@ -136,6 +148,8 @@ func prepare_to_die(body_arg: Node2D) -> void:
 	if self != body_arg:
 		return
 	else:
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
 		_UncalibrationUI.close()
 		set_physics_process(false)
 

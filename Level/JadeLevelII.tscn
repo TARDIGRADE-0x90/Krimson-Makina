@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxht8l8misjhh"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_gj3km"]
+[ext_resource type="PackedScene" uid="uid://c6qdiciuwg3ks" path="res://Level/JadeLevelIILayout.tscn" id="2_2cfo0"]
+[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_wsq88"]
+[ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="5_qlypc"]
+[ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="5_smwyh"]
+
+[node name="JadeLevelII" type="Node" node_paths=PackedStringArray("LevelDelay", "PlayerSpawn", "Enemies")]
+script = ExtResource("1_gj3km")
+LevelDelay = NodePath("LevelClearWait")
+LevelKey = 1
+PlayerSpawn = NodePath("PlayerSpawn")
+Enemies = NodePath("Enemies")
+
+[node name="JadeLevelIILayout" parent="." instance=ExtResource("2_2cfo0")]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(-81, 2253)
+
+[node name="PlayerCamera" parent="." instance=ExtResource("4_wsq88")]
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="PlasmaTrigunTurret" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(4874, 95)
+
+[node name="PlasmaTrigunTurret2" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(4793, 3583)
+
+[node name="PlasmaTrigunTurret3" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(7595, -913)
+
+[node name="PlasmaTrigunTurret4" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(7716, 4630)
+
+[node name="PlasmaTrigunTurret5" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(8703, 1768)
+
+[node name="PlasmaTrigunTurret6" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(15175, 1708)
+
+[node name="PlasmaTrigunTurret7" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(11767, 55)
+
+[node name="PlasmaTrigunTurret8" parent="Enemies" instance=ExtResource("5_qlypc")]
+position = Vector2(11869, 3542)
+
+[node name="LevelClearWait" parent="." instance=ExtResource("5_smwyh")]
+Delay = 5.0

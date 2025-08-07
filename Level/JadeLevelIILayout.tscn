@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6qdiciuwg3ks"]
+
+[ext_resource type="Texture2D" uid="uid://0odg6yg4lx3r" path="res://Assets/jade_undergrating.png" id="1_xncv4"]
+[ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="2_v0dow"]
+[ext_resource type="Texture2D" uid="uid://bpnxpl48m3ndg" path="res://Assets/jade_wall.png" id="3_5478u"]
+[ext_resource type="Texture2D" uid="uid://dyrbgxjdrf5u5" path="res://Assets/jade_beam.png" id="4_h0e66"]
+
+[node name="JadeLevelIILayout" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("1_xncv4")
+polygon = PackedVector2Array(-2863, -5177, 19418, -5393, 19391, 7685, -3078, 8008)
+
+[node name="Wall" parent="." instance=ExtResource("2_v0dow")]
+
+[node name="WallVisual" parent="Wall" index="0"]
+texture = ExtResource("3_5478u")
+polygon = PackedVector2Array(-1482, 1700, -1463, 6313, 17857, 6286, 17762, -2498, -1539, -2403, -1483, 1679, -6417, 1667, -6779, -6211, 22014, -6077, 22565, 9874, -6711, 10134, -6451, 1686)
+
+[node name="WallOutline" parent="Wall" index="1"]
+points = PackedVector2Array(-1482, 1700, -1463, 6313, 17857, 6286, 17762, -2498, -1539, -2403, -1483, 1679, -6417, 1667, -6779, -6211, 22014, -6077, 22565, 9874, -6711, 10134, -6451, 1686, -1482, 1700)
+texture = ExtResource("4_h0e66")
+
+[node name="Wall2" parent="." instance=ExtResource("2_v0dow")]
+
+[node name="WallVisual" parent="Wall2" index="0"]
+texture = ExtResource("3_5478u")
+polygon = PackedVector2Array(1984, 4380, 3106, 3410, 3164, 175, 1927, -985)
+
+[node name="WallOutline" parent="Wall2" index="1"]
+points = PackedVector2Array(1984, 4380, 3106, 3410, 3164, 175, 1927, -985, 1984, 4380)
+texture = ExtResource("4_h0e66")
+
+[editable path="Wall"]
+[editable path="Wall2"]

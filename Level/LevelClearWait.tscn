@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjyg8b25bqojw"]
+
+[ext_resource type="Script" path="res://Level/LevelClearWait.gd" id="1_5s6q4"]
+
+[node name="LevelClearWait" type="Timer"]
+script = ExtResource("1_5s6q4")

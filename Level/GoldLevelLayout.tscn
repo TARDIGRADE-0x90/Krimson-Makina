@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://5jjaogge6n5v"]
+
+[ext_resource type="Texture2D" uid="uid://c02nradhgbqir" path="res://Assets/gold_undergrating.png" id="1_5jcg2"]
+[ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="2_72bxn"]
+[ext_resource type="Texture2D" uid="uid://dlvg1kdk4xtpg" path="res://Assets/gold_wall.png" id="3_po3cl"]
+[ext_resource type="Texture2D" uid="uid://cij1jiswieuo4" path="res://Assets/gold_beam.png" id="4_phmn1"]
+
+[node name="GoldLevelLayout" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("1_5jcg2")
+texture_scale = Vector2(0.75, 1.2)
+polygon = PackedVector2Array(-3092, -1234, 9309, -1320, 9152, 6035, -3007, 5551)
+
+[node name="Wall" parent="." instance=ExtResource("2_72bxn")]
+
+[node name="WallVisual" parent="Wall" index="0"]
+texture = ExtResource("3_po3cl")
+polygon = PackedVector2Array(5884, 261, 5904, 3828, 234, 3900, 276, 221, -3655, 202, -3537, 6220, 9352, 6648, 9622, -1676, -3727, -1612, -3653, 182)
+
+[node name="WallOutline" parent="Wall" index="1"]
+points = PackedVector2Array(5884, 261, 5904, 3828, 234, 3900, 276, 221, -3655, 202, -3537, 6220, 9352, 6648, 9622, -1676, -3727, -1612, -3653, 182, 5884, 261)
+texture = ExtResource("4_phmn1")
+
+[editable path="Wall"]

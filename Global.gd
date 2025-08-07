@@ -1,8 +1,11 @@
 extends Node
 
+signal player_ref_updated(ref: Player)
+
 const ERR_TIMEOUT_METHOD_INVALID: String = "Error in Global.gd: timeout_method invalid"
 
 enum GAME_STATES {START_SCREEN, GAME_LOOP}
+enum LEVEL_KEYS {JADE_I, JADE_II, JADE_III, GOLD_I, GOLD_II, GOLD_III, RUBY_I, RUBY_II, RUBY_III}
 
 const META_SHOOTABLE_REF: String = "shot_detection_reference"
 const META_MELEEABLE_REF: String = "melee_detection_reference"
@@ -12,11 +15,17 @@ const SHOOT_DETECTOR: String = "Shootable"
 
 var current_level: Node
 var active_camera: MainCamera
-var player: Player
 var player_position = Vector2(0, 0) #allows for initialization even as the player is not loaded in yet
+var player_ref: PackedScene
+var player: Player
+
+var level_index: int = LEVEL_KEYS.JADE_I
 
 func _ready() -> void:
-	pass
+	player_ref_updated.connect(update_player_ref)
+
+func update_player_ref(ref: PackedScene) -> void:
+	player_ref = ref
 
 #Makes node a child of another given node (preferrably the root scene)
 func add_child_to_owner(child: Variant, node: Variant) -> void: 
@@ -50,17 +59,3 @@ func mirrored_half(size: int) -> Array[int]: #O(n)
 
 func is_vector_in_bound(query: Vector2, bound: Vector4) -> bool:
 	return query.x >= bound.x && query.x <= bound.y && query.y >= bound.z && query.y <= bound.w
-
-## Apply this for bound checking for enemy aggroing
-"""
-const BOUND_WIDTH: int = 200
-const BOUND_HEIGHT: int = 400
-
-var test_bound: Vector4
-func update_bound() -> void:
-	test_bound = Vector4(
-	(-BOUND_WIDTH * 0.5) + global_position.x, 
-	(BOUND_HEIGHT * 0.5) + global_position.y, 
-	(BOUND_WIDTH * 0.5)  + global_position.x, 
-	(BOUND_HEIGHT * 0.5) + global_position.y)
-"""

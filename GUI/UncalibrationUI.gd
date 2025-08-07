@@ -1,6 +1,7 @@
 extends Control
 class_name UncalibrationUI
 
+signal triggered
 signal cleared
 
 const WINDOW: float = 5.0
@@ -74,6 +75,7 @@ func trigger() -> void:
 	active = true
 	set_visible(true)
 	UncalibrationWindow.start()
+	triggered.emit()
 	Events.enemy_uncalibrated.emit()
 
 func reset() -> void:

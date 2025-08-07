@@ -5,10 +5,10 @@ class_name AggroCast
 @export var AggroTarget: Vector2
 @export var AggroBody: Node
 @export var TickCap: int
-@export var IntervalRange: Vector2
+@export var IntervalRange: Vector2i
 
 var aggro_cast_ticks: int = 0
-var aggro_interval = Vector2()
+var aggro_interval = Vector2i()
 var aggroed: bool = false
 
 func _ready() -> void:

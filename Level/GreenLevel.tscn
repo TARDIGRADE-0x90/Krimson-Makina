@@ -1,19 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://do42yial8lces"]
+[gd_scene load_steps=6 format=3 uid="uid://do42yial8lces"]
 
 [ext_resource type="Script" path="res://Level/Level.gd" id="1_bqapj"]
 [ext_resource type="PackedScene" uid="uid://ca5lgf7rf871u" path="res://Level/GreenLevelLayout.tscn" id="1_erkjg"]
-[ext_resource type="PackedScene" uid="uid://bn834txfdx660" path="res://Player/Guillotine-07.tscn" id="2_1qp4t"]
 [ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="3_dkdva"]
 [ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="4_70ggc"]
 [ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="6_g8otq"]
 
-[node name="GreenLevel" type="Node"]
+[node name="GreenLevel" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
 script = ExtResource("1_bqapj")
+PlayerSpawn = NodePath("PlayerSpawn")
 
 [node name="GreenLevelLayout" parent="." instance=ExtResource("1_erkjg")]
 
-[node name="Guillotine-07" parent="." instance=ExtResource("2_1qp4t")]
-position = Vector2(151, -139)
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(32, -242)
 
 [node name="PlayerCamera" parent="." instance=ExtResource("3_dkdva")]
 

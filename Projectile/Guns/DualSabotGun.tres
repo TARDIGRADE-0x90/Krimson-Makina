@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GunData" load_steps=4 format=3 uid="uid://bt2cdu3hvvdju"]
+
+[ext_resource type="Texture2D" uid="uid://ga1pts1epqxp" path="res://Assets/guillotine-dual-sabot.png" id="1_06ca0"]
+[ext_resource type="Script" path="res://Projectile/GunData.gd" id="1_tmqh4"]
+[ext_resource type="Resource" uid="uid://q1wpki5y2ds7" path="res://Projectile/EnemyProjectiles/SabotRound.tres" id="2_yre6f"]
+
+[resource]
+script = ExtResource("1_tmqh4")
+FiringPattern = 2
+Shots = 2
+FireRate = 0.15
+PoolSize = 128
+HeatRange = Vector2(7.2, 11.3)
+Spread = -1.0
+Offset = 200.0
+ShotData = ExtResource("2_yre6f")
+PlayerGunVisual = ExtResource("1_06ca0")

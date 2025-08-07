@@ -122,7 +122,7 @@ func multifire_parallel(start: Vector2, angle: float, shots: int, bullet_offset:
 		current_shot = shot_pool[pool_index]
 		
 		if not current_shot.active:
-			current_shot.global_position = start + (Vector2.from_angle((angle - PI * 0.5 * 1)) * bullet_offset * (i + even_offset))
+			current_shot.global_position = start + (Vector2.from_angle((angle - PI * 0.5)) * bullet_offset * (i + even_offset))
 			current_shot.set_rotation(angle)
 			current_shot.trigger(Vector2.from_angle(angle) * _GunData.ShotData.Speed, dmg_mod, crit_mod)
 			pool_index = (pool_index + 1) % shot_pool.size()

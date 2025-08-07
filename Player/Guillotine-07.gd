@@ -30,6 +30,9 @@ const SPEED_DICT: Dictionary = {
 	MOVEMENT_STATES.RUSH: 3000
 }
 
+const ERR_PACKING_PLAYER: String = "ERROR :: Guillotine-07 - failed to pack scene"
+const PLAYER_PATH: String = "res://Player/Guillotine-07.tscn"
+
 const ZERO_VECTOR = Vector2(0, 0)
 
 const VIEW_MARGIN_FOCUS: int = 720
@@ -47,7 +50,7 @@ const GUN_BASE_CRIT: float = 0.02
 const CRIT_MOD_DEFAULT: float = 1.0
 const CRIT_MOD_FOCUS: float = 1.25
 const CRIT_MOD_RUSH: float = 1.5
-const CRIT_MOD_EXECUTING: float = 2.0
+const CRIT_MOD_EXECUTING: float = 2.0 #only applies for anything the blade swipes during the execution lunge
 
 const BLADE_BASE_DAMAGE: float = 25.0
 const THRUST_DAMAGE_MODIFIER: float = 0.8
@@ -171,8 +174,6 @@ var rush_heat: float = RUSH_HEAT_DEFAULT
 var overheated: bool = false
 
 func _ready() -> void:
-	Global.player = self
-	
 	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, false) # override what ShotDetector does (spaghetti btw)
 	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, true)
 	CollisionBits.set_mask(Blade, CollisionBits.PLAYER_SWORD_BIT, true)
@@ -205,13 +206,16 @@ func _ready() -> void:
 	Events.execution_unready.connect(func(): can_execute = false)
 	Events.weapon_heat_updated.connect(check_heat)
 	ShotDetector.shot_detected.connect(read_damage)
+	
+	#if !Global.player_ref:
+	#	pack_self_ref()
 
 func _physics_process(delta: float) -> void:
 	Global.player_position = global_position
 	
 	cursor = get_global_mouse_position()
 	
-	if move_state != MOVEMENT_STATES.FOCUS and !executing:
+	if move_state != MOVEMENT_STATES.FOCUS && !executing:
 		look_at(cursor)
 	
 	handle_looking()
@@ -233,7 +237,7 @@ func _physics_process(delta: float) -> void:
 	if move_state == MOVEMENT_STATES.RUSH:
 		handle_rush()
 	
-	if gun_held and GunCooldown.is_stopped() and !executing:
+	if gun_held && GunCooldown.is_stopped() && !executing:
 		fire_gun()
 	
 	if !gun_held:
@@ -245,10 +249,19 @@ func _physics_process(delta: float) -> void:
 	if overheated:
 		tick_overheat_damage()
 
-func _unhandled_input(event : InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	parse_input_movement(event)
 	parse_input_attack(event)
 	parse_input_execution(event)
+
+"""
+func pack_self_ref() -> void:
+	var packed_ref: PackedScene = self.change_sc
+	var err = packed_ref.pack(self)
+	assert(err == OK, ERR_PACKING_PLAYER)
+	
+	Global.player_ref_updated.emit(packed_ref)
+"""
 
 func initialize_rush_timer() -> void:
 	RushTimer.set_timer_process_callback(Timer.TIMER_PROCESS_PHYSICS)
@@ -286,6 +299,7 @@ func initialize_z_ordering() -> void:
 	Blade.z_index = Z_BLADE
 	GunAnchor.z_index = Z_GUN
 
+#this "works" for what it does but does not actually work as intended
 func look_at_with_bound(obj: Node2D, target: Vector2, bound: Vector2) -> void:
 	var localized_target = to_local(target)
 	
@@ -328,7 +342,7 @@ func update_direction() -> void:
 	"""
 
 func parse_input_movement(event: InputEvent) -> void:
-	if event.is_action_pressed(Inputs.RUSH) and move_state != MOVEMENT_STATES.RUSH:
+	if event.is_action_pressed(Inputs.RUSH) && move_state != MOVEMENT_STATES.RUSH:
 		move_state = MOVEMENT_STATES.RUSH
 		current_speed = SPEED_DICT[move_state]
 		trigger_rush()
@@ -349,7 +363,7 @@ func parse_input_movement(event: InputEvent) -> void:
 			current_speed = SPEED_DICT[move_state]
 
 func parse_input_attack(event: InputEvent) -> void:
-	if event.is_action_pressed(Inputs.PRIMARY) and !slashing and !thrusting and !executing:
+	if event.is_action_pressed(Inputs.PRIMARY) && !slashing && !thrusting && !executing:
 		if Input.is_action_pressed(Inputs.FOCUS):
 			trigger_thrust()
 			return
@@ -368,11 +382,11 @@ CRASHES STILL OCCUR - THOROUGHLY EXAMINE LATER
 func parse_input_execution(event: InputEvent) -> void:
 	if event.is_action_pressed(Inputs.EXECUTE):
 		if execution_body:
-			if !execution_body.destroyed and !executing and can_execute:
+			if !execution_body.destroyed && !executing && can_execute:
 				trigger_execution()
 
 func handle_looking() -> void: #remember that this method, as it is now, is literally running every frame
-	if move_state == MOVEMENT_STATES.FOCUS and !executing:
+	if move_state == MOVEMENT_STATES.FOCUS && !executing:
 		look_at_with_bound(GunAnchor, cursor, FOCUS_AIM_BOUND)
 		look_at_with_bound(Head, cursor, FOCUS_AIM_BOUND)
 		
@@ -636,7 +650,7 @@ func check_heat(value: float) -> void:
 		overheated = false
 
 func read_damage(amount: float, crit: float = 0.0) -> void:
-	if not executing: #invincible during execution
+	if !executing: #invincible during execution
 		core_heat -= amount
 		
 		auxiliary_heat += HIT_HEAT

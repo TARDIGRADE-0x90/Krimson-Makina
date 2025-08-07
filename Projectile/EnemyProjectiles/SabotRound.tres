@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ProjectileData" load_steps=4 format=3 uid="uid://q1wpki5y2ds7"]
+
+[ext_resource type="Script" path="res://Projectile/ProjectileData.gd" id="1_s6nu8"]
+[ext_resource type="Shape2D" uid="uid://cphqu5naqwqvq" path="res://Projectile/ProjectileColliders/ColliderMed.tres" id="1_vysrk"]
+[ext_resource type="Texture2D" uid="uid://lovmrdfnmktd" path="res://Assets/sabot_shot.png" id="2_3prbe"]
+
+[resource]
+script = ExtResource("1_s6nu8")
+ShotVisual = ExtResource("2_3prbe")
+CollisionData = ExtResource("1_vysrk")
+CollisionType = 3
+Lifetime = 1.1
+Speed = 50.0
+BaseDamage = 10.0

@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://btp0q11achqih"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_qnj0x"]
+[ext_resource type="PackedScene" uid="uid://5jjaogge6n5v" path="res://Level/GoldLevelLayout.tscn" id="2_fmjwa"]
+[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_jgjp7"]
+[ext_resource type="PackedScene" uid="uid://btojetc84kpdp" path="res://GUI/PlayerUI.tscn" id="4_nww6f"]
+
+[node name="GoldLevel" type="Node" node_paths=PackedStringArray("PlayerSpawn")]
+script = ExtResource("1_qnj0x")
+PlayerSpawn = NodePath("PlayerSpawn")
+
+[node name="GoldLevelLayout" parent="." instance=ExtResource("2_fmjwa")]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(566, 407)
+
+[node name="PlayerCamera" parent="." instance=ExtResource("4_jgjp7")]
+
+[node name="PlayerUI" parent="." instance=ExtResource("4_nww6f")]

@@ -62,7 +62,7 @@ func set_presence(value: bool) -> void:
 func collide(obj: CollisionObject2D) -> void:
 	if active:
 		
-		if obj.has_meta(Global.META_SHOOTABLE_REF) and damage > 0:
+		if obj.has_meta(Global.META_SHOOTABLE_REF) && damage > 0:
 			obj.get_meta(Global.META_SHOOTABLE_REF).shot_detected.emit(damage, crit)
 		
 		explode()

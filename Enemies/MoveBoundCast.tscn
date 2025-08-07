@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cru1v521q38em"]
+
+[ext_resource type="Script" path="res://Enemies/MoveBoundCast.gd" id="1_mf0n8"]
+
+[node name="MoveBoundCast" type="RayCast2D"]
+script = ExtResource("1_mf0n8")

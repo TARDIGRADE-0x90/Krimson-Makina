@@ -15,8 +15,6 @@ const ROTATION_DEBUFF: float = 0.25
 const BURST_COUNT: int = 6
 const BURST_DELAY: float = 1.2
 
-const DEATH_DELAY: float = 5.0
-
 @export var MachineTitle: String
 
 @onready var _UncalibrationUI: UncalibrationUI = $UncalibrationUI
@@ -56,7 +54,7 @@ func _ready() -> void:
 	Events.execution_struck.connect(execute)
 
 func _physics_process(delta: float) -> void:
-	if Global.player:
+	if Global.current_level.player_loaded:
 		update_target(Global.player_position)
 	
 	if _AggroCast.is_aggroed():
@@ -117,6 +115,8 @@ func prepare_to_die(body_arg: Node2D) -> void:
 	if self != body_arg:
 		return
 	else:
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)
+		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_SWORD_BIT, false)
 		_UncalibrationUI.close()
 		set_physics_process(false)
 

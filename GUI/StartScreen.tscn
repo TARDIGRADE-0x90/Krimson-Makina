@@ -1,11 +1,16 @@
-[gd_scene load_steps=22 format=3 uid="uid://c5s05gik05p3j"]
+[gd_scene load_steps=24 format=3 uid="uid://c5s05gik05p3j"]
 
 [ext_resource type="Script" path="res://GUI/StartScreen.gd" id="1_0kti6"]
 [ext_resource type="Texture2D" uid="uid://djvuiok6fs3ux" path="res://Assets/start_screen.png" id="1_vy43a"]
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_1t8dm"]
 [ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="3_5f036"]
 [ext_resource type="Texture2D" uid="uid://d2oolrvyxmx63" path="res://Assets/demo_screenshot.png" id="4_ri4rm"]
+[ext_resource type="Texture2D" uid="uid://j5ygv2uajfw4" path="res://Assets/MechJamVILogoWhitePNG.png" id="4_vq7yr"]
 [ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="6_oj540"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mbyt4"]
+font = ExtResource("2_1t8dm")
+font_size = 18
 
 [sub_resource type="LabelSettings" id="LabelSettings_sxftd"]
 font = ExtResource("2_1t8dm")
@@ -114,6 +119,40 @@ offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_vy43a")
 
+[node name="MarginContainer" type="MarginContainer" parent="."]
+modulate = Color(1, 0.203922, 0.227451, 1)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -728.0
+offset_right = 1442.0
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = -20
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "This game is a"
+label_settings = SubResource("LabelSettings_mbyt4")
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(32, 128)
+layout_mode = 2
+texture = ExtResource("4_vq7yr")
+expand_mode = 3
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "submission"
+label_settings = SubResource("LabelSettings_mbyt4")
+horizontal_alignment = 1
+
 [node name="MenuButtonMargin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 4
@@ -157,6 +196,7 @@ theme_override_font_sizes/font_size = 24
 text = "EXIT"
 
 [node name="DemoUI" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

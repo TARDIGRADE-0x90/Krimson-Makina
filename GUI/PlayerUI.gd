@@ -62,9 +62,12 @@ const CRITICAL_FLICKER: float = 0.8
 @onready var DestroyFlicker: Timer = $DestroyFlicker
 @onready var CriticalFlicker: Timer = $CriticalFlicker
 
+@onready var AllClearLabel: Label = $AllClearLabel
+
 var fully_cooled: bool = false
 var in_combat: bool = false
 var combatant: String
+var current_player_ref: Player
 
 func _ready() -> void:
 	adjust_weapon_heat(0)
@@ -77,6 +80,7 @@ func _ready() -> void:
 	EnemyHealthBar.set_visible(false)
 	DestructionLabel.set_visible(false)
 	CriticalPanel.set_visible(false)
+	AllClearLabel.set_visible(false)
 	
 	CoreHeatHeader.set_text(CORE_HEAT_PREFIX)
 	CoreHeat.set_text("%2.1f %s" % [Player.CORE_HEAT_INITIAL_MAX, CORE_HEAT_SUFFIX])
@@ -92,6 +96,7 @@ func _ready() -> void:
 	Events.new_target_hit.connect(trigger_combat_behavior)
 	Events.target_destroyed.connect(display_destruction_label)
 	Events.enemy_uncalibrated.connect(trigger_critical_flicker)
+	Events.all_clear.connect(func(): AllClearLabel.set_visible(true))
 
 func _process(delta) -> void:
 	display_weapon_heat()
@@ -113,35 +118,38 @@ func initialize_critical_flicker() -> void:
 	CriticalFlicker.set_one_shot(true)
 	CriticalFlicker.timeout.connect(CriticalPanel.hide)
 
+func set_current_player_ref(player: Player) -> void:
+	current_player_ref = player
+
 func display_weapon_heat() -> void:
 	AuxiliaryHeatPanel.visible = !fully_cooled
 	
-	if Global.player:
-		if Global.player.auxiliary_heat >= Global.player.auxiliary_heat_max:
+	if current_player_ref:
+		if current_player_ref.auxiliary_heat >= current_player_ref.auxiliary_heat_max:
 			OverheatWarning.set_visible(true)
-			AuxiliaryMaxHeat.set_text("%s %2.1f %s" % [AUXILIARY_MAX_HEAT_PREFIX, Global.player.auxiliary_heat_max, AUXILIARY_MAX_HEAT_SUFFIX_WARN])
-		elif Global.player.auxiliary_heat >= Global.player.auxiliary_heat_max * HEAT_WARN_FACTOR:
+			AuxiliaryMaxHeat.set_text("%s %2.1f %s" % [AUXILIARY_MAX_HEAT_PREFIX, current_player_ref.auxiliary_heat_max, AUXILIARY_MAX_HEAT_SUFFIX_WARN])
+		elif current_player_ref.auxiliary_heat >= current_player_ref.auxiliary_heat_max * HEAT_WARN_FACTOR:
 			OverheatWarning.set_visible(false)
-			AuxiliaryMaxHeat.set_text("%s %2.1f %s" % [AUXILIARY_MAX_HEAT_PREFIX, Global.player.auxiliary_heat_max, AUXILIARY_MAX_HEAT_SUFFIX_WARN])
+			AuxiliaryMaxHeat.set_text("%s %2.1f %s" % [AUXILIARY_MAX_HEAT_PREFIX, current_player_ref.auxiliary_heat_max, AUXILIARY_MAX_HEAT_SUFFIX_WARN])
 		else:
 			OverheatWarning.set_visible(false)
-			AuxiliaryMaxHeat.set_text("%s %2.1f %s" % [AUXILIARY_MAX_HEAT_PREFIX, Global.player.auxiliary_heat_max, AUXILIARY_MAX_HEAT_SUFFIX])
+			AuxiliaryMaxHeat.set_text("%s %2.1f %s" % [AUXILIARY_MAX_HEAT_PREFIX, current_player_ref.auxiliary_heat_max, AUXILIARY_MAX_HEAT_SUFFIX])
 
 func display_core_heat() -> void:
-	if Global.player:
+	if current_player_ref:
 		
-		if Global.player.core_heat == Global.player.core_heat_max:
-			CoreHeat.set_text("%2.1f %s" % [Global.player.core_heat, CORE_HEAT_SUFFX_MAX])
+		if current_player_ref.core_heat == current_player_ref.core_heat_max:
+			CoreHeat.set_text("%2.1f %s" % [current_player_ref.core_heat, CORE_HEAT_SUFFX_MAX])
 		else:
-			CoreHeat.set_text("%2.1f %s" % [Global.player.core_heat, CORE_HEAT_SUFFIX])
+			CoreHeat.set_text("%2.1f %s" % [current_player_ref.core_heat, CORE_HEAT_SUFFIX])
 		
-		CoreHeatBar.size.x = Global.player.core_heat * CORE_HEAT_BAR_X_FACTOR
+		CoreHeatBar.size.x = current_player_ref.core_heat * CORE_HEAT_BAR_X_FACTOR
 
 func display_optical_text() -> void:
-	if Global.player:
+	if current_player_ref:
 		
 		if not in_combat:
-			if Global.player.move_state == Global.player.MOVEMENT_STATES.FOCUS:
+			if current_player_ref.move_state == current_player_ref.MOVEMENT_STATES.FOCUS:
 				OpticalLabel.set_text(MSG_FOCUSED)
 			else:
 				OpticalLabel.set_text(MSG_IDLE)

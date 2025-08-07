@@ -1,0 +1,92 @@
+[gd_scene load_steps=18 format=3 uid="uid://mobmq4mmq76q"]
+
+[ext_resource type="Script" path="res://Enemies/Striker.gd" id="1_06y8o"]
+[ext_resource type="Texture2D" uid="uid://ceaiqbxqgkvd2" path="res://Assets/striker_base.png" id="1_daoa3"]
+[ext_resource type="Texture2D" uid="uid://wc4hmt7fos6s" path="res://Assets/striker_body.png" id="1_wpbgn"]
+[ext_resource type="Texture2D" uid="uid://dr32x1w3y8th5" path="res://Assets/striker_head.png" id="2_27med"]
+[ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_ibb5k"]
+[ext_resource type="PackedScene" uid="uid://cpihldu12wvhc" path="res://Enemies/DeathDelay.tscn" id="6_61fkm"]
+[ext_resource type="PackedScene" uid="uid://0wu02j7iqkpw" path="res://Enemies/AggroCast.tscn" id="6_ebmkg"]
+[ext_resource type="PackedScene" uid="uid://cru1v521q38em" path="res://Enemies/MoveBoundCast.tscn" id="6_tgqta"]
+[ext_resource type="PackedScene" uid="uid://gju4oyyv6dta" path="res://Enemies/AggroBound.tscn" id="7_q7kfu"]
+[ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="7_yriky"]
+[ext_resource type="PackedScene" path="res://Utility/Shootable.tscn" id="8_dqnsg"]
+[ext_resource type="Resource" uid="uid://bt2cdu3hvvdju" path="res://Projectile/Guns/DualSabotGun.tres" id="8_yw7bn"]
+[ext_resource type="PackedScene" path="res://Utility/Meleeable.tscn" id="9_g7b4p"]
+[ext_resource type="PackedScene" path="res://Utility/HitFlashHandler.tscn" id="10_mkjx3"]
+[ext_resource type="PackedScene" uid="uid://dtn83xn0u1hpe" path="res://GUI/UncalibrationUI.tscn" id="11_58gb4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b2fqb"]
+size = Vector2(256, 256)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03ml1"]
+resource_local_to_scene = true
+shader = ExtResource("2_ibb5k")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_modifier = 0.0
+
+[node name="Striker" type="CharacterBody2D"]
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_06y8o")
+MachineTitle = "G2-STRIKER"
+MoveBound = Vector4(-512, 512, -512, 512)
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_b2fqb")
+
+[node name="FullBody" type="Node2D" parent="."]
+material = SubResource("ShaderMaterial_03ml1")
+
+[node name="Base" type="Sprite2D" parent="FullBody"]
+use_parent_material = true
+texture = ExtResource("1_daoa3")
+
+[node name="Body" type="Sprite2D" parent="FullBody"]
+use_parent_material = true
+texture = ExtResource("1_wpbgn")
+
+[node name="Muzzle" type="Marker2D" parent="FullBody/Body"]
+position = Vector2(96, 0)
+
+[node name="Head" type="Sprite2D" parent="FullBody"]
+use_parent_material = true
+texture = ExtResource("2_27med")
+
+[node name="MoveBoundCast" parent="." instance=ExtResource("6_tgqta")]
+Magnitude = 800.0
+TickCap = 80
+IntervalRange = Vector2i(4, 8)
+
+[node name="AggroCast" parent="." instance=ExtResource("6_ebmkg")]
+CastMagnitude = 2600.0
+TickCap = 80
+IntervalRange = Vector2i(4, 16)
+
+[node name="AggroBound" parent="." instance=ExtResource("7_q7kfu")]
+AggroWidth = 3200
+AggroHeight = 3200
+
+[node name="DualSabots" parent="." instance=ExtResource("7_yriky")]
+GunInfo = ExtResource("8_yw7bn")
+
+[node name="Shootable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("8_dqnsg")]
+CollisionType = 2
+Collider = NodePath("..")
+
+[node name="Meleeable" parent="." node_paths=PackedStringArray("Collider") instance=ExtResource("9_g7b4p")]
+Collider = NodePath("..")
+
+[node name="HitFlashHandler" parent="." instance=ExtResource("10_mkjx3")]
+Duration = 0.25
+
+[node name="UncalibrationUI" parent="." node_paths=PackedStringArray("Body") instance=ExtResource("11_58gb4")]
+BoxSize = 256
+Body = NodePath("..")
+
+[node name="DeathDelay" parent="." instance=ExtResource("6_61fkm")]
+Delay = 5.0
+
+[node name="Firerate" type="Timer" parent="."]
+
+[node name="MoveTime" type="Timer" parent="."]

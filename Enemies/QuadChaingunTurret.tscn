@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://bd402lrwxwgvg"]
 
-[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="1_4oqvl"]
+[ext_resource type="PackedScene" uid="uid://cpihldu12wvhc" path="res://Enemies/DeathDelay.tscn" id="1_4oqvl"]
 [ext_resource type="Script" path="res://Enemies/QuadChaingunTurret.gd" id="1_td80g"]
 [ext_resource type="PackedScene" uid="uid://bpktjxlghct6o" path="res://Projectile/ProjectileManager.tscn" id="2_2dyvq"]
 [ext_resource type="PackedScene" uid="uid://0wu02j7iqkpw" path="res://Enemies/AggroCast.tscn" id="2_yau36"]
@@ -35,13 +35,13 @@ MachineTitle = "X4-VIPER"
 [node name="AggroCast" parent="." instance=ExtResource("2_yau36")]
 CastMagnitude = 4000.0
 TickCap = 120
-IntervalRange = Vector2(4, 16)
+IntervalRange = Vector2i(4, 12)
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_sp1nu")
 
 [node name="Destruction" parent="." instance=ExtResource("1_4oqvl")]
-Delay = 5.0
+Delay = 3.0
 
 [node name="Firerate" type="Timer" parent="."]
 
