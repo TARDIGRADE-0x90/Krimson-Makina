@@ -196,7 +196,6 @@ theme_override_font_sizes/font_size = 24
 text = "EXIT"
 
 [node name="DemoUI" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -472,9 +471,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -194.0
-offset_top = -347.0
+offset_top = -350.0
 offset_right = 45.0
-offset_bottom = -85.0
+offset_bottom = -50.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/margin_right = 80
@@ -505,9 +504,9 @@ text = "Fire: RMB"
 label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Focus" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
-visible = false
 layout_mode = 2
-text = "Focus: Ctrl"
+text = "Focus: Shift
+"
 label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Rush" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
@@ -518,6 +517,11 @@ label_settings = SubResource("LabelSettings_f0brf")
 [node name="Execute" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
 text = "Execute: F"
+label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="PickUp" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
+layout_mode = 2
+text = "Pick Up: Q"
 label_settings = SubResource("LabelSettings_f0brf")
 
 [node name="Overview" type="Label" parent="DemoUI/Tutorial"]

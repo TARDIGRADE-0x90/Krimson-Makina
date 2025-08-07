@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dv084hdfx1jsr"]
+[gd_scene load_steps=6 format=3 uid="uid://dv084hdfx1jsr"]
 
 [ext_resource type="Script" path="res://Level/Level.gd" id="1_26hiw"]
 [ext_resource type="PackedScene" uid="uid://dce7hm3ujmaxd" path="res://Level/JadeLevelIIILayout.tscn" id="2_65w0n"]
-[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_b13nn"]
 [ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="5_11xcy"]
 [ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="6_sa1jr"]
 [ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="6_sn6cp"]
@@ -19,8 +18,6 @@ position = Vector2(-8072, 2241)
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(707, 1354)
-
-[node name="PlayerCamera" parent="." instance=ExtResource("4_b13nn")]
 
 [node name="Enemies" type="Node" parent="."]
 

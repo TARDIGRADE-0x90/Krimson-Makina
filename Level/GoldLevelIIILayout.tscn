@@ -1,0 +1,85 @@
+[gd_scene load_steps=6 format=3 uid="uid://cctjdy7sf4ymb"]
+
+[ext_resource type="Texture2D" uid="uid://c02nradhgbqir" path="res://Assets/gold_undergrating.png" id="1_xmmav"]
+[ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="2_6xwg6"]
+[ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="2_mqqtw"]
+[ext_resource type="Texture2D" uid="uid://dlvg1kdk4xtpg" path="res://Assets/gold_wall.png" id="3_skkf7"]
+[ext_resource type="Texture2D" uid="uid://cij1jiswieuo4" path="res://Assets/gold_beam.png" id="4_noite"]
+
+[node name="GoldLevelIIILayout" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+texture_repeat = 3
+position = Vector2(2056, -81)
+texture = ExtResource("1_xmmav")
+polygon = PackedVector2Array(-4748, 8293, 7911, 7910, 8234, -2582, -4648, -2703)
+
+[node name="Grating" type="Polygon2D" parent="."]
+texture_repeat = 3
+position = Vector2(2056, -81)
+texture = ExtResource("2_mqqtw")
+polygon = PackedVector2Array(-7612, 8446, 7911, 7910, 8234, -2582, -7588, -3277)
+
+[node name="Wall" parent="." instance=ExtResource("2_6xwg6")]
+
+[node name="WallVisual" parent="Wall" index="0"]
+texture = ExtResource("3_skkf7")
+polygon = PackedVector2Array(-2558, 2460, -2518, -65, 63, -1818, 6133, -1793, 6164.92, 1305.74, 9735, 1320, 9720, 3555, 8481, 3555, 7590, 2347, 6171, 2317, 6224, 7042, -522, 7052, -2598, 4774, -2553, 2473, -6139, 2518, -6388, 9350, 10681, 9807, 10532, -4028, -5965, -3733, -6137, 2504)
+
+[node name="WallOutline" parent="Wall" index="1"]
+points = PackedVector2Array(-2558, 2460, -2518, -65, 63, -1818, 6133, -1793, 6164.92, 1305.74, 9735, 1320, 9720, 3555, 8481, 3555, 7590, 2347, 6171, 2317, 6224, 7042, -522, 7052, -2598, 4774, -2553, 2473, -6139, 2518, -6388, 9350, 10681, 9807, 10532, -4028, -5965, -3733, -6137, 2504, -2558, 2460)
+texture = ExtResource("4_noite")
+
+[node name="Wall2" parent="." instance=ExtResource("2_6xwg6")]
+position = Vector2(-1463, -3380)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall2" index="0"]
+texture = ExtResource("3_skkf7")
+polygon = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637)
+
+[node name="WallOutline" parent="Wall2" index="1"]
+points = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637, 651, 3685)
+texture = ExtResource("4_noite")
+
+[node name="Wall3" parent="." instance=ExtResource("2_6xwg6")]
+position = Vector2(2361, -3464)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall3" index="0"]
+texture = ExtResource("3_skkf7")
+polygon = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637)
+
+[node name="WallOutline" parent="Wall3" index="1"]
+points = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637, 651, 3685)
+texture = ExtResource("4_noite")
+
+[node name="Wall4" parent="." instance=ExtResource("2_6xwg6")]
+position = Vector2(-1391, 791)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall4" index="0"]
+texture = ExtResource("3_skkf7")
+polygon = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637)
+
+[node name="WallOutline" parent="Wall4" index="1"]
+points = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637, 651, 3685)
+texture = ExtResource("4_noite")
+
+[node name="Wall5" parent="." instance=ExtResource("2_6xwg6")]
+position = Vector2(2349, 767)
+metadata/_edit_group_ = true
+
+[node name="WallVisual" parent="Wall5" index="0"]
+texture = ExtResource("3_skkf7")
+polygon = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637)
+
+[node name="WallOutline" parent="Wall5" index="1"]
+points = PackedVector2Array(651, 3685, 644, 3939, 2693, 3939, 2683, 3637, 651, 3685)
+texture = ExtResource("4_noite")
+
+[editable path="Wall"]
+[editable path="Wall2"]
+[editable path="Wall3"]
+[editable path="Wall4"]
+[editable path="Wall5"]

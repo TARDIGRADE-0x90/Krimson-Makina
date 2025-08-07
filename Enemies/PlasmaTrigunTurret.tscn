@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://cpbfnumyppfm7"]
 
 [ext_resource type="Script" path="res://Enemies/PlasmaTrigunTurret.gd" id="1_f3274"]
-[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="2_b2r0b"]
+[ext_resource type="PackedScene" uid="uid://cpihldu12wvhc" path="res://Enemies/DeathDelay.tscn" id="2_b2r0b"]
 [ext_resource type="PackedScene" uid="uid://0wu02j7iqkpw" path="res://Enemies/AggroCast.tscn" id="2_nkiup"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="3_0a7qk"]
 [ext_resource type="Texture2D" uid="uid://dq1utibhjvpsr" path="res://Assets/turret_base.png" id="4_g2bmg"]

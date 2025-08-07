@@ -1,8 +1,8 @@
 extends StaticBody2D
 class_name PlasmaTrigunTurret
 
-const BLAST_MARK_PATH: String = "res://BlastMark.tscn"
-const BLAST_MARK: PackedScene = preload(BLAST_MARK_PATH)
+const BLAST_MARK: PackedScene = preload(FilePaths.BLAST_MARK)
+const GUN_DROP: PackedScene = preload(FilePaths.DROPPED_GUN)
 
 const BASE_HEALTH: float = 100.0
 
@@ -11,6 +11,8 @@ const AIM_DAMP: float = 0.5
 
 const ROTATION_RATE: int = 100
 const ROTATION_DEBUFF: float = 0.25
+
+const DROP_CHANCE: float = 0.25
 
 @export var MachineTitle: String
 
@@ -42,6 +44,8 @@ func _ready() -> void:
 	MeleeDetect.melee_detected.connect(read_damage)
 	ShootDetect.shot_detected.connect(read_damage)
 	_UncalibrationUI.cleared.connect(func(): uncalibrated = false)
+	
+	PlasmaGun.flag_collision_override(ProjectileData.CollisionTypes.ENEMY)
 	
 	Events.execution_initiated.connect(prepare_to_die)
 	Events.execution_struck.connect(execute)
@@ -114,6 +118,21 @@ func execute(body_arg: Node2D) -> void:
 	else:
 		destroy()
 
+func generate_blast_mark() -> void:
+	var blast_mark: Sprite2D = BLAST_MARK.instantiate()
+	Global.current_level.call_deferred("add_child", blast_mark)
+	blast_mark.set_rotation_degrees(randi_range(0, 360))
+	blast_mark.global_position = global_position
+
+func generate_gun_drop(chance: float = 1.0) -> void:
+	var chance_query: float = randf()
+	
+	if chance_query <= chance:
+		var dropped_gun: DroppedGun = GUN_DROP.instantiate()
+		Global.current_level.call_deferred("add_child", dropped_gun)
+		dropped_gun.global_position = global_position
+		dropped_gun.drop(global_position, PlasmaGun.get_gun())
+
 func destroy() -> void:
 	if !destroyed:
 		destroyed = true
@@ -123,10 +142,8 @@ func destroy() -> void:
 		
 		Events.target_destroyed.emit()
 		
-		var blast_mark: Sprite2D = BLAST_MARK.instantiate()
-		Global.current_level.call_deferred("add_child", blast_mark)
-		blast_mark.set_rotation_degrees(randi_range(0, 360))
-		blast_mark.global_position = global_position
+		generate_blast_mark()
+		generate_gun_drop(DROP_CHANCE)
 		
 		CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
 		CollisionBits.set_mask_and_layer(self, CollisionBits.PLAYER_PROJECTILE_BIT, false)

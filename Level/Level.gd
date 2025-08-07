@@ -14,11 +14,9 @@ enum LevelKeys {
 	RUBY_3 = Global.LEVEL_KEYS.RUBY_III
 }
 
-const PLAYER_UI_PATH: String = "res://GUI/PlayerUI.tscn"
-const PLAYER_UI: PackedScene = preload(PLAYER_UI_PATH)
-
-const PLAYER_PATH: String = "res://Player/Guillotine-07.tscn"
-const PLAYER: PackedScene = preload(PLAYER_PATH)
+const PLAYER: PackedScene = preload(FilePaths.PLAYER)
+const PLAYER_UI: PackedScene = preload(FilePaths.PLAYER_UI)
+const PLAYER_CAMERA: PackedScene = preload(FilePaths.PLAYER_CAMERA)
 
 @export var LevelDelay: LevelClearWait
 @export var LevelKey: LevelKeys
@@ -26,7 +24,7 @@ const PLAYER: PackedScene = preload(PLAYER_PATH)
 @export var Enemies: Node
 
 var player: Player
-var player_scene := PackedScene.new()
+#var player_scene := PackedScene.new()
 
 var player_loaded: bool = false
 var enemy_count: int
@@ -51,9 +49,12 @@ func _ready() -> void:
 	player_loaded = true
 	enemy_count = Enemies.get_child_count()
 	
-	var player_ui = PLAYER_UI.instantiate()
+	var player_ui: PlayerUI = PLAYER_UI.instantiate()
 	player_ui.set_current_player_ref(player)
 	add_child(player_ui)
+	
+	var player_camera: MainCamera = PLAYER_CAMERA.instantiate()
+	add_child(player_camera)
 	
 	LevelDelay.timeout.connect(change_level)
 	Events.target_destroyed.connect(update_enemy_count)
@@ -66,5 +67,5 @@ func update_enemy_count() -> void:
 		LevelDelay.start()
 
 func change_level() -> void:
-	Global.level_index = (Global.level_index + 1) % 5#Global.LEVEL_KEYS.size()
+	Global.level_index = (Global.level_index + 1) % Global.LEVEL_KEYS.size()
 	Events.game_state_changed.emit(Global.GAME_STATES.GAME_LOOP)

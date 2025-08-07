@@ -1,0 +1,150 @@
+[gd_scene load_steps=9 format=3 uid="uid://le23duwh8y8f"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_vr5vv"]
+[ext_resource type="PackedScene" uid="uid://cjbci3qdvoae2" path="res://Level/RedLevelLayout.tscn" id="2_4elwq"]
+[ext_resource type="PackedScene" uid="uid://cp3mgj3s0d6r8" path="res://Enemies/LaserShotgunTurret.tscn" id="3_ip0ff"]
+[ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="4_h6djp"]
+[ext_resource type="PackedScene" uid="uid://bd402lrwxwgvg" path="res://Enemies/QuadChaingunTurret.tscn" id="5_hh0pi"]
+[ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="6_p4f2a"]
+[ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="7_u3wl3"]
+[ext_resource type="PackedScene" uid="uid://mobmq4mmq76q" path="res://Enemies/Striker.tscn" id="7_umfhc"]
+
+[node name="RubyLevel1" type="Node" node_paths=PackedStringArray("LevelDelay", "PlayerSpawn", "Enemies")]
+script = ExtResource("1_vr5vv")
+LevelDelay = NodePath("LevelClearWait")
+LevelKey = 6
+PlayerSpawn = NodePath("PlayerSpawn")
+Enemies = NodePath("Enemies")
+
+[node name="RedLevelLayout" parent="." instance=ExtResource("2_4elwq")]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1057, 4424)
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="LaserShotgunTurret" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(211, 220)
+
+[node name="PlasmaTrigunTurret" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(3812, 240)
+
+[node name="PlasmaTrigunTurret2" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(5911, 1350)
+
+[node name="PlasmaTrigunTurret3" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(8131, 223)
+
+[node name="LaserShotgunTurret2" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(19017, 1195)
+
+[node name="LaserShotgunTurret3" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(9464, 4285)
+
+[node name="PlasmaTrigunTurret4" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(11309, 3274)
+
+[node name="LaserShotgunTurret4" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(12793, 2035)
+
+[node name="QuadChaingunTurret" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(10295, -1144)
+
+[node name="LaserShotgunTurret5" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(20580, 4809)
+
+[node name="QuadChaingunTurret2" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(21534, 3445)
+
+[node name="QuadChaingunTurret3" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(18290, 3445)
+
+[node name="PlasmaTrigunTurret5" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(17178, 2206)
+
+[node name="PlasmaTrigunTurret6" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(17203, 4819)
+
+[node name="PlasmaTrigunTurret7" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(22746, 1820)
+
+[node name="LaserShotgunTurret6" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(19098, 5654)
+
+[node name="LaserShotgunTurret7" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(20544, 2118)
+
+[node name="QuadChaingunTurret4" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(27593, 4177)
+
+[node name="QuadChaingunTurret5" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(30456, 2835)
+
+[node name="LaserShotgunTurret8" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(24173, 4837)
+
+[node name="LaserShotgunTurret9" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(24200, 2376)
+
+[node name="QuadChaingunTurret6" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(24540, 5663)
+
+[node name="QuadChaingunTurret7" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(24441, 1272)
+
+[node name="PlasmaTrigunTurret8" parent="Enemies" instance=ExtResource("4_h6djp")]
+position = Vector2(22722, 5313)
+
+[node name="GeminiGunner" parent="Enemies" instance=ExtResource("6_p4f2a")]
+position = Vector2(9335, -3056)
+
+[node name="GeminiGunner2" parent="Enemies" instance=ExtResource("6_p4f2a")]
+position = Vector2(10960, -4824)
+
+[node name="GeminiGunner3" parent="Enemies" instance=ExtResource("6_p4f2a")]
+position = Vector2(9434, -6620)
+
+[node name="QuadChaingunTurret8" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(-1719, -9143)
+
+[node name="LaserShotgunTurret10" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(-4026, -6994)
+
+[node name="LaserShotgunTurret11" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(-4043, -10917)
+
+[node name="Striker" parent="Enemies" instance=ExtResource("7_umfhc")]
+position = Vector2(-389, -10155)
+
+[node name="Striker2" parent="Enemies" instance=ExtResource("7_umfhc")]
+position = Vector2(-317, -7964)
+
+[node name="Striker3" parent="Enemies" instance=ExtResource("7_umfhc")]
+position = Vector2(20481, -11364)
+
+[node name="QuadChaingunTurret9" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(14579, -10466)
+
+[node name="QuadChaingunTurret10" parent="Enemies" instance=ExtResource("5_hh0pi")]
+position = Vector2(26382, -10309)
+
+[node name="LaserShotgunTurret12" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(18072, -12191)
+
+[node name="LaserShotgunTurret13" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(23360, -12376)
+
+[node name="LaserShotgunTurret14" parent="Enemies" instance=ExtResource("3_ip0ff")]
+position = Vector2(34949, -9739)
+
+[node name="GeminiGunner4" parent="Enemies" instance=ExtResource("6_p4f2a")]
+position = Vector2(33552, -5120)
+
+[node name="GeminiGunner5" parent="Enemies" instance=ExtResource("6_p4f2a")]
+position = Vector2(35076, -1658)
+
+[node name="GeminiGunner6" parent="Enemies" instance=ExtResource("6_p4f2a")]
+position = Vector2(34286, 820)
+
+[node name="LevelClearWait" parent="." instance=ExtResource("7_u3wl3")]
+Delay = 5.0

@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_tmqh4")
+Name = "Dual Sabot"
 FiringPattern = 2
 Shots = 2
 FireRate = 0.15

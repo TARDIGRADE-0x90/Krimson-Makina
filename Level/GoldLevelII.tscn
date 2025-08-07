@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnqh20tb4lvk2"]
+[gd_scene load_steps=7 format=3 uid="uid://bnqh20tb4lvk2"]
 
 [ext_resource type="Script" path="res://Level/Level.gd" id="1_la72k"]
 [ext_resource type="PackedScene" uid="uid://cs0fbxw2mf0ma" path="res://Level/GoldLevelIILayout.tscn" id="2_t5af0"]
 [ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="3_ay5k5"]
-[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="3_hgy26"]
 [ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="4_mhvcq"]
 [ext_resource type="PackedScene" uid="uid://cp3mgj3s0d6r8" path="res://Enemies/LaserShotgunTurret.tscn" id="5_b2oiq"]
 [ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="6_duuxd"]
@@ -19,8 +18,6 @@ Enemies = NodePath("Enemies")
 
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(17956, 6809)
-
-[node name="PlayerCamera" parent="." instance=ExtResource("3_hgy26")]
 
 [node name="Enemies" type="Node" parent="."]
 

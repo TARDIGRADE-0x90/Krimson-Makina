@@ -14,30 +14,37 @@ func change_game_state(state: int) -> void:
 	
 	game_state = state
 	match game_state:
-		Global.GAME_STATES.GAME_LOOP: 
-			
+		Global.GAME_STATES.GAME_LOOP:
 			match Global.level_index:
 				Global.LEVEL_KEYS.JADE_I:
+					Music.set_current_track(FilePaths.MUSIC_JADE)
 					load_scene(FilePaths.LEVEL_JADE_I)
 				Global.LEVEL_KEYS.JADE_II:
+					Music.set_current_track(FilePaths.MUSIC_JADE)
 					load_scene(FilePaths.LEVEL_JADE_II)
 				Global.LEVEL_KEYS.JADE_III:
+					Music.set_current_track(FilePaths.MUSIC_JADE)
 					load_scene(FilePaths.LEVEL_JADE_III)
 				Global.LEVEL_KEYS.GOLD_I:
+					Music.set_current_track(FilePaths.MUSIC_GOLD)
 					load_scene(FilePaths.LEVEL_GOLD_I)
 				Global.LEVEL_KEYS.GOLD_II:
+					Music.set_current_track(FilePaths.MUSIC_GOLD)
 					load_scene(FilePaths.LEVEL_GOLD_II)
 				Global.LEVEL_KEYS.GOLD_III:
+					Music.set_current_track(FilePaths.MUSIC_GOLD)
 					load_scene(FilePaths.LEVEL_GOLD_III)
 				Global.LEVEL_KEYS.RUBY_I:
+					Music.set_current_track(FilePaths.MUSIC_RUBY)
 					load_scene(FilePaths.LEVEL_RUBY_I)
-				Global.LEVEL_KEYS.RUBY_II:
-					load_scene(FilePaths.LEVEL_RUBY_II)
-				Global.LEVEL_KEYS.RUBY_III:
-					load_scene(FilePaths.LEVEL_RUBY_III)
+				#Global.LEVEL_KEYS.RUBY_II:
+				#	load_scene(FilePaths.LEVEL_RUBY_II)
+				#Global.LEVEL_KEYS.RUBY_III:
+				##	load_scene(FilePaths.LEVEL_RUBY_III)
 		
 		Global.GAME_STATES.START_SCREEN: 
 			load_scene(FilePaths.START_SCREEN)
+			Music.set_current_track(FilePaths.MUSIC_IDLE)
 		_:
 			print("Invalid gameplay state (SceneManager.gd, change_game_state())")
 	
@@ -59,7 +66,6 @@ func load_scene(path: String, hide_tree: bool = false) -> void:
 
 func flush_current_tree(root: Variant, preserve_player: bool = false) -> void:
 	for game_scene in root.get_children():
-		print(game_scene)
 		game_scene.queue_free()
 
 func hide_current_tree(root: Variant) -> void:

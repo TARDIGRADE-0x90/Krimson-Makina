@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_uwn3r")
+Name = "Plasma Cannon"
 FiringPattern = 0
 Shots = 1
 FireRate = 0.075

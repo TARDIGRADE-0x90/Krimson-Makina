@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxht8l8misjhh"]
+[gd_scene load_steps=5 format=3 uid="uid://bxht8l8misjhh"]
 
 [ext_resource type="Script" path="res://Level/Level.gd" id="1_gj3km"]
 [ext_resource type="PackedScene" uid="uid://c6qdiciuwg3ks" path="res://Level/JadeLevelIILayout.tscn" id="2_2cfo0"]
-[ext_resource type="PackedScene" uid="uid://b3uxyo0vddcmg" path="res://Player/PlayerCamera.tscn" id="4_wsq88"]
 [ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="5_qlypc"]
 [ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="5_smwyh"]
 
@@ -17,8 +16,6 @@ Enemies = NodePath("Enemies")
 
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(-81, 2253)
-
-[node name="PlayerCamera" parent="." instance=ExtResource("4_wsq88")]
 
 [node name="Enemies" type="Node" parent="."]
 

@@ -38,8 +38,15 @@ var offset_mod: float = 1.0
 var override_type: int = 0
 
 func _ready() -> void:
+	_GunData = GunData.new()
 	_GunData.copy_data(GunInfo)
 	
+	initialize_projectiles()
+
+func override_data(new_data: GunData) -> void:
+	shot_pool.clear()
+	_GunData = GunData.new()
+	_GunData.copy_data(new_data)
 	initialize_projectiles()
 
 func initialize_projectiles() -> void:

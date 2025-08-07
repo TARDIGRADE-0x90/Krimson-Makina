@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_8w7y7")
+Name = "Quad Chaingun"
 FiringPattern = 2
 Shots = 4
 FireRate = 0.05

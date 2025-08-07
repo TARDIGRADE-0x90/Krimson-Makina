@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://cp3mgj3s0d6r8"]
 
 [ext_resource type="Script" path="res://Enemies/LaserShotgunTurret.gd" id="1_ghsm1"]
-[ext_resource type="PackedScene" path="res://Enemies/DeathDelay.tscn" id="2_pb1a6"]
+[ext_resource type="PackedScene" uid="uid://cpihldu12wvhc" path="res://Enemies/DeathDelay.tscn" id="2_pb1a6"]
 [ext_resource type="PackedScene" uid="uid://0wu02j7iqkpw" path="res://Enemies/AggroCast.tscn" id="2_qgib2"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="3_mjrua"]
 [ext_resource type="Texture2D" uid="uid://dipyv4tbujgmr" path="res://Assets/shotgun_turret_base.png" id="4_a5d04"]

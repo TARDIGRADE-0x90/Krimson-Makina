@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_uyu1c")
+Name = "Laser Shotgun"
 FiringPattern = 1
 Shots = 5
 FireRate = 1.4

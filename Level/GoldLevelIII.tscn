@@ -1,0 +1,80 @@
+[gd_scene load_steps=8 format=3 uid="uid://befxtu1vc8gvy"]
+
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_mc671"]
+[ext_resource type="PackedScene" uid="uid://bjyg8b25bqojw" path="res://Level/LevelClearWait.tscn" id="2_3rpbq"]
+[ext_resource type="PackedScene" uid="uid://cctjdy7sf4ymb" path="res://Level/GoldLevelIIILayout.tscn" id="2_r3jea"]
+[ext_resource type="PackedScene" uid="uid://cpbfnumyppfm7" path="res://Enemies/PlasmaTrigunTurret.tscn" id="3_602s3"]
+[ext_resource type="PackedScene" uid="uid://cp3mgj3s0d6r8" path="res://Enemies/LaserShotgunTurret.tscn" id="4_v5dbk"]
+[ext_resource type="PackedScene" uid="uid://mobmq4mmq76q" path="res://Enemies/Striker.tscn" id="5_65bdt"]
+[ext_resource type="PackedScene" uid="uid://dgvp5iubtrbcf" path="res://Enemies/GeminiGunner.tscn" id="6_fff0j"]
+
+[node name="GoldLevelIII" type="Node" node_paths=PackedStringArray("LevelDelay", "PlayerSpawn", "Enemies")]
+script = ExtResource("1_mc671")
+LevelDelay = NodePath("LevelClearWait")
+LevelKey = 5
+PlayerSpawn = NodePath("Marker2D")
+Enemies = NodePath("Enemies")
+
+[node name="GoldLevelIIILayout" parent="." instance=ExtResource("2_r3jea")]
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(8954, 2950)
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="PlasmaTrigunTurret" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(-2121, 1253)
+
+[node name="PlasmaTrigunTurret2" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(1012, -1381)
+
+[node name="PlasmaTrigunTurret3" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(-2126, 4388)
+
+[node name="PlasmaTrigunTurret4" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(900, 6600)
+
+[node name="PlasmaTrigunTurret5" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(2104, 4095)
+
+[node name="PlasmaTrigunTurret6" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(4565, 3538)
+
+[node name="PlasmaTrigunTurret7" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(2024, 933)
+
+[node name="PlasmaTrigunTurret8" parent="Enemies" instance=ExtResource("3_602s3")]
+position = Vector2(4413, 1365)
+
+[node name="LaserShotgunTurret" parent="Enemies" instance=ExtResource("4_v5dbk")]
+position = Vector2(2787, 1967)
+
+[node name="LaserShotgunTurret2" parent="Enemies" instance=ExtResource("4_v5dbk")]
+position = Vector2(2832, 3090)
+
+[node name="Striker" parent="Enemies" instance=ExtResource("5_65bdt")]
+position = Vector2(5084, -1209)
+
+[node name="Striker2" parent="Enemies" instance=ExtResource("5_65bdt")]
+position = Vector2(4796, 6021)
+
+[node name="Striker3" parent="Enemies" instance=ExtResource("5_65bdt")]
+position = Vector2(4102, 2554)
+
+[node name="GeminiGunner" parent="Enemies" instance=ExtResource("6_fff0j")]
+position = Vector2(-518, 988)
+
+[node name="GeminiGunner2" parent="Enemies" instance=ExtResource("6_fff0j")]
+position = Vector2(444, 3936)
+
+[node name="GeminiGunner3" parent="Enemies" instance=ExtResource("6_fff0j")]
+position = Vector2(3227, 5333)
+
+[node name="GeminiGunner4" parent="Enemies" instance=ExtResource("6_fff0j")]
+position = Vector2(3144, -329)
+
+[node name="Striker4" parent="Enemies" instance=ExtResource("5_65bdt")]
+position = Vector2(-1517, 2648)
+
+[node name="LevelClearWait" parent="." instance=ExtResource("2_3rpbq")]
+Delay = 5.0

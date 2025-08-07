@@ -33,6 +33,8 @@ const SPEED_DICT: Dictionary = {
 const ERR_PACKING_PLAYER: String = "ERROR :: Guillotine-07 - failed to pack scene"
 const PLAYER_PATH: String = "res://Player/Guillotine-07.tscn"
 
+const BLAST_MARK: PackedScene = preload(FilePaths.BLAST_MARK)
+
 const ZERO_VECTOR = Vector2(0, 0)
 
 const VIEW_MARGIN_FOCUS: int = 720
@@ -173,6 +175,11 @@ var rush_heat: float = RUSH_HEAT_DEFAULT
 
 var overheated: bool = false
 
+var alive: bool = true
+
+var querying_new_gun: bool = false
+var gun_query: GunData = GunData.new()
+
 func _ready() -> void:
 	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, false) # override what ShotDetector does (spaghetti btw)
 	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, true)
@@ -205,6 +212,11 @@ func _ready() -> void:
 	Events.execution_ready.connect(prime_execution)
 	Events.execution_unready.connect(func(): can_execute = false)
 	Events.weapon_heat_updated.connect(check_heat)
+	
+	Events.gun_query_hovered.connect(examine_new_gun)
+	Events.gun_query_exited.connect(ignore_new_gun)
+	Events.gun_selected.connect(select_new_gun)
+	
 	ShotDetector.shot_detected.connect(read_damage)
 	
 	#if !Global.player_ref:
@@ -253,6 +265,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	parse_input_movement(event)
 	parse_input_attack(event)
 	parse_input_execution(event)
+	#parse_input_pickup(event)
 
 """
 func pack_self_ref() -> void:
@@ -384,6 +397,11 @@ func parse_input_execution(event: InputEvent) -> void:
 		if execution_body:
 			if !execution_body.destroyed && !executing && can_execute:
 				trigger_execution()
+
+func parse_input_pickup(event: InputEvent) -> void:
+	if event.is_action_pressed(Inputs.PICK_UP):
+		if querying_new_gun:
+			Events.gun_selected.emit()
 
 func handle_looking() -> void: #remember that this method, as it is now, is literally running every frame
 	if move_state == MOVEMENT_STATES.FOCUS && !executing:
@@ -598,6 +616,23 @@ func clear_rush() -> void: #reset movement and chassis part positioning
 	Head.position.x = 0
 	GunAnchor.position.x = GUN_START.x 
 
+func examine_new_gun(newGunData: GunData) -> void:
+	querying_new_gun = true
+	gun_query = newGunData
+
+func ignore_new_gun() -> void:
+	querying_new_gun = false
+	gun_query = GunData.new()
+
+func select_new_gun() -> void:
+	querying_new_gun = false
+	
+	PlayerGun.override_data(gun_query)
+	GunVisual.set_texture(gun_query.PlayerGunVisual)
+	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
+	
+	gun_query = GunData.new()
+
 """
 do later -
 figure out some equation for heat generation with relation to number of shots,
@@ -653,10 +688,34 @@ func read_damage(amount: float, crit: float = 0.0) -> void:
 	if !executing: #invincible during execution
 		core_heat -= amount
 		
+		if core_heat <= 0:
+			alive = false
+			Events.player_died.emit()
+			destroy()
+
+		
 		auxiliary_heat += HIT_HEAT
 		Events.weapon_heat_updated.emit(auxiliary_heat)
 		
 		FlashHandler.trigger_flash()
+
+func generate_blast_mark() -> void:
+	var blast_mark: Sprite2D = BLAST_MARK.instantiate()
+	Global.current_level.call_deferred("add_child", blast_mark)
+	blast_mark.set_rotation_degrees(randi_range(0, 360))
+	blast_mark.global_position = global_position
+
+func destroy() -> void:
+	generate_blast_mark()
+	
+	hide()
+	set_physics_process(false)
+	set_process(false)
+	
+	CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
+	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, true) # override what ShotDetector does (spaghetti btw)
+	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, false)
+	CollisionBits.set_mask(Blade, CollisionBits.PLAYER_SWORD_BIT, false)
 
 func tick_overheat_damage() -> void:
 	core_heat -= OVERHEAT_DAMAGE_RATE * get_physics_process_delta_time()

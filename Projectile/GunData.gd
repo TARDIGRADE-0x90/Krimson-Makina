@@ -7,6 +7,7 @@ needs Spread and Offset
 
 enum FiringPatterns {NIL = -1, SINGLE = 0, RADIAL = 1, PARALLEL = 2}
 
+@export var Name: String
 @export var FiringPattern: FiringPatterns
 @export var Shots: int
 @export var FireRate: float
@@ -18,6 +19,7 @@ enum FiringPatterns {NIL = -1, SINGLE = 0, RADIAL = 1, PARALLEL = 2}
 @export var PlayerGunVisual: Texture
 
 func copy_data(data: GunData) -> void:
+	Name = data.Name
 	FiringPattern = data.FiringPattern
 	Shots = data.Shots
 	FireRate = data.FireRate

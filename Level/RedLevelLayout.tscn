@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cjbci3qdvoae2"]
 
 [ext_resource type="Texture2D" uid="uid://bw7kbvr7f64y4" path="res://Assets/undergrating.png" id="1_eq8lg"]
-[ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="2_jv6vx"]
+[ext_resource type="Texture2D" uid="uid://bywfcf3of635a" path="res://Assets/grating.png" id="2_1t556"]
 [ext_resource type="PackedScene" uid="uid://b8f41ln8a0bfb" path="res://Level/Wall.tscn" id="3_j0qr2"]
 
 [node name="RedLevelLayout" type="Node2D"]
@@ -9,13 +9,12 @@
 [node name="Underfloor" type="Polygon2D" parent="."]
 texture_repeat = 3
 texture = ExtResource("1_eq8lg")
-texture_rotation = 1.5708
 polygon = PackedVector2Array(-11725, 10649, 44405, 11360, 44059, -17921, -11981, -17712)
 
-[node name="Floor" type="Polygon2D" parent="."]
-texture_repeat = 2
-texture = ExtResource("2_jv6vx")
-polygon = PackedVector2Array(-11021, 10021, 42481, 10670, 42909, -17445, -11437, -17319)
+[node name="Grating" type="Polygon2D" parent="."]
+texture_repeat = 3
+texture = ExtResource("2_1t556")
+polygon = PackedVector2Array(-11725, 10649, 44405, 11360, 44059, -17921, -11981, -17712)
 
 [node name="Walls" type="Node2D" parent="."]
 
