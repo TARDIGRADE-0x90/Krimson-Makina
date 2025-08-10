@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://bn834txfdx660"]
+[gd_scene load_steps=18 format=3 uid="uid://bn834txfdx660"]
 
 [ext_resource type="Script" path="res://Player/Guillotine-07.gd" id="1_2uy8n"]
+[ext_resource type="PackedScene" uid="uid://cpihldu12wvhc" path="res://Enemies/DeathDelay.tscn" id="2_00qgp"]
 [ext_resource type="Shader" path="res://HitFlash.gdshader" id="2_dlrn3"]
 [ext_resource type="Texture2D" uid="uid://dfdrywdfoturh" path="res://Assets/guillotine-wings-draft.png" id="4_5julm"]
 [ext_resource type="Texture2D" uid="uid://b4t8skqxmo2rg" path="res://Assets/guillotine-body-draft.png" id="5_aulbw"]
@@ -63,6 +64,10 @@ one_shot = true
 
 [node name="GunCooldown" type="Timer" parent="."]
 process_callback = 0
+
+[node name="Destruction" parent="." instance=ExtResource("2_00qgp")]
+process_mode = 3
+Delay = 3.0
 
 [node name="FullBody" type="Node2D" parent="."]
 

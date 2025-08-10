@@ -1,0 +1,7 @@
+0.0.1 - Font handling on different exports; updated Guide menu
+
+0.0.2 - Fully implemented weapon pick-ups
+
+0.0.3 - Crash potential for executions
+
+0.0.4 - Camera rework

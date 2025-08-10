@@ -4,7 +4,7 @@ class_name Striker
 const BLAST_MARK: PackedScene = preload(FilePaths.BLAST_MARK)
 const GUN_DROP: PackedScene = preload(FilePaths.DROPPED_GUN)
 
-const DROP_CHANCE: float = 0.3
+const DROP_CHANCE: float = 0.45
 
 const BASE_HEALTH: float = 150.0
 

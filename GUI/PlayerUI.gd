@@ -97,6 +97,7 @@ func _ready() -> void:
 	Events.target_destroyed.connect(display_destruction_label)
 	Events.enemy_uncalibrated.connect(trigger_critical_flicker)
 	Events.all_clear.connect(func(): AllClearLabel.set_visible(true))
+	Events.player_died.connect(func(): AllClearLabel.set_visible(false))
 
 func _process(delta) -> void:
 	display_weapon_heat()

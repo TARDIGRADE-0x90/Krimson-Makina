@@ -22,5 +22,6 @@ signal execution_initiated(body: Node2D)
 signal execution_struck(body: Node2D)
 
 signal player_died
+signal player_death_finalized
 
 signal all_clear

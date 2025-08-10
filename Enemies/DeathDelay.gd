@@ -14,4 +14,5 @@ func _ready() -> void:
 	timeout.connect(death)
 
 func death() -> void:
-	owner.call_deferred("queue_free")
+	pass #DO LATER - CHANGE THE WAY ATTACK COLLIDERS 
+	#owner.call_deferred("queue_free")

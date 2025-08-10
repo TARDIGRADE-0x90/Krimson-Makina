@@ -2,11 +2,7 @@
 
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="1_ha40n"]
 [ext_resource type="Script" path="res://GUI/FPSLabel.gd" id="1_moqcw"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_wxahc"]
-font = ExtResource("1_ha40n")
-font_size = 12
-outline_size = 2
+[ext_resource type="PackedScene" uid="uid://b8klsyyu7k8rx" path="res://GUI/FontExportOverride.tscn" id="3_aydmb"]
 
 [node name="FPSLabel" type="Label"]
 anchors_preset = 15
@@ -14,6 +10,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_ha40n")
+theme_override_font_sizes/font_size = 12
 text = "FPS"
-label_settings = SubResource("LabelSettings_wxahc")
 script = ExtResource("1_moqcw")
+
+[node name="FontExportOverride" parent="." instance=ExtResource("3_aydmb")]

@@ -1,16 +1,13 @@
-[gd_scene load_steps=24 format=3 uid="uid://c5s05gik05p3j"]
+[gd_scene load_steps=19 format=3 uid="uid://c5s05gik05p3j"]
 
 [ext_resource type="Script" path="res://GUI/StartScreen.gd" id="1_0kti6"]
 [ext_resource type="Texture2D" uid="uid://djvuiok6fs3ux" path="res://Assets/start_screen.png" id="1_vy43a"]
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_1t8dm"]
 [ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="3_5f036"]
 [ext_resource type="Texture2D" uid="uid://d2oolrvyxmx63" path="res://Assets/demo_screenshot.png" id="4_ri4rm"]
+[ext_resource type="PackedScene" uid="uid://b8klsyyu7k8rx" path="res://GUI/FontExportOverride.tscn" id="4_t315q"]
 [ext_resource type="Texture2D" uid="uid://j5ygv2uajfw4" path="res://Assets/MechJamVILogoWhitePNG.png" id="4_vq7yr"]
 [ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="6_oj540"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_mbyt4"]
-font = ExtResource("2_1t8dm")
-font_size = 18
 
 [sub_resource type="LabelSettings" id="LabelSettings_sxftd"]
 font = ExtResource("2_1t8dm")
@@ -75,35 +72,6 @@ font_size = 24
 shadow_size = 8
 shadow_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_f0brf"]
-font = ExtResource("2_1t8dm")
-outline_size = 2
-
-[sub_resource type="LabelSettings" id="LabelSettings_au60y"]
-font = ExtResource("2_1t8dm")
-outline_size = 1
-shadow_size = 8
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_6lapp"]
-font = ExtResource("2_1t8dm")
-outline_size = 1
-shadow_size = 8
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_medka"]
-font = ExtResource("2_1t8dm")
-outline_size = 1
-shadow_size = 8
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_pp8s3"]
-line_spacing = 8.0
-font = ExtResource("2_1t8dm")
-outline_size = 1
-shadow_size = 8
-shadow_color = Color(0, 0, 0, 1)
-
 [node name="StartScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -137,9 +105,12 @@ theme_override_constants/separation = -20
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "This game is a"
-label_settings = SubResource("LabelSettings_mbyt4")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="MarginContainer/VBoxContainer/Label" instance=ExtResource("4_t315q")]
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(32, 128)
@@ -149,9 +120,12 @@ expand_mode = 3
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "submission"
-label_settings = SubResource("LabelSettings_mbyt4")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="MarginContainer/VBoxContainer/Label2" instance=ExtResource("4_t315q")]
 
 [node name="MenuButtonMargin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -179,6 +153,8 @@ theme_override_fonts/font = ExtResource("3_5f036")
 theme_override_font_sizes/font_size = 24
 text = "START"
 
+[node name="FontExportOverride" parent="MenuButtonMargin/MenuButtons/StartButton" instance=ExtResource("4_t315q")]
+
 [node name="GuideButton" type="Button" parent="MenuButtonMargin/MenuButtons"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
@@ -187,6 +163,8 @@ theme_override_fonts/font = ExtResource("3_5f036")
 theme_override_font_sizes/font_size = 24
 text = "GUIDE"
 
+[node name="FontExportOverride" parent="MenuButtonMargin/MenuButtons/GuideButton" instance=ExtResource("4_t315q")]
+
 [node name="ExitButton" type="Button" parent="MenuButtonMargin/MenuButtons"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0.254902, 1)
@@ -194,6 +172,8 @@ theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
 theme_override_fonts/font = ExtResource("3_5f036")
 theme_override_font_sizes/font_size = 24
 text = "EXIT"
+
+[node name="FontExportOverride" parent="MenuButtonMargin/MenuButtons/ExitButton" instance=ExtResource("4_t315q")]
 
 [node name="DemoUI" type="Control" parent="."]
 layout_mode = 1
@@ -214,10 +194,11 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BG" type="Sprite2D" parent="DemoUI/DemoBG"]
+modulate = Color(0.443137, 0.384314, 0.396078, 1)
 texture = ExtResource("4_ri4rm")
 
 [node name="OpticalIndicator" type="Control" parent="DemoUI"]
-modulate = Color(1, 1, 1, 0.54902)
+modulate = Color(1, 1, 1, 0.337255)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -319,7 +300,7 @@ rotation = 3.14159
 color = Color(1, 0.717647, 0.611765, 0.580392)
 
 [node name="AuxiliaryHeatPanel" type="Control" parent="DemoUI"]
-modulate = Color(1, 1, 1, 0.486275)
+modulate = Color(1, 1, 1, 0.278431)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -484,96 +465,141 @@ size_flags_horizontal = 8
 
 [node name="Header" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("6_oj540")
+theme_override_font_sizes/font_size = 12
 text = "CONTROLS"
-label_settings = SubResource("LabelSettings_f0brf")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Header" instance=ExtResource("4_t315q")]
 
 [node name="Move" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Move: WASD"
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Move" instance=ExtResource("4_t315q")]
 
 [node name="Melee" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Melee: LMB"
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Melee" instance=ExtResource("4_t315q")]
 
 [node name="Fire" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Fire: RMB"
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Fire" instance=ExtResource("4_t315q")]
 
 [node name="Focus" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Focus: Shift
 "
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Focus" instance=ExtResource("4_t315q")]
 
 [node name="Rush" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Rush: Space"
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Rush" instance=ExtResource("4_t315q")]
 
 [node name="Execute" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Execute: F"
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/Execute" instance=ExtResource("4_t315q")]
 
 [node name="PickUp" type="Label" parent="DemoUI/Tutorial/InputsContainer/Inputs"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Pick Up: Q"
-label_settings = SubResource("LabelSettings_f0brf")
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/InputsContainer/Inputs/PickUp" instance=ExtResource("4_t315q")]
 
 [node name="Overview" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 761.0
-offset_top = 448.0
-offset_right = 1264.0
-offset_bottom = 629.0
+offset_left = 769.0
+offset_top = 421.0
+offset_right = 1272.0
+offset_bottom = 602.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_1t8dm")
 text = "Control a versatile mech to destroy
 enemies and progress to the
 next room.
 
 You must weave through projectiles
 and wrestle the flow of combat."
-label_settings = SubResource("LabelSettings_au60y")
-horizontal_alignment = 1
+horizontal_alignment = 2
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/Overview" instance=ExtResource("4_t315q")]
 
 [node name="CritGude" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 263.0
-offset_top = 54.0
-offset_right = 1010.0
-offset_bottom = 237.0
-text = "Attacks may trigger critical strikes, uncalibrating enemies and leaving them open for execution. Executions restore half of core heat, all of auxiliary heat, and destroy the enemy."
-label_settings = SubResource("LabelSettings_6lapp")
+offset_left = 460.0
+offset_top = 60.0
+offset_right = 973.0
+offset_bottom = 323.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
+text = "Critical strikes uncalibrate enemies, leaving them open for execution. You may aim over an enemy to execute from any distance. 
+
+Executions restore half of core heat and all of auxiliary heat."
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="FontExportOverride" parent="DemoUI/Tutorial/CritGude" instance=ExtResource("4_t315q")]
+
 [node name="HeatGuide" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 17.0
-offset_top = 463.0
-offset_right = 587.0
-offset_bottom = 689.0
+offset_left = 12.0
+offset_top = 459.0
+offset_right = 582.0
+offset_bottom = 697.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Firing, rushing, and taking damage all raise auxiliary heat. When it exceeds the heat limit, your core heat begins to fall.
 
 
 While focused, the auxiliary cool rate is lowered."
-label_settings = SubResource("LabelSettings_medka")
 autowrap_mode = 2
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/HeatGuide" instance=ExtResource("4_t315q")]
 
 [node name="AimGuide" type="Label" parent="DemoUI/Tutorial"]
 layout_mode = 0
-offset_left = 10.0
-offset_top = 220.0
-offset_right = 475.0
-offset_bottom = 395.0
+offset_left = 13.0
+offset_top = 211.0
+offset_right = 478.0
+offset_bottom = 402.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_1t8dm")
+theme_override_font_sizes/font_size = 18
 text = "Focusing looks forward, aims the gun, reduces spread, and allows the blade to be thrusted.
 
 Movement is slowed."
-label_settings = SubResource("LabelSettings_pp8s3")
 autowrap_mode = 2
+
+[node name="FontExportOverride" parent="DemoUI/Tutorial/AimGuide" instance=ExtResource("4_t315q")]
 
 [node name="ReturnButton" type="Button" parent="DemoUI"]
 layout_mode = 1
@@ -590,3 +616,5 @@ theme_override_colors/font_outline_color = Color(0, 0, 0.992157, 0.772549)
 theme_override_fonts/font = ExtResource("3_5f036")
 theme_override_font_sizes/font_size = 28
 text = "RETURN"
+
+[node name="FontExportOverride" parent="DemoUI/ReturnButton" instance=ExtResource("4_t315q")]

@@ -1,21 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtn83xn0u1hpe"]
+[gd_scene load_steps=5 format=3 uid="uid://dtn83xn0u1hpe"]
 
 [ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="1_kobhf"]
 [ext_resource type="Script" path="res://GUI/UncalibrationUI.gd" id="1_uras1"]
+[ext_resource type="PackedScene" uid="uid://b8klsyyu7k8rx" path="res://GUI/FontExportOverride.tscn" id="3_1dfyx"]
 [ext_resource type="Texture2D" uid="uid://bm8ryhooqhgur" path="res://Assets/execution_indicator.png" id="3_jgahr"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_v7i1u"]
-resource_local_to_scene = true
-font = ExtResource("1_kobhf")
-font_size = 72
-shadow_size = 16
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_hnx42"]
-font = ExtResource("1_kobhf")
-font_size = 48
-outline_size = 24
-outline_color = Color(0, 0, 0, 1)
 
 [node name="UncalibrationUI" type="Control"]
 layout_mode = 3
@@ -33,9 +21,14 @@ offset_left = -485.0
 offset_right = 485.0
 offset_bottom = 108.0
 grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 24
+theme_override_fonts/font = ExtResource("1_kobhf")
+theme_override_font_sizes/font_size = 72
 text = "[!! UNCALIBRATED !!]"
-label_settings = SubResource("LabelSettings_v7i1u")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="Uncalibratedheader" instance=ExtResource("3_1dfyx")]
 
 [node name="TimeLeft" type="Label" parent="."]
 layout_mode = 1
@@ -49,9 +42,14 @@ offset_top = -68.0
 offset_right = 46.5
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("1_kobhf")
+theme_override_font_sizes/font_size = 64
 text = "5.0"
-label_settings = SubResource("LabelSettings_hnx42")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="TimeLeft" instance=ExtResource("3_1dfyx")]
 
 [node name="UncalibrationWindow" type="Timer" parent="."]
 

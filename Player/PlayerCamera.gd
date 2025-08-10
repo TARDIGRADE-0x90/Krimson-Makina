@@ -1,8 +1,13 @@
 extends Camera2D
 class_name MainCamera
 
-const DEFAULT_ZOOM: float = 0.4
-const FOCUS_ZOOM: float = 0.3
+"""
+do later;
+remove any "offset" when camera is not focused; apply it when camera is focused
+"""
+
+const DEFAULT_ZOOM: float = 0.3
+const FOCUS_ZOOM: float = 0.25
 
 const TILT_TIME: float = 0.25
 const TILT_DAMP: float = 0.2

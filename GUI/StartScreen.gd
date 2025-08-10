@@ -1,4 +1,5 @@
 extends Control
+class_name StartScreen
 
 @onready var StartButton: Button = $MenuButtonMargin/MenuButtons/StartButton
 @onready var GuideButton: Button  = $MenuButtonMargin/MenuButtons/GuideButton
@@ -6,7 +7,11 @@ extends Control
 @onready var DemoUI: Control = $DemoUI
 @onready var ReturnButton: Button = $DemoUI/ReturnButton
 
-# Called when the node enters the scene tree for the first time.
+"""
+do later -
+> make guide screen a bit longer to better elaborate on how the game plays
+"""
+
 func _ready():
 	DemoUI.set_visible(false)
 	StartButton.pressed.connect(start_game)
@@ -14,7 +19,6 @@ func _ready():
 	ReturnButton.pressed.connect(hide_guide)
 	ExitButton.pressed.connect(exit_game)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 

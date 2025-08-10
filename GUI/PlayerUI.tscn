@@ -1,78 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://btojetc84kpdp"]
+[gd_scene load_steps=7 format=3 uid="uid://btojetc84kpdp"]
 
 [ext_resource type="Script" path="res://GUI/PlayerUI.gd" id="1_mbxyd"]
 [ext_resource type="FontVariation" uid="uid://cy1srnumm2skd" path="res://Assets/Font-Precison.tres" id="2_gei3a"]
 [ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="3_3g6s7"]
+[ext_resource type="PackedScene" uid="uid://b8klsyyu7k8rx" path="res://GUI/FontExportOverride.tscn" id="3_i3abs"]
 [ext_resource type="PackedScene" uid="uid://t32j02e4nyx2" path="res://GUI/FPSLabel.tscn" id="3_jpwls"]
 [ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="4_6ie41"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_yebyq"]
-font = ExtResource("2_gei3a")
-font_size = 12
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 4
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_d2aph"]
-font = ExtResource("2_gei3a")
-font_size = 18
-outline_size = 6
-outline_color = Color(0.423529, 0, 0, 1)
-shadow_size = 12
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_l4nmq"]
-font = ExtResource("2_gei3a")
-font_size = 24
-
-[sub_resource type="LabelSettings" id="LabelSettings_lr8o4"]
-font = ExtResource("2_gei3a")
-outline_size = 8
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_0govm"]
-font = ExtResource("2_gei3a")
-outline_size = 8
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_v5r0y"]
-font = ExtResource("3_3g6s7")
-font_size = 18
-font_color = Color(1, 0.682353, 0, 1)
-outline_size = 4
-outline_color = Color(0.905882, 0, 0, 1)
-shadow_size = 20
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_r3nsp"]
-font = ExtResource("2_gei3a")
-font_size = 12
-outline_size = 2
-outline_color = Color(1, 0.890196, 0.768627, 1)
-shadow_size = 4
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_haf7r"]
-font = ExtResource("2_gei3a")
-outline_size = 2
-
-[sub_resource type="LabelSettings" id="LabelSettings_xlmte"]
-font = ExtResource("2_gei3a")
-font_color = Color(1, 0.835294, 0.596078, 1)
-shadow_size = 12
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_evf64"]
-font = ExtResource("4_6ie41")
-font_size = 24
-shadow_size = 8
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_83o58"]
-line_spacing = 20.0
-font = ExtResource("4_6ie41")
-font_size = 28
 
 [node name="PlayerUI" type="CanvasLayer"]
 script = ExtResource("1_mbxyd")
@@ -96,15 +29,27 @@ layout_mode = 2
 
 [node name="OpticalLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 10
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 12
 text = "OPTICAL FEED :: ACTIVE"
-label_settings = SubResource("LabelSettings_yebyq")
 vertical_alignment = 2
+
+[node name="FontExportOverride" parent="OpticalIndicator/MarginContainer/VBoxContainer/OpticalLabel" instance=ExtResource("3_i3abs")]
 
 [node name="EnemyLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 16
 text = "ENEMY TITLE :: ENEMY_HEALTH"
-label_settings = SubResource("LabelSettings_d2aph")
 vertical_alignment = 2
+
+[node name="FontExportOverride" parent="OpticalIndicator/MarginContainer/VBoxContainer/EnemyLabel" instance=ExtResource("3_i3abs")]
 
 [node name="EnemyHealthBar" type="ColorRect" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 clip_contents = true
@@ -115,8 +60,11 @@ color = Color(0.764706, 0.713726, 0.662745, 0.65098)
 
 [node name="DestructionLabel" type="Label" parent="OpticalIndicator/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 32
 text = "TARGET DESTROYED"
-label_settings = SubResource("LabelSettings_l4nmq")
+
+[node name="FontExportOverride" parent="OpticalIndicator/MarginContainer/VBoxContainer/DestructionLabel" instance=ExtResource("3_i3abs")]
 
 [node name="CoreHeatPanel" type="Control" parent="."]
 layout_mode = 3
@@ -148,16 +96,26 @@ layout_mode = 2
 
 [node name="CoreHeatHeader" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 18
 text = "GUILLOTINE-07 TEMPERATURE:
 "
-label_settings = SubResource("LabelSettings_lr8o4")
 horizontal_alignment = 2
+
+[node name="FontExportOverride" parent="CoreHeatPanel/MarginContainer/VBoxContainer/CoreHeatHeader" instance=ExtResource("3_i3abs")]
 
 [node name="CoreHeat" type="Label" parent="CoreHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 16
 text = "200° C FROM PEAK"
-label_settings = SubResource("LabelSettings_0govm")
 horizontal_alignment = 2
+
+[node name="FontExportOverride" parent="CoreHeatPanel/MarginContainer/VBoxContainer/CoreHeat" instance=ExtResource("3_i3abs")]
 
 [node name="CoreHeatBar" type="ColorRect" parent="CoreHeatPanel"]
 custom_minimum_size = Vector2(0, 12)
@@ -230,10 +188,16 @@ offset_top = 64.0
 offset_right = 132.0
 offset_bottom = 108.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.333333, 0, 1)
+theme_override_colors/font_outline_color = Color(0.278431, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_3g6s7")
+theme_override_font_sizes/font_size = 16
 text = "OVERHEATING"
-label_settings = SubResource("LabelSettings_v5r0y")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="FontExportOverride" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit/OverheatWarning" instance=ExtResource("3_i3abs")]
 
 [node name="AuxiliaryMaxHeat" type="Label" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit"]
 layout_mode = 1
@@ -247,10 +211,14 @@ offset_top = -34.0
 offset_right = 71.5
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 18
 text = "MAX: 150° C"
-label_settings = SubResource("LabelSettings_r3nsp")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="FontExportOverride" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual/AuxiliaryHeatLimit/AuxiliaryMaxHeat" instance=ExtResource("3_i3abs")]
 
 [node name="AuxiliaryHeatBase" type="ColorRect" parent="AuxiliaryHeatPanel/AuxiliaryHeatVisual"]
 custom_minimum_size = Vector2(64, 4)
@@ -276,15 +244,25 @@ layout_mode = 2
 
 [node name="AuxiliaryHeatHeader" type="Label" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 15
 text = "AUXILIARY HEAT"
-label_settings = SubResource("LabelSettings_haf7r")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer/AuxiliaryHeatHeader" instance=ExtResource("3_i3abs")]
 
 [node name="AuxiliaryHeat" type="Label" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.756863, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("2_gei3a")
+theme_override_font_sizes/font_size = 24
 text = "00.00° C"
-label_settings = SubResource("LabelSettings_xlmte")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="AuxiliaryHeatPanel/MarginContainer/VBoxContainer/AuxiliaryHeat" instance=ExtResource("3_i3abs")]
 
 [node name="CriticalPanel" type="Control" parent="."]
 layout_mode = 3
@@ -312,9 +290,14 @@ theme_override_constants/margin_top = 20
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_6ie41")
+theme_override_font_sizes/font_size = 26
 text = "CRITICAL  STRIKE"
-label_settings = SubResource("LabelSettings_evf64")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="CriticalPanel/MarginContainer/CriticalLabel" instance=ExtResource("3_i3abs")]
 
 [node name="BattleDelay" type="Timer" parent="."]
 
@@ -348,8 +331,11 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_6ie41")
+theme_override_font_sizes/font_size = 32
 text = "ALL CLEAR
 
 Relocating..."
-label_settings = SubResource("LabelSettings_83o58")
 horizontal_alignment = 1
+
+[node name="FontExportOverride" parent="AllClearLabel" instance=ExtResource("3_i3abs")]

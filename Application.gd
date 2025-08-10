@@ -5,7 +5,10 @@ var current_scene: Variant
 var next_scene: Variant
 var game_state: int = -1
 
-func _ready():
+func _init() -> void:
+	Global.export_type = Global.EXPORT_TYPES.WEB
+
+func _ready() -> void:
 	Events.game_state_changed.connect(change_game_state)
 	Events.game_state_changed.emit(Global.GAME_STATES.START_SCREEN)
 
@@ -37,10 +40,6 @@ func change_game_state(state: int) -> void:
 				Global.LEVEL_KEYS.RUBY_I:
 					Music.set_current_track(FilePaths.MUSIC_RUBY)
 					load_scene(FilePaths.LEVEL_RUBY_I)
-				#Global.LEVEL_KEYS.RUBY_II:
-				#	load_scene(FilePaths.LEVEL_RUBY_II)
-				#Global.LEVEL_KEYS.RUBY_III:
-				##	load_scene(FilePaths.LEVEL_RUBY_III)
 		
 		Global.GAME_STATES.START_SCREEN: 
 			load_scene(FilePaths.START_SCREEN)
@@ -51,6 +50,7 @@ func change_game_state(state: int) -> void:
 	get_tree().paused = false
 
 func load_scene(path: String, hide_tree: bool = false) -> void:
+	
 	if hide_tree:
 		hide_current_tree(self)
 	else:

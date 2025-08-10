@@ -4,7 +4,7 @@ class_name QuadChaingunTurret
 const BLAST_MARK: PackedScene = preload(FilePaths.BLAST_MARK)
 const GUN_DROP: PackedScene = preload(FilePaths.DROPPED_GUN)
 
-const DROP_CHANCE: float = 0.2
+const DROP_CHANCE: float = 0.35
 
 const BASE_HEALTH: float = 100.0
 

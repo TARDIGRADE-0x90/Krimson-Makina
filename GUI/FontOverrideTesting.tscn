@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://boeyyp1he6jxo"]
+
+[ext_resource type="FontVariation" uid="uid://dml5osi0xwm0y" path="res://Assets/Font-Precison_Warn.tres" id="1_cji15"]
+[ext_resource type="FontVariation" uid="uid://dh7gj3mitjm5e" path="res://Assets/Font-Precison_II.tres" id="2_1hrjf"]
+[ext_resource type="PackedScene" uid="uid://b8klsyyu7k8rx" path="res://GUI/FontExportOverride.tscn" id="2_7moko"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 400
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 400
+theme_override_constants/margin_bottom = 200
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_cji15")
+text = "TEST 
+TWO"
+
+[node name="FontExportOverride" parent="MarginContainer/Label" instance=ExtResource("2_7moko")]
+
+[node name="Button" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("2_1hrjf")
+text = "TEST 
+ONE"
+
+[node name="FontExportOverride" parent="MarginContainer/Button" instance=ExtResource("2_7moko")]

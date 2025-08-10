@@ -15,6 +15,9 @@ NOTE:
 	that if there's still time left before the deadline)
 	
 	
+	do later:
+		make LMB able to be held down
+	
 	also, do later:
 		when switching between levels, let player generate in a spawnpoint instead;
 		check if Global has the player object saved, and if so, set the position of
@@ -37,8 +40,9 @@ const BLAST_MARK: PackedScene = preload(FilePaths.BLAST_MARK)
 
 const ZERO_VECTOR = Vector2(0, 0)
 
-const VIEW_MARGIN_FOCUS: int = 720
-const VIEW_MARGIN_DEFAULT: int = 480
+const VIEW_MARGIN_FOCUS: int = 480
+const VIEW_MARGIN_DEFAULT: int = 120
+const VIEW_MARGIN_RUSH: int = 360
 const VIEW_MARGIN_EXECUTION: int = 240
 
 const RUSH_TIME: float = 0.5
@@ -116,6 +120,7 @@ const Z_HEAD: int = 3
 @onready var ThrustTimer: Timer = $ThrustTimer
 @onready var ExecutionTimer: Timer = $ExecutionTimer
 @onready var GunCooldown: Timer = $GunCooldown
+@onready var Destruction: DeathDelay = $Destruction
 
 @onready var Hurtbox: Area2D = $Hurtbox
 @onready var FullBody: Node2D = $FullBody
@@ -209,6 +214,8 @@ func _ready() -> void:
 	initialize_execution_timer()
 	initialize_gun_cooldown()
 	
+	Destruction.timeout.connect(signal_death)
+	
 	Events.execution_ready.connect(prime_execution)
 	Events.execution_unready.connect(func(): can_execute = false)
 	Events.weapon_heat_updated.connect(check_heat)
@@ -223,49 +230,51 @@ func _ready() -> void:
 	#	pack_self_ref()
 
 func _physics_process(delta: float) -> void:
-	Global.player_position = global_position
-	
-	cursor = get_global_mouse_position()
-	
-	if move_state != MOVEMENT_STATES.FOCUS && !executing:
-		look_at(cursor)
-	
-	handle_looking()
-	handle_aim_choke()
-	handle_crit_modifier()
-	
-	update_direction()
-	update_velocity()
-	
-	if slashing || thrusting || executing:
-		check_blade_collision()
-	
-	if slashing:
-		animate_slash()
-	
-	if thrusting:
-		animate_thrust()
-	
-	if move_state == MOVEMENT_STATES.RUSH:
-		handle_rush()
-	
-	if gun_held && GunCooldown.is_stopped() && !executing:
-		fire_gun()
-	
-	if !gun_held:
-		cool_weapon()
-	
-	if executing:
-		handle_execution()
-	
-	if overheated:
-		tick_overheat_damage()
+	if alive:
+		Global.player_position = global_position
+		
+		cursor = get_global_mouse_position()
+		
+		if move_state != MOVEMENT_STATES.FOCUS && !executing:
+			look_at(cursor)
+		
+		handle_looking()
+		handle_aim_choke()
+		handle_crit_modifier()
+		
+		update_direction()
+		update_velocity()
+		
+		if slashing || thrusting || executing:
+			check_blade_collision()
+		
+		if slashing:
+			animate_slash()
+		
+		if thrusting:
+			animate_thrust()
+		
+		if move_state == MOVEMENT_STATES.RUSH:
+			handle_rush()
+		
+		if gun_held && GunCooldown.is_stopped() && !executing:
+			fire_gun()
+		
+		if !gun_held:
+			cool_weapon()
+		
+		if executing:
+			handle_execution()
+		
+		if overheated:
+			tick_overheat_damage()
 
 func _unhandled_input(event: InputEvent) -> void:
-	parse_input_movement(event)
-	parse_input_attack(event)
-	parse_input_execution(event)
-	#parse_input_pickup(event)
+	if alive:
+		parse_input_movement(event)
+		parse_input_attack(event)
+		parse_input_execution(event)
+		parse_input_pickup(event)
 
 """
 func pack_self_ref() -> void:
@@ -408,10 +417,9 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 		look_at_with_bound(GunAnchor, cursor, FOCUS_AIM_BOUND)
 		look_at_with_bound(Head, cursor, FOCUS_AIM_BOUND)
 		
-		if Global.active_camera:
-			Global.active_camera.set_focused(true)
-			Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_FOCUS)
-			Global.active_camera.tilt_to_angle(Head.rotation)
+		Global.active_camera.set_focused(true)
+		Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_FOCUS)
+		Global.active_camera.tilt_to_angle(Head.rotation)
 	
 	elif executing:
 		set_rotation(global_position.angle_to_point(execution_point))
@@ -420,15 +428,22 @@ func handle_looking() -> void: #remember that this method, as it is now, is lite
 		
 		Global.active_camera.set_focused(false)
 		Global.active_camera.snap_to_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_EXECUTION)
-
+	
+	
+	#elif move_state == MOVEMENT_STATES.RUSH:
+		#GunAnchor.set_rotation(0)
+		#Head.set_rotation(0)
+		
+		#Global.active_camera.set_focused(false)
+		#Global.active_camera.smooth_to_target(global_position + Vector2.from_angle(rotation).normalized() * 1200)
+	
 	else:
 		GunAnchor.set_rotation(0)
 		Head.set_rotation(0)
 		
-		if Global.active_camera:
-			Global.active_camera.set_focused(false)
-			Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_DEFAULT)
-			Global.active_camera.tilt_to_angle(0)
+		Global.active_camera.set_focused(false)
+		Global.active_camera.set_current_target(global_position + Vector2.from_angle(rotation).normalized() * VIEW_MARGIN_DEFAULT)
+		Global.active_camera.tilt_to_angle(0)
 
 func handle_crit_modifier() -> void:
 	if executing:
@@ -630,6 +645,8 @@ func select_new_gun() -> void:
 	PlayerGun.override_data(gun_query)
 	GunVisual.set_texture(gun_query.PlayerGunVisual)
 	PlayerGun.flag_collision_override(ProjectileData.CollisionTypes.PLAYER)
+	GunCooldown.set_wait_time(gun_query.FireRate)
+	gun_heat_range = gun_query.HeatRange
 	
 	gun_query = GunData.new()
 
@@ -689,10 +706,7 @@ func read_damage(amount: float, crit: float = 0.0) -> void:
 		core_heat -= amount
 		
 		if core_heat <= 0:
-			alive = false
-			Events.player_died.emit()
 			destroy()
-
 		
 		auxiliary_heat += HIT_HEAT
 		Events.weapon_heat_updated.emit(auxiliary_heat)
@@ -706,16 +720,26 @@ func generate_blast_mark() -> void:
 	blast_mark.global_position = global_position
 
 func destroy() -> void:
+	alive = false
+	Destruction.start()
+	Events.player_died.emit()
+	
 	generate_blast_mark()
+	
+	CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
+	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, false) # override what ShotDetector does (spaghetti btw)
+	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, false)
+	CollisionBits.set_mask(Blade, CollisionBits.PLAYER_SWORD_BIT, false)
 	
 	hide()
 	set_physics_process(false)
 	set_process(false)
-	
-	CollisionBits.set_mask_and_layer(self, CollisionBits.DEFAULT_BIT, false)
-	CollisionBits.set_layer(self, CollisionBits.ENEMY_PROJECTILE_BIT, true) # override what ShotDetector does (spaghetti btw)
-	CollisionBits.set_layer(Hurtbox, CollisionBits.ENEMY_PROJECTILE_BIT, false)
-	CollisionBits.set_mask(Blade, CollisionBits.PLAYER_SWORD_BIT, false)
+
+func signal_death() -> void:
+	Events.player_death_finalized.emit()
 
 func tick_overheat_damage() -> void:
 	core_heat -= OVERHEAT_DAMAGE_RATE * get_physics_process_delta_time()
+	
+	if core_heat <= 0:
+		destroy()

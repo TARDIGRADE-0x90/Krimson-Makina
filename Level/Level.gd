@@ -10,8 +10,8 @@ enum LevelKeys {
 	GOLD_2 = Global.LEVEL_KEYS.GOLD_II,
 	GOLD_3 = Global.LEVEL_KEYS.GOLD_III,
 	RUBY_1 = Global.LEVEL_KEYS.RUBY_I,
-	RUBY_2 = Global.LEVEL_KEYS.RUBY_II,
-	RUBY_3 = Global.LEVEL_KEYS.RUBY_III
+	#RUBY_2 = Global.LEVEL_KEYS.RUBY_II,
+	#RUBY_3 = Global.LEVEL_KEYS.RUBY_III
 }
 
 const PLAYER: PackedScene = preload(FilePaths.PLAYER)
@@ -27,6 +27,8 @@ var player: Player
 #var player_scene := PackedScene.new()
 
 var player_loaded: bool = false
+var player_destroyed: bool = false
+
 var enemy_count: int
 
 func _init() -> void:
@@ -57,7 +59,10 @@ func _ready() -> void:
 	add_child(player_camera)
 	
 	LevelDelay.timeout.connect(change_level)
+	
 	Events.target_destroyed.connect(update_enemy_count)
+	Events.player_died.connect(func(): player_destroyed = true)
+	Events.player_death_finalized.connect(restart_level)
 
 func update_enemy_count() -> void:
 	enemy_count -= 1
@@ -67,5 +72,9 @@ func update_enemy_count() -> void:
 		LevelDelay.start()
 
 func change_level() -> void:
-	Global.level_index = (Global.level_index + 1) % Global.LEVEL_KEYS.size()
+	if !player_destroyed:
+		Global.level_index = (Global.level_index + 1) % Global.LEVEL_KEYS.size()
+		Events.game_state_changed.emit(Global.GAME_STATES.GAME_LOOP)
+
+func restart_level() -> void:
 	Events.game_state_changed.emit(Global.GAME_STATES.GAME_LOOP)

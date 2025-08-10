@@ -4,8 +4,9 @@ signal player_ref_updated(ref: Player)
 
 const ERR_TIMEOUT_METHOD_INVALID: String = "Error in Global.gd: timeout_method invalid"
 
+enum EXPORT_TYPES {UNSET, WINDOWS, WEB, LINUX}
 enum GAME_STATES {START_SCREEN, GAME_LOOP}
-enum LEVEL_KEYS {JADE_I, JADE_II, JADE_III, GOLD_I, GOLD_II, GOLD_III, RUBY_I, RUBY_II, RUBY_III}
+enum LEVEL_KEYS {JADE_I, JADE_II, JADE_III, GOLD_I, GOLD_II, GOLD_III, RUBY_I}
 
 const META_SHOOTABLE_REF: String = "shot_detection_reference"
 const META_MELEEABLE_REF: String = "melee_detection_reference"
@@ -19,6 +20,7 @@ var player_position = Vector2(0, 0) #allows for initialization even as the playe
 var player_ref: PackedScene
 var player: Player
 
+var export_type: int = EXPORT_TYPES.UNSET
 var level_index: int = LEVEL_KEYS.JADE_I
 
 func _ready() -> void:
